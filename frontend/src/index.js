@@ -19,7 +19,7 @@ const options = {
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <BrowserRouter basename='/Lotus'>
+    <BrowserRouter basename='/'>
       <AlertProvider template={AlertTemplate} {...options}>
         <App />
       </AlertProvider>
