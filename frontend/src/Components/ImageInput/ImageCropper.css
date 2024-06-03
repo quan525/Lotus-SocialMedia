@@ -1,0 +1,33 @@
+.btn {
+    background-color: #4B9CD3;
+    /* Green */
+    border: none;
+    border-radius: 10px;
+    color: white;
+    padding: 5px 12px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    transition-duration: 0.4s;
+}
+
+.btn:hover {
+    background-color: rgb(95, 170, 224);
+    color: rgb(127, 109, 109);
+    border: 2px solid #4B9CD3;
+}
+
+.btn-outline {
+    background-color: white;
+    color: #ee2715;
+    border: 2px solid rgb(112, 126, 96);
+}
+
+.btn-outline:hover {
+    background-color: #ff2222;
+    color: white;
+    border: 2px solid #1a3344;
+}

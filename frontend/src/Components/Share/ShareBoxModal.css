@@ -1,0 +1,16 @@
+button.upload_button {
+    padding: 5px 10px;
+    width: 15%;
+    height: 10%;
+    background: #4B9CD3;
+    border-radius: 5px;
+    font-size: 13px;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+}
+
+button.upload_button:hover {
+    border: 1px solid #16384f;
+    background-color: #16384f;
+}

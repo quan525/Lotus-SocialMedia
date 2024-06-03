@@ -1,0 +1,35 @@
+.result-list {
+    width: 100%;
+    max-height: 219px;
+    overflow-y: auto;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    z-index: 1001;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+}
+
+.result {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.result img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.result p {
+    margin: 0;
+    font-size: 16px;
+    color: #333;
+}
+
+.result:hover {
+    background-color: #f1f1f1;
+}
