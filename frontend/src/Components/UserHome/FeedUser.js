@@ -4,7 +4,7 @@ import PostUser from './PostUser'
 const FeedUser = ({posts,setPosts,profileImg,modelDetails,images}) => {
   return (
     <div className='feedposts'>
-        {posts.map((post)=>(
+        {posts?.map((post)=>(
             <PostUser 
               images={images }
               modelDetails={modelDetails}

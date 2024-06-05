@@ -4,7 +4,7 @@ import { jwtDecode } from "jwt-decode";
 
 export const fetchChatRooms = async (token) => {
     try {
-        const response = await axios.get(`${API_PATHS.api}/chats/`, {
+        const response = await axios.get(`${API_PATHS.api}/chats`, {
             headers: {
                 Authorization: `Bearer ${token}`
             }

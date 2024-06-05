@@ -202,6 +202,7 @@ const Chat = () => {
                 try {
                     const result = await fetchChatRooms(userData.token);
                     console.log("result", result)
+                    if(result === undefined) return;
                     setChatRooms([...result.data.rooms])
                 } catch (error) {
                     console.error("Error fetching chat rooms:", error);
@@ -213,15 +214,7 @@ const Chat = () => {
     },[fetchRooms, userData.token])
 
     useEffect(()=> {
-
-        chatRooms.map((room) => {             
-            const joinRoomMessage = {
-              "type" : "join",
-              "payload" : { "room_id" : room.room_id}   
-            }    
-            connection.current.send(JSON.stringify(joinRoomMessage))
-        })
-
+        
         const sendOnlineNotify = () => {
             connection.current.send(JSON.stringify({"type": "online", 
                                                     "payload": {
@@ -229,6 +222,19 @@ const Chat = () => {
             }}))
 
         }
+        if (connection.current.readyState === WebSocket.OPEN) {
+            chatRooms.map((room) => {             
+            const joinRoomMessage = {
+              "type" : "join",
+              "payload" : { "room_id" : room.room_id}   
+            }    
+            connection.current.send(JSON.stringify(joinRoomMessage))
+            sendOnlineNotify()
+            })
+        } 
+
+        
+
     },[chatRooms])
 
     useEffect(()=> {
