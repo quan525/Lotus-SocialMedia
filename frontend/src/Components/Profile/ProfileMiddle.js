@@ -64,7 +64,7 @@ const ProfileMiddle = ({
           Authorization: `Bearer ${ userData.token }`
         }
       }
-    const url = `${API_PATHS}/api/post/posts`
+    const url = `${API_PATHS.api}/post/posts`
     try {
       const response =  await axios.post(url, { content : body}, config);
       setBody("")

@@ -55,7 +55,7 @@ const Home = ({setFriendsProfile, friendRequests}) => {
     };
     
     // Define the URL where you want to post the data
-    const url = `${API_PATHS.api}/post/post`;
+    const url = `${API_PATHS.api}/post/posts`;
     // Make a POST request to the URL using Axios
     axios.post(url, { content: body, media: images }, config)
         .then((response) => {
