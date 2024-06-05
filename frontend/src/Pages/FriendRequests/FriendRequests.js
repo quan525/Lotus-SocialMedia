@@ -21,8 +21,10 @@ const FriendRequests = ({setFriendsProfile, friendRequests, setFriendRequests}) 
           console.log(typeof res); // Add this line
           console.log(res)
           setFriendRequests(request => {
-            const uniqueRes = res?.filter(r => !request.some(req => req.user_id === r.user_id));
-            return [...request, ...uniqueRes];
+              if(Array.isArray(res)) {
+              const uniqueRes = res?.filter(r => !request.some(req => req.user_id === r.user_id));
+              return [...request, ...uniqueRes];
+            }
           });        
         })
         .catch(error => {
