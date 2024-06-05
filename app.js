@@ -38,7 +38,7 @@ app.use(express.urlencoded({ extended: false })); // Parse application/x-www-for
 //   origin: "http://localhost:3001",
 // };
 var corsOptions = {
-  origin: 'https://fd78e0fa.lotus-socialmedia.pages.dev' || "http://localhost:3001",
+  origin: 'https://lotus-socialmedia.pages.dev/' || "http://localhost:3001",
   optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 }
 
