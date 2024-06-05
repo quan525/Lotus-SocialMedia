@@ -8,7 +8,7 @@ const Online = () => {
   const {friendsList, setFriendsList} = useContext( FriendsContext )
   return (
     <div className="online-comp">
-      <h2>Online Friends</h2>
+      <h2>Friends</h2>
 
       {friendsList.map((value,user_id)=>(
         <FriendsList 

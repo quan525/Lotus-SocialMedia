@@ -58,7 +58,7 @@ useEffect(()=> {
     <div className="nav-wrapper">
     <nav>
       <div className="n-logo">
-          <Link href="/Lotus/home" className='logo' style={{color:"white",textDecoration:"none"}}>
+          <Link href="/home" className='logo' style={{color:"white",textDecoration:"none"}}>
             <h1>LoTus</h1>
           </Link>
       </div>
@@ -77,7 +77,7 @@ useEffect(()=> {
       </div>
 
       <div className="social-icons">
-      <Link href="/Lotus/home" style={{textDecoration:"none",display:"flex",alignItems:"center",color:"#000000"}}>
+      <Link href="/home" style={{textDecoration:"none",display:"flex",alignItems:"center",color:"#000000"}}>
         <AiOutlineHome className='nav-icons'/>
       </Link>
 
@@ -88,7 +88,7 @@ useEffect(()=> {
         }
       </Link>
       {/* <Link to="/notification" id='notifi' style={{marginTop:"8px"}}><IoNotificationsOutline className='nav-icons'/><span>{notifications.length}</span></Link> */}
-      <Link href='/Lotus/chat' style={{ textDecoration: 'none' }}>
+      <Link href='/chat' style={{ textDecoration: 'none' }}>
         <AiOutlineMessage className='nav-icons' />
       </Link>
       

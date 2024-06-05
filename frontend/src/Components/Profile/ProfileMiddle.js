@@ -7,6 +7,7 @@ import "../Profile/ProfileMiddle.css"
 import ProfileInputPost from './ProfileComponents/ProfileInputPost'
 
 import axios from 'axios'
+import API_PATHS from '../../api/apiPath'
 import { UserContext } from '../../App'
 const ProfileMiddle = ({
                         search,
@@ -38,7 +39,7 @@ const ProfileMiddle = ({
     }
 
     try {
-      const response = await axios.get("http://localhost:3000/api/post/my-posts", config);  
+      const response = await axios.get(`${API_PATHS}/post/my-posts`, config);  
       console.log(response)
       setUserPostData(response.data);
     } catch (error) {
@@ -63,7 +64,7 @@ const ProfileMiddle = ({
           Authorization: `Bearer ${ userData.token }`
         }
       }
-    const url = "http://localhost:3000/api/post/posts"
+    const url = `${API_PATHS}/api/post/posts`
     try {
       const response =  await axios.post(url, { content : body}, config);
       setBody("")

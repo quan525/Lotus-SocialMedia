@@ -18,9 +18,10 @@ const FriendRequests = ({setFriendsProfile, friendRequests, setFriendRequests}) 
     if (userData.token) {
       fetchFriendRequests(userData.token)
         .then(res => {
+          console.log(typeof res); // Add this line
           console.log(res)
           setFriendRequests(request => {
-            const uniqueRes = res.filter(r => !request.some(req => req.user_id === r.user_id));
+            const uniqueRes = res?.filter(r => !request.some(req => req.user_id === r.user_id));
             return [...request, ...uniqueRes];
           });        
         })
