@@ -146,7 +146,7 @@ const Chat = () => {
 
     
     useEffect(() => {
-        const socket = new WebSocket('ws://lotus-api-n5eq.onrender.com' || "ws://localhost:3000");
+        const socket = new WebSocket('wss://lotus-api-n5eq.onrender.com' || "ws://localhost:3000");
         
         socket.onopen = (event) => { 
           console.log("Joining room", currentRoomId);
