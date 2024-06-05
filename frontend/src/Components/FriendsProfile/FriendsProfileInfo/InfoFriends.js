@@ -92,12 +92,12 @@ const handleFriendAction = async (action, token, otherUserId) => {
             <div className="info-col-1">
               <div className="info-details-list"> 
                 <LocationOnOutlinedIcon />
-                <span>Ha Noi</span>
+                <span></span>
               </div>
 
               <div className="info-details-list">
                 <WorkOutlineRoundedIcon />
-                <span>Engineer</span>
+                <span></span>
               </div>
 
               <div className="info-details-list">
