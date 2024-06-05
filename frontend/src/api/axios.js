@@ -1,7 +1,7 @@
 import axios from 'axios';
-
+import API_PATHS from './apiPath'
 export const fetchFriendRequests = async (token) => {
-  const url = "http://localhost:3000/api/friends/friend-requests";
+  const url = `${API_PATHS}/api/friends/friend-requests`;
   const config = {
     headers: {
       "Authorization": `Bearer ${token}`
@@ -22,7 +22,7 @@ export const fetchFriendRequests = async (token) => {
 
 export const acceptRequest = async (token, friendId) => {
   let responseData
-  const url = `http://localhost:3000/api/friends/${friendId}/accept`;
+  const url = `${API_PATHS}/api/friends/${friendId}/accept`;
   const config =  { 
     headers: {"Authorization" : `Bearer ${token}` }
   } 
