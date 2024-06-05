@@ -6,6 +6,7 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios'
 import { UserContext } from '../../App'
 import { getUserFriends } from '../../api/services/Friends'
+import API_PATHS from '../../api/apiPath';
 
 const FriendsProfileMiddle = ({userId, friendProfile}) => {
   const user = useContext(UserContext)
@@ -26,7 +27,7 @@ const FriendsProfileMiddle = ({userId, friendProfile}) => {
 
       if (userId && user?.token) {
         try {
-          const response = await axios.get("http://localhost:3000/api/post/user/" + userId + "/posts", config);
+          const response = await axios.get(`${API_PATHS.api}/post/user/` + userId + "/posts", config);
           console.log(response)
           setFriendPosts(response.data);
         } catch (error) {

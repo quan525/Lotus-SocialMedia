@@ -2,6 +2,7 @@ import React from 'react'
 import PostUser from './PostUser'
 
 const FeedUser = ({posts,setPosts,profileImg,modelDetails,images}) => {
+  
   return (
     <div className='feedposts'>
         {posts?.map((post)=>(

@@ -39,9 +39,9 @@ const ProfileMiddle = ({
     }
 
     try {
-      const response = await axios.get(`${API_PATHS}/post/my-posts`, config);  
+      const response = await axios.get(`${API_PATHS.api}/post/my-posts`, config);  
       console.log(response)
-      setUserPostData(response.data);
+      setUserPostData(response?.data);
     } catch (error) {
       console.error("Error fetching posts: ", error);
       if (error.response) {
