@@ -26,6 +26,9 @@ import moment from 'moment';
 import { UserContext } from '../../App';
 
 import SharedPost from '../Share/SharedPost';
+import API_PATHS from '../../api/apiPath';
+
+import { useAlert } from 'react-alert'
 const PostUser = ({posts,post,setPosts,profileImg,modelDetails,images}) => {
   const userData = useContext(UserContext)
   const [comments,setComments] =useState([])
@@ -35,6 +38,8 @@ const PostUser = ({posts,post,setPosts,profileImg,modelDetails,images}) => {
 
   const [filledLike,setFilledLike] =useState(<FavoriteBorderOutlinedIcon />)
   const [unFilledLike,setUnFilledLike] =useState(false)
+
+  const alert = useAlert()
 
   const handlelikes=()=>{
     setLike(unlike ? like -1 :like +1)
@@ -50,7 +55,7 @@ const PostUser = ({posts,post,setPosts,profileImg,modelDetails,images}) => {
 
 
 const handleDelete=(id)=>{
-    const url = `http://localhost:3000/api/post/${id}` 
+    const url = `${API_PATHS.api}/post/${id}` 
     const token = JSON.parse(localStorage.getItem("data")).token
     const config = {
         headers: {
@@ -64,6 +69,8 @@ const handleDelete=(id)=>{
         const deleteFilter = posts.filter(val=> val.post_id !== id)
         setPosts(deleteFilter)
         setShowDelete(false)
+      }else {
+        alert.show(response?.data)
       }
     })
   const deleteFilter = posts.filter(val=> val.id !== id)
@@ -221,8 +228,8 @@ const handleDelete=(id)=>{
         
 
         <div className="like-comment-details">
-          <span className='post-like'>{post.likes_count} people like it,</span>
-          <span className='post-comment'>{post.comments_count} comments</span>
+          <span className='post-like'>{post?.likes_count} likes,</span>
+          <span className='post-comment'>{post?.comments_count} comments</span>
         </div>
         
        {showComment && (<div className="commentSection">
