@@ -33,6 +33,7 @@ import { UserContext } from '../../App';
 import { commentOnPost, fetchPostComments } from '../../api/services/Comments';
 import { handleDateDiff  } from '../../utils/utils';
 import { sharePost } from '../../api/services/Post';
+import API_PATHS from '../../api/apiPath';
 
 
 
@@ -77,7 +78,7 @@ const Post = ({post,posts,setPosts,setFriendsProfile,images}) => {
 
     setFilledLike(unFilledLike ?   <FavoriteBorderOutlinedIcon /> : <FavoriteRoundedIcon />)
     setUnFilledLike(!unFilledLike)
-    const url = `http://localhost:3000/api/like/${postId}`
+    const url = `${API_PATHS.api}/like/${postId}`
     
     console.log(postId)
     const config = {
