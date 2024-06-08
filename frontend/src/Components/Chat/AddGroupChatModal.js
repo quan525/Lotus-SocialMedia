@@ -173,24 +173,6 @@ const AddGroupChat = ({ open, handleClose, setChatRooms, chatRooms, setFetchRoom
               Create Group
             </Button>
         </Box>      
-        <Card
-            sx={{
-              width: 600,
-              height: 300,
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-        >
-        <TextField
-            sx={{
-              width: 300,
-              input: { textAlign: 'center', padding: 1, fontSize: 20 },
-            }}
-            placeholder='My Awesome Org 🙂'
-        />
-        </Card>
       </div>
     </Modal>
   );

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import API_PATHS from './apiPath'
 export const fetchFriendRequests = async (token) => {
-  const url = `${API_PATHS}/api/friends/friend-requests`;
+  const url = `${API_PATHS.api}/friends/friend-requests`;
   const config = {
     headers: {
       "Authorization": `Bearer ${token}`
@@ -15,6 +15,7 @@ export const fetchFriendRequests = async (token) => {
     })
     .catch((error) => {
       console.error("Error fetching friend requests:", error);
+      return error
     });
 
   return responseData;

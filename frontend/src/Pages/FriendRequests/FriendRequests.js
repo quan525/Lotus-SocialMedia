@@ -57,7 +57,7 @@ const FriendRequests = ({setFriendsProfile, friendRequests, setFriendRequests}) 
       <div className="notification-group">
               <h1>Request</h1>
               {friendRequests ? (
-                friendRequests.map((request) => (
+                friendRequests?.map((request) => (
                   <Request request={request} handleFriendsId={handleFriendsId} setFriendRequests={setFriendRequests} friendRequests={friendRequests} />
                 ))
               ) : (
