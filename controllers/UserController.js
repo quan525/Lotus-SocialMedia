@@ -131,6 +131,33 @@ const ResetPassword = async (req, res) => {
   }
 }
 
+const ForgotPassword = async (req, res) => {
+  try{
+    console.log(req.body.username)
+    const username = req.body.username;
+    const result = await pool.query('SELECT username, user_id, email FROM users WHERE username = $1', [username]);
+    console.log(result)
+    if(result.rows.length < 1){
+      res.status(404).send("User not found")
+    }else if(result.rows[0].email){
+      const user = result.rows[0];
+      const token = resetPasswordToken(user.user_id);
+      const userId = user.user_id;
+      await new PasswordToken({
+        user_id : userId,
+        token : token
+      })
+      const link = `http:localhost:3000/Lotus/passwordReset?token=${token}&id=${userId}`;
+      const text = `Hi, We received your request to reset password.\nHere is your password reset link: <a href="${link}">${link}</a>`
+      await sendEmail(user.email,"Password Reset Request",text);
+      res.status(200).send("Password reset link sent to your email")
+    }
+  }catch (err){
+    console.log(err)
+    res.status(500).send("Server error")
+  }
+}
+
 const UpdateAvatar = async (req, res) => {
   console.log(req.file)
   const file = req.file;
@@ -309,4 +336,4 @@ const FriendSuggestion = async (req, res) => {
     // Handle error
   }
 };
-module.exports = { Login, Register, ResetPassword, GetAllUsers, UpdateAvatar, GetSingleUser, SearchUser, FriendSuggestion, UpdateProfile}
+module.exports = { Login, Register, ForgotPassword, ResetPassword, GetAllUsers, UpdateAvatar, GetSingleUser, SearchUser, FriendSuggestion, UpdateProfile}
