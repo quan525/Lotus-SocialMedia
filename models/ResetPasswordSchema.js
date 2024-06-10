@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const PasswordToken = new Schema({
   user_id: {
-    type: Schema.Types.ObjectId,
+    type: Number,
     required: true
   },
   token: {
