@@ -206,6 +206,7 @@ const App = () => {
 
                 <Route path='/signup' element={isLoggedIn ? <Navigate to="/home" /> : <SignUp />} />
 
+                <Route path='/passwordReset' element={isLoggedIn ? <Navigate to="/home" /> : <SignUp />} />
                 {/* <Route path='/SendOtp'   element={isLoggedIn ? <Navigate to="/home"/> : <OTPInput/> } /> */}
 
                 <Route path='/videocall' element={<PrivateRoute><VideoCall/></PrivateRoute>} />

@@ -47,13 +47,6 @@ const Login = () => {
         // }
     }
 
-    const handleForgotPassword = (data) => {
-        const error = {};
-        if(data.username === ""){
-            error.username = "* Username is Required"
-        }
-    } 
-
     function validationLogin(data){
         const error ={}
 
@@ -80,7 +73,27 @@ const Login = () => {
         return error
    }
 
-
+    const handleForgotPassword = async () => {
+            if(data.username === ""){                
+            alert.show("* Enter username to reset password");
+            return;
+        }
+        console.log("Forgot password");
+        try {
+            await ForgotPassword(data.username)
+            .then(res => 
+                {
+                    if(res && res.ok){
+                        alert.show('Request was successful');
+                    } else {
+                        alert.show(res ? res.data : 'No response received');
+                    } 
+                }
+             );
+        } catch (error) {
+            console.error(error);
+        }
+    }
 
   return (
     <div className="container">
@@ -112,7 +125,7 @@ const Login = () => {
                
 
                 <div className='divBtn'>
-                    <small className='FG'>Forgot Password?</small>
+                    <small className='FG'  onClick={handleForgotPassword}>Forgot Password?</small>
                     <button type='submit' className='loginBtn'>LOGIN</button>
                 </div>
                 
