@@ -40,6 +40,7 @@ function initWebSocketServer(server) {
                     broadcastToChatRoom(ws, payload);
                     break; 
                 case 'online':         
+                    console.log("online")
                     for(const room in chatRooms){
                       if(chatRooms[room].includes(ws)){
                         sendOnlineNotify(ws, room, payload.user_id)

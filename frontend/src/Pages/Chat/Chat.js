@@ -146,7 +146,7 @@ const Chat = () => {
 
     
     useEffect(() => {
-        const socket = new WebSocket('wss://lotus-api-n5eq.onrender.com' || "ws://localhost:3000");
+        const socket = new WebSocket('wss://lotus-api-n5eq.onrender.com' );
         
         socket.onopen = (event) => { 
           console.log("Joining room", currentRoomId);
@@ -161,6 +161,7 @@ const Chat = () => {
             }) ) 
           }
           if(data.online){
+            console.log(data)
             clearTimeout(setOnlineStatus)
             // console.log("online", data)
             setOnlineRoom(prevState => ({
@@ -255,7 +256,7 @@ const Chat = () => {
                 return;
             }
         }
-        const intervalId = setInterval(sendOnlineStatus, 30000);
+        const intervalId = setInterval(sendOnlineStatus, 10000);
         return () => clearInterval(intervalId); // Clear interval on component unmount
     }, [connection.current ? connection.current.readyState : null, navigator.onLine]);
 
