@@ -18,6 +18,6 @@ const PasswordToken = new Schema({
   },
 });
 
-module.exports = mongoose.model("Token", PasswordToken);
+module.exports = mongoose.model("ResetToken", PasswordToken);
 
 

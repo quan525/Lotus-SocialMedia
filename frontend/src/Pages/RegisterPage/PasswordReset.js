@@ -1,4 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react'
+import { useParams } from 'react-router-dom';
+
 import {FiMail} from "react-icons/fi"
 import {RiLockPasswordLine} from "react-icons/ri"
 import "../RegisterPage/RegisterPage.css"
@@ -6,10 +8,11 @@ import { Link, useNavigate } from 'react-router-dom'
 import { LoginContext } from '../../App';
 import { useAlert } from 'react-alert'
 
-import API_PATHS from '../../api/apiPath'
-import axios from 'axios';
+import { ResetPassword } from '../../api/services/User'
 
 const PasswordReset = () => {
+    const { token, userId } = useParams();
+
     const [error, setError] = useState({})
     const [data, setData] = useState({
         password: "",
@@ -22,8 +25,31 @@ const PasswordReset = () => {
     }
 
     const handleSubmit = async (e) => {
+        e.preventDefault();
+        const error = validateInput(data);
+        setError(error)
+        if(!error) {
+            const result = await ResetPassword(userId, data.password, token)
+            console.log(result)
+        }
     }
     
+    function validateInput(data){
+        const error ={}
+
+        
+        const passwordPattern= /^[a-zA-Z0-9!@#\$%\^\&*_=+-]{8,12}$/g;
+
+        if(data.password === ""){
+            error.password = "* Password is Required"
+        }
+        else if(!passwordPattern.test(data.password)){
+            error.password="* Password not valid"
+        }else if (data.password != data.checkPassword){
+            error.password="* Password did not match"
+        }
+        return error
+   }
     return (
           <div className="container">
           <div className="container-form">

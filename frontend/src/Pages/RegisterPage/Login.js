@@ -31,7 +31,7 @@ const Login = () => {
         const errors = validationLogin(data);
         setError(errors);
 
-        // if (!errors) {
+        if (!errors) {
             axios.post(`${API_PATHS.login}/login`, data)
             .then(response => {
                 console.log(response.data);
@@ -46,7 +46,7 @@ const Login = () => {
                 console.log('Login failed', error);
                 // handle failed login here
             });
-        // }
+        }
     }
 
     function validationLogin(data){
@@ -80,9 +80,10 @@ const Login = () => {
             alert.show("* Enter username to reset password");
             return;
         }
+        const rootUrl = window.location.origin.toString()
         console.log("Forgot password");
         try {
-            await ForgotPassword(data.username)
+            await ForgotPassword(data.username, rootUrl)
             .then(res => 
                 {
                     if(res && res.ok){

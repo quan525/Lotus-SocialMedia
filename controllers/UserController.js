@@ -5,7 +5,9 @@ const bcrypt = require('bcrypt')
 const saltRounds = 10
 const PasswordToken = require("../models/ResetPasswordSchema");
 const sendEmail = require("../utils/sendEmail");
+const ResetToken = require("../models/ResetPasswordSchema");
 
+const ResetPassword = require("../models/ResetPasswordSchema");
 const Register = async (req, res, next) => {
   let uploadedImagePublicId;
   try {
@@ -108,22 +110,27 @@ const Login = async (req, res) => {
 const ResetPassword = async (req, res) => {
   try{
     console.log(req.body.username)
-    const username = req.body.username;
-    const result = await pool.query('SELECT username, user_id, email FROM users WHERE username = $1', [username]);
-    console.log(result)
+    const { userId, resetPassword, token } = req.body;
+    const result = await pool.query('SELECT username, user_id, email FROM users WHERE username = $1 LIMIT 1', [userId]);
     if(result.rows.length < 1){
       res.status(404).send("User not found")
     }else if(result.rows[0].email){
       const user = result.rows[0];
       const token = resetPasswordToken(user.user_id);
       const userId = user.user_id;
-      await new PasswordToken({
-        user_id : userId,
-        token : token
-      })
-      const link = `http:localhost:3000/Lotus/passwordReset?token=${token}&id=${userId}`;
-      const text = `Hi, We received your request to reset password.\nHere is your password reset link: ${link}`
-      await sendEmail(user.email,"Password Reset Request",text);
+      const resetItem = await ResetToken.findOneAndDelete({user_id: userId}, {token: token});
+      if(!resetItem) {
+        res.status(400).send('Token not found')
+      }else{
+        const salt = await bcrypt.genSalt(saltRounds);
+        const encryptPassword = await bcrypt.hash(resetPassword, salt);
+        const result = await pool.query('UPDATE users SET password = $1 WHERE user_id = $2', [encryptPassword, userId]);
+        if(result.rowCount > 0){
+          res.status(200).send("Password reset successful")
+        }else{
+          res.status(400).send("Password reset failed")
+        }
+      }
     }
   }catch (err){
     console.log(err)
@@ -135,20 +142,22 @@ const ForgotPassword = async (req, res) => {
   try{
     console.log(req.body.username)
     const username = req.body.username;
+    const webUrl = req.body.webRootUrl;
     const result = await pool.query('SELECT username, user_id, email FROM users WHERE username = $1', [username]);
     console.log(result)
     if(result.rows.length < 1){
       res.status(404).send("User not found")
     }else if(result.rows[0].email){
       const user = result.rows[0];
-      const token = resetPasswordToken(user.user_id);
       const userId = user.user_id;
       await new PasswordToken({
         user_id : userId,
         token : token
       })
-      const link = `http:localhost:3000/Lotus/passwordReset?token=${token}&id=${userId}`;
-      const text = `Hi, We received your request to reset password.\nHere is your password reset link: <a href="${link}">${link}</a>`
+      const link = `${webUrl}/passwordReset?token=${token}&userId=${userId}`;
+      const text = `Hi, We received your request to reset password.\nHere is your password reset link:\n
+      <a href="${link}"> click here </a>
+`
       await sendEmail(user.email,"Password Reset Request",text);
       res.status(200).send("Password reset link sent to your email")
     }
