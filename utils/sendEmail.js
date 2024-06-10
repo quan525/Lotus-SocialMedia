@@ -1,7 +1,7 @@
 const nodemailer = require("nodemailer");
 require('dotenv').config();
 
-const sendEmail = async (email, subject, text) => {
+const sendEmail = async (email, subject, body) => {
     try {
         console.log(typeof process.env.EMAIL)
         console.log(process.env.EMAILPASS)
@@ -19,7 +19,7 @@ const sendEmail = async (email, subject, text) => {
             from: "LOTUS@gmail.com",
             to: email,
             subject: subject,
-            text: text,
+            body
         });
         
         console.log("email sent sucessfully");

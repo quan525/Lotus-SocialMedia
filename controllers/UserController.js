@@ -154,10 +154,13 @@ const ForgotPassword = async (req, res) => {
         token : token
       }).save();
       const link = `${webUrl}/passwordReset?token=${token}&userId=${userId}`;
-      const text = `Hi, We received your request to reset password.\nHere is your password reset link:\n
+      const body = `
+      <h2>Hi,</h2> 
+      <p>We received your request to reset password.</p>
+      <p>Here is your password reset link:</p>
       <a href="${link}"> click here </a>
-`
-      await sendEmail(user.email,"Password Reset Request",text);
+      <p>Please note that the reset token will be expired in 3 minute 30 sec</p>`
+      await sendEmail(user.email,"Password Reset Request",body);
       res.status(200).send("Password reset link sent to your email")
     }
   }catch (err){
