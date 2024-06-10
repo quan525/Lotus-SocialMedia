@@ -115,7 +115,6 @@ const ResetPassword = async (req, res) => {
       res.status(404).send("User not found")
     }else if(result.rows[0].email){
       const user = result.rows[0];
-      const token = resetPasswordToken(user.user_id);
       const userId = user.user_id;
       const resetItem = await ResetItem.findOneAndDelete({user_id: userId}, {token: token});
       if(!resetItem) {
@@ -149,13 +148,11 @@ const ForgotPassword = async (req, res) => {
     }else if(result.rows[0].email){
       const user = result.rows[0];
       const userId = user.user_id;
+      const token = resetPasswordToken(user.user_id);
       await new ResetItem({
         user_id : userId,
         token : token
-      })
-      ResetItem.save(function(err, result) {
-        if(err) throw err;
-      })
+      }).save();
       const link = `${webUrl}/passwordReset?token=${token}&userId=${userId}`;
       const text = `Hi, We received your request to reset password.\nHere is your password reset link:\n
       <a href="${link}"> click here </a>
