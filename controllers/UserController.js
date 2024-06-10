@@ -149,11 +149,11 @@ const ForgotPassword = async (req, res) => {
     }else if(result.rows[0].email){
       const user = result.rows[0];
       const userId = user.user_id;
-      await new resetItem({
+      await new ResetItem({
         user_id : userId,
         token : token
       })
-      resetItem.save(function(err, result) {
+      ResetItem.save(function(err, result) {
         if(err) throw err;
       })
       const link = `${webUrl}/passwordReset?token=${token}&userId=${userId}`;
