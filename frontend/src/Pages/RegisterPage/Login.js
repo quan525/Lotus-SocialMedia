@@ -8,6 +8,8 @@ import { useAlert } from 'react-alert'
 
 import API_PATHS from '../../api/apiPath'
 import axios from 'axios';
+import { ForgotPassword } from '../../api/services/User'
+
 const Login = () => {
     const alert = useAlert()
     const navigate =useNavigate()
