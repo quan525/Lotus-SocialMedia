@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const PasswordToken = new Schema({
-  userId: {
+  user_id: {
     type: Schema.Types.ObjectId,
     required: true,
     ref: "user",
