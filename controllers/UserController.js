@@ -3,11 +3,10 @@ const { generateToken, resetPasswordToken } = require("../config/generateToken")
 const cloudinary = require("../config/cloudinary")
 const bcrypt = require('bcrypt')
 const saltRounds = 10
-const PasswordToken = require("../models/ResetPasswordSchema");
 const sendEmail = require("../utils/sendEmail");
-const ResetToken = require("../models/ResetPasswordSchema");
 
-const ResetPassword = require("../models/ResetPasswordSchema");
+const ResetItem = require("../models/ResetPasswordSchema");
+
 const Register = async (req, res, next) => {
   let uploadedImagePublicId;
   try {
@@ -118,7 +117,7 @@ const ResetPassword = async (req, res) => {
       const user = result.rows[0];
       const token = resetPasswordToken(user.user_id);
       const userId = user.user_id;
-      const resetItem = await ResetToken.findOneAndDelete({user_id: userId}, {token: token});
+      const resetItem = await ResetItem.findOneAndDelete({user_id: userId}, {token: token});
       if(!resetItem) {
         res.status(400).send('Token not found')
       }else{
@@ -150,9 +149,12 @@ const ForgotPassword = async (req, res) => {
     }else if(result.rows[0].email){
       const user = result.rows[0];
       const userId = user.user_id;
-      await new PasswordToken({
+      await new resetItem({
         user_id : userId,
         token : token
+      })
+      resetItem.save(function(err, result) {
+        if(err) throw err;
       })
       const link = `${webUrl}/passwordReset?token=${token}&userId=${userId}`;
       const text = `Hi, We received your request to reset password.\nHere is your password reset link:\n

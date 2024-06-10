@@ -245,7 +245,6 @@ const SignUp = () => {
                     )}
                 </div>
                 <div className='divBtn'>
-                    <small className='FG'>Forgot Password?</small>
                     <button className='loginBtn' type='submit'>SIGN UP</button>
                 </div>
             </form>
