@@ -4,12 +4,11 @@ const Schema = mongoose.Schema;
 const PasswordToken = new Schema({
   user_id: {
     type: Schema.Types.ObjectId,
-    required: true,
-    ref: "user",
+    required: true
   },
   token: {
     type: String,
-    required: true,
+    required: true
   },
   createdAt: {
     type: Date,
