@@ -57,5 +57,6 @@ export const updateProfile = async (token, data) => {
 }
 
 export const ForgotPassword = async (username) => {
-    await axios.post(`${API_PATHS.api}/users/forgot_password`, {username})
+    const result = await axios.post(`${API_PATHS.api}/auth/forgot_password`, {username})
+    return result
 }
