@@ -19,7 +19,7 @@ const sendEmail = async (email, subject, body) => {
             from: "LOTUS@gmail.com",
             to: email,
             subject: subject,
-            body
+            html : body
         });
         
         console.log("email sent sucessfully");

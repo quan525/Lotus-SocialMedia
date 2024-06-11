@@ -28,6 +28,7 @@ const Login = () => {
 
     const handleLogin = async (e) => {
         e.preventDefault();
+        console.log("handleLogin function called");
         const errors = validationLogin(data);
         setError(errors);
 
@@ -75,7 +76,8 @@ const Login = () => {
         return error
    }
 
-    const handleForgotPassword = async () => {
+    const handleForgotPassword = async (e) => {
+        e.preventDefault()
             if(data.username === ""){                
             alert.show("* Enter username to reset password");
             return;
@@ -121,7 +123,6 @@ const Login = () => {
                             name="password" 
                             id="password" 
                             onChange={handleChange}
-                            onClick={handleForgotPassword}
                             placeholder='Password'/>
                 </div>
                 {error.password && <span style={{color:"red",display:"block",marginTop:"5px"}}>{error.password}</span>}
