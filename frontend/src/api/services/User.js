@@ -61,7 +61,7 @@ export const ForgotPassword = async (username, webRootUrl) => {
     return result
 }
 
-export const PasswordReset = async (userId, resetPassword, token) => {
+export const ResetPassword = async (userId, resetPassword, token) => {
     const result = await axios.post(`${API_PATHS.api}/auth/reset_password`, {userId, resetPassword, token})
     return result
 }
