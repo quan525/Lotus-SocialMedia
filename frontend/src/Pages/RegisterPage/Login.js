@@ -32,7 +32,7 @@ const Login = () => {
         const errors = validationLogin(data);
         setError(errors);
 
-        if (!errors) {
+        if (Object.keys(errors).length === 0) {
             axios.post(`${API_PATHS.login}/login`, data)
             .then(response => {
                 console.log(response.data);
