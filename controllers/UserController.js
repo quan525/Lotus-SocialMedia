@@ -153,7 +153,7 @@ const ForgotPassword = async (req, res) => {
         user_id : userId,
         token : token
       }).save();
-      const link = `${webUrl}/passwordReset?token=${token}&userId=${userId}`;
+      const link = `${webUrl}/api/auth/passwordReset?token=${token}&userId=${userId}`;
       const body = `
       <h2>Hi,</h2> 
       <p>We received your request to reset password from account ${user.username}.</p>

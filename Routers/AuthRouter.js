@@ -1,5 +1,5 @@
 const express = require("express");
-const { Login, Register, ForgotPassword } = require("../controllers/UserController");
+const { Login, Register, ForgotPassword, ResetPassword } = require("../controllers/UserController");
 const router = express.Router();
 const parser = require("../config/multer");
 
@@ -11,4 +11,5 @@ router.post("/logout")
 
 router.post("/forgot_password", ForgotPassword);
 
+router.post("/reset_password", ResetPassword)
 module.exports = router;
