@@ -18,7 +18,7 @@ const Right = ({showMenu,setShowMenu}) => {
 
       <Friends />
 
-      <FollowingU />
+      {/* <FollowingU /> */}
     </div>
   )
 }

@@ -156,7 +156,7 @@ const ForgotPassword = async (req, res) => {
       const link = `${webUrl}/passwordReset?token=${token}&userId=${userId}`;
       const body = `
       <h2>Hi,</h2> 
-      <p>We received your request to reset password.</p>
+      <p>We received your request to reset password from account ${user.username}.</p>
       <p>Here is your password reset link:</p>
       <a href="${link}"> click here </a>
       <p>Please note that the reset token will be expired in 3 minute 30 sec</p>`

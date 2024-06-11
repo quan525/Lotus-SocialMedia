@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react'
-import { useParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 
 import {FiMail} from "react-icons/fi"
 import {RiLockPasswordLine} from "react-icons/ri"
@@ -11,8 +11,9 @@ import { useAlert } from 'react-alert'
 import { ResetPassword } from '../../api/services/User'
 
 const PasswordReset = () => {
-    const { token, userId } = useParams();
-
+    const [ searchParams ] = useSearchParams();
+    const token = searchParams.get('token')
+    const userId = searchParams.get('userId')
     const [error, setError] = useState({})
     const [data, setData] = useState({
         password: "",
@@ -26,9 +27,9 @@ const PasswordReset = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const error = validateInput(data);
-        setError(error)
-        if(!error) {
+        const errors = validateInput(data);
+        setError(errors)
+        if(Object.keys(errors).length === 0) {
             const result = await ResetPassword(userId, data.password, token)
             console.log(result)
         }
@@ -40,7 +41,7 @@ const PasswordReset = () => {
         
         const passwordPattern= /^[a-zA-Z0-9!@#\$%\^\&*_=+-]{8,12}$/g;
 
-        if(data.password === ""){
+        if(data.password === "" || data.checkPassword === ""){
             error.password = "* Password is Required"
         }
         else if(!passwordPattern.test(data.password)){
@@ -67,8 +68,8 @@ const PasswordReset = () => {
                   {error.password && <span style={{color:"red",display:"block",marginTop:"5px"}}>{error.password}</span>}
 
                   <div className="inputBox">
-                      <FiMail className='password'/>
-                      <input type="text" 
+                      <RiLockPasswordLine className='password'/>
+                      <input type="password" 
                               name="checkPassword" 
                               id="checkPassword" 
                               onChange={handleChange}
@@ -80,8 +81,10 @@ const PasswordReset = () => {
                   <div className='divBtn'>
                       <button type='submit' className='loginBtn' onClick={handleSubmit}>Reset Password</button>
                   </div>
-
-              </form>
+                </form>
+                <div className='dont'>
+                    <p>Back to Signin page<Link to="/"><span>Sign in</span></Link></p>
+                </div>
           </div>
       </div>
     )

@@ -88,6 +88,7 @@ const Login = () => {
             await ForgotPassword(data.username, rootUrl)
             .then(res => 
                 {
+                    console.log(res)
                     if(res && res.ok){
                         alert.show('Request was successful');
                     } else {

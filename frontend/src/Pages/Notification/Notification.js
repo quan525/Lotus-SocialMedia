@@ -44,11 +44,6 @@ const Notification = ({notifications}) => {
           
           })
         }
-        <div className="notification-msg">
-            {/* <img src={img1} alt="" /> */}
-            {/* User has like you post onclick => post_id */}
-            <p>Mike Tyson liked <span className='noti-like'>your profile picture</span><small><br />10 mins ago</small></p>
-        </div>
 
 
       </div>
