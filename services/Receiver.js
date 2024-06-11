@@ -60,8 +60,8 @@ async consume(queue, waitTime = 5000) {
 
   // Stop consuming
   await this.channel.cancel(consumeResponse.consumerTag);
-
-  return messages ;
+  const consumerTag = consumeResponse.consumerTag
+  return { messages, consumerTag } ;
 }
 
   async stopConsuming(consumerTag) {

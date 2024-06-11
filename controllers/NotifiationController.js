@@ -42,11 +42,12 @@ const GetNotifications = async (req, res) => {
   const userId = req.userId;
   let messages = [];
   let timeoutId;
-
+  let consumerTag;
   const poll = async () => {
     try {
       await consumer.consume(userId).then((result) => {
-        messages = messages.concat(result);
+        messages = messages.concat(result.messages);
+        consumerTag = result.consumerTag;
       });
 
       if (messages.length > 0) {
@@ -73,6 +74,7 @@ const GetNotifications = async (req, res) => {
 
   // Stop polling when the client disconnects
   res.on('close', () => {
+    consumer.stopConsuming(consumerTag);
     clearTimeout(timeoutId);
   });
 
