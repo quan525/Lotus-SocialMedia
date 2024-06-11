@@ -110,7 +110,7 @@ const ResetPassword = async (req, res) => {
   try{
     console.log(req.body.username)
     const { userId, resetPassword, token } = req.body;
-    const result = await pool.query('SELECT username, user_id, email FROM users WHERE username = $1 LIMIT 1', [userId]);
+    const result = await pool.query('SELECT username, user_id, email FROM users WHERE user_id = $1 LIMIT 1', [userId]);
     if(result.rows.length < 1){
       res.status(404).send("User not found")
     }else if(result.rows[0].email){
@@ -153,7 +153,7 @@ const ForgotPassword = async (req, res) => {
         user_id : userId,
         token : token
       }).save();
-      const link = `${webUrl}/api/auth/passwordReset?token=${token}&userId=${userId}`;
+      const link = `${webUrl}/passwordReset?token=${token}&userId=${userId}`;
       const body = `
       <h2>Hi,</h2> 
       <p>We received your request to reset password from account ${user.username}.</p>
