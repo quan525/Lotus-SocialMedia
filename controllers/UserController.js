@@ -108,7 +108,6 @@ const Login = async (req, res) => {
 
 const ResetPassword = async (req, res) => {
   try{
-    console.log(req.body.username)
     const { userId, resetPassword, token } = req.body;
     const result = await pool.query('SELECT username, user_id, email FROM users WHERE user_id = $1 LIMIT 1', [userId]);
     if(result.rows.length < 1){
@@ -116,7 +115,7 @@ const ResetPassword = async (req, res) => {
     }else if(result.rows[0].email){
       const user = result.rows[0];
       const userId = user.user_id;
-      const resetItem = await ResetItem.findOneAndDelete({user_id: userId}, {token: token});
+      const resetItem = await ResetItem.findOneAndDelete({user_id: userId, token: token});
       if(!resetItem) {
         res.status(400).send('Token not found')
       }else{

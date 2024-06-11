@@ -73,8 +73,9 @@ const GetNotifications = async (req, res) => {
   };
 
   // Stop polling when the client disconnects
-  res.on('close', () => {
-    consumer.stopConsuming(consumerTag);
+  res.on('close', async () => {
+    console.log("res close consumer tag")
+    await consumer.stopConsuming(consumerTag);
     clearTimeout(timeoutId);
   });
 
