@@ -9,6 +9,7 @@ import Login from './Pages/RegisterPage/Login'
 import SignUp from './Pages/RegisterPage/SignUp'
 import PrivateRoute from './PrivateRoute/privateroute'
 import FriendRequests from './Pages/FriendRequests/FriendRequests'
+import PasswordReset from './Pages/RegisterPage/PasswordReset'
 // import OTPInput from './Pages/RegisterPage/OTPInput';
 import  { jwtDecode } from 'jwt-decode';
 
@@ -206,7 +207,7 @@ const App = () => {
 
                 <Route path='/signup' element={isLoggedIn ? <Navigate to="/home" /> : <SignUp />} />
 
-                <Route path='/passwordReset' element={isLoggedIn ? <Navigate to="/home" /> : <SignUp />} />
+                <Route path='/passwordReset' element={<PasswordReset />} />
                 {/* <Route path='/SendOtp'   element={isLoggedIn ? <Navigate to="/home"/> : <OTPInput/> } /> */}
 
                 <Route path='/videocall' element={<PrivateRoute><VideoCall/></PrivateRoute>} />
