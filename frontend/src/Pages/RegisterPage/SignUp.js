@@ -178,7 +178,7 @@ const SignUp = () => {
                         name="username" 
                         id="fullname" 
                         onChange={handleChange}
-                        placeholder='Full Name'
+                        placeholder='Username'
                  /> 
                 </div>
                 {error.username && <span style={{color:"red",display:"block",marginTop:"5px"}}>{error.username}</span>}

@@ -10,7 +10,7 @@ import { updateProfile } from '../../../../api/services/User';
 function ModelProfile({openEdit,setOpenEdit,handleModel,
                       name,setName,gender,
                       setGender,countryName,setCountryName,
-                      jobName,setJobName
+                      emailName,setEmailname
                       }) 
                       {
   const alert = useAlert();
@@ -28,7 +28,7 @@ function ModelProfile({openEdit,setOpenEdit,handleModel,
   const handleUpdateProfile = async (e) => {
   e.preventDefault();
   console.log(JSON.parse(localStorage.getItem('data')));
-  await updateProfile(userData.token, { profileName : profileName , gender: editGender })
+  await updateProfile(userData.token, { profileName : profileName , gender: editGender, email : emailName })
     .then(res => {
       console.log(res)
       if(res.status === 200){
@@ -94,9 +94,9 @@ function ModelProfile({openEdit,setOpenEdit,handleModel,
           </div>
 
           <div className="inputBox1">
-            <input type="text" name="jobname" id="name" placeholder='Enter Job'
-                   onChange={(e)=>setJobName(e.target.value)}
-                   value={jobName}
+            <input type="text" name="emailname" id="name" placeholder='Edit Email'
+                   onChange={(e)=>setEmailname(e.target.value)}
+                   value={emailName}
                    />
           </div>
 

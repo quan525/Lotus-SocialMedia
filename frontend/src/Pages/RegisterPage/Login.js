@@ -28,7 +28,6 @@ const Login = () => {
 
     const handleLogin = async (e) => {
         e.preventDefault();
-        console.log("handleLogin function called");
         const errors = validationLogin(data);
         setError(errors);
 
@@ -64,6 +63,9 @@ const Login = () => {
         // }
         if(data.username === ""){
             error.username = "* Username is Required"
+        }
+        if(data.username?.length < 6) {
+            error.username = "* Username must be at least 6 characters long"
         }
         
         if(data.password === ""){

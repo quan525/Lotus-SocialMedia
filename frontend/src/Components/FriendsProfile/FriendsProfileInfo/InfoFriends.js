@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import CalendarMonthRoundedIcon from '@mui/icons-material/CalendarMonthRounded';
-import WorkOutlineRoundedIcon from '@mui/icons-material/WorkOutlineRounded';
+import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import "./InfoFriend.css"
 import { addFriend, checkRelationship, acceptRequest, refuseRequest, removeFriend } from '../../../api/services/Friends';
 import { UserContext } from '../../../App';
@@ -96,7 +96,7 @@ const handleFriendAction = async (action, token, otherUserId) => {
               </div>
 
               <div className="info-details-list">
-                <WorkOutlineRoundedIcon />
+                <EmailOutlinedIcon />
                 <span></span>
               </div>
 

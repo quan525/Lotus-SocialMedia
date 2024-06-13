@@ -6,7 +6,7 @@ export default function validation(data){
 
     if(data.username === ""){
         error.username="* Name is Required!"
-    }else if(data.username.length < 8){
+    }else if(data.username.length < 6){
         console.log(data.username.length)
         error.username="* Name must be atleast 6 characters"
     }

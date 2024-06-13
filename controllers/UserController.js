@@ -10,12 +10,15 @@ const ResetItem = require("../models/ResetPasswordSchema");
 const Register = async (req, res, next) => {
   let uploadedImagePublicId;
   try {
+    const emailPattern= /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/;
     const { username, email, password, file } = req.body;
     if(!username || !password || !email || username.length < 6 || password.length < 8) {
       return res.status(400).json({ message: "Invalid or missing fields" });
+    }else if (!emailPattern.test(email)) {
+      return res.status(400).json({ message: "Invalid email" });
     }
 
-    const userExists = (await pool.query('SELECT * FROM users WHERE username = $1', [username])).rows.length > 0;
+    const userExists = (await pool.query('SELECT 1  FROM users WHERE username = $1 LIMIT 1', [username])).rows.length > 0;
     if (userExists) {
       return res.status(400).send("User already exists");
     }
@@ -214,10 +217,11 @@ const UpdateProfile = async (req, res) => {
     const userId = req.userId;
     const profileName = req.body.profileName;
     const gender = req.body.gender;
+    const email = req.body.email;
     const checkUser = await pool.query("SELECT * FROM users WHERE user_id = $1", [userId]);
     let result;
     if (checkUser.rows.length > 0) {
-      result = await pool.query("UPDATE users SET profile_name = $1, gender = $2 WHERE user_id = $3", [profileName, gender, userId]);
+      result = await pool.query("UPDATE users SET profile_name = $1, gender = $2, email = $3 WHERE user_id = $4", [profileName, gender, email, userId]);
     }
     if(result) {
       console.log(result)

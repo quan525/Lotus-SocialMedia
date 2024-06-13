@@ -3,7 +3,10 @@
 // Check difference between two date
 export const handleDateDiff = (date) => {
     const currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0);
     const providedDate = new Date(date);
+    providedDate.setHours(0, 0, 0, 0);
+
     const diffTime = Math.abs(currentDate - providedDate);
     const diffMinutes = Math.floor(diffTime / (1000 * 60));
     const diffHours = Math.floor(diffTime / (1000 * 60 * 60));

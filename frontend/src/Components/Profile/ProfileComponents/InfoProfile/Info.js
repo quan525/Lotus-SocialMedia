@@ -2,13 +2,15 @@ import React, { useContext, useEffect, useState } from 'react'
 import "../InfoProfile/Info.css"
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import CalendarMonthRoundedIcon from '@mui/icons-material/CalendarMonthRounded';
-import WorkOutlineRoundedIcon from '@mui/icons-material/WorkOutlineRounded';
+import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
+
 import Modal from 'react-modal';
 import { UpdateAvatar } from '../../../../api/services/User.js';
 import { useNavigate } from "react-router-dom";
 import {LiaEdit} from "react-icons/lia"
 import '../../../Modals/PostBoxModal.css'
 import {IoCameraOutline} from "react-icons/io5"
+
 import {BiLogOut} from "react-icons/bi"
 import { useRef } from 'react';
 import ModelProfile from '../ModelProfile/ModelProfile.js';
@@ -161,7 +163,7 @@ const onCropDone = (imgCroppedArea) => {
 
   const [openEdit,setOpenEdit] =useState(false)
   const [countryName,setCountryName]= useState("")
-  const [jobName,setJobName]= useState("")
+  const [emailName,setEmailName]= useState("")
   const userData = useContext(UserContext)
   
   const handleLogOut = () => {
@@ -267,8 +269,8 @@ const onCropDone = (imgCroppedArea) => {
               setGender={setGender}
               countryName={countryName}
               setCountryName={setCountryName}
-              jobName={jobName}
-              setJobName={setJobName}
+              emailName={emailName}
+              setEmailName={setEmailName}
               openEdit={openEdit}
               setOpenEdit={setOpenEdit}
             />
@@ -276,14 +278,17 @@ const onCropDone = (imgCroppedArea) => {
 
           <div className="info-details">
             <div className="info-col-1">
-              <div className="info-details-list">
-                <LocationOnOutlinedIcon />
-                <span>{}</span>
-              </div>
+              {
+                userData?.location && 
+                <div className="info-details-list">
+                  <LocationOnOutlinedIcon />
+                  <span>{userData.location}</span>
+                </div>
+              }
 
               <div className="info-details-list">
-                <WorkOutlineRoundedIcon />
-                <span>{}</span>
+                <EmailOutlinedIcon />
+                <span>{userData.email}</span>
               </div>
 
               <div className="info-details-list">
