@@ -194,9 +194,9 @@ const onCropDone = (imgCroppedArea) => {
           style={customStyles} 
         >
           <h2>Creete New Avatar</h2>
-          <textarea style={{width:'450px',height:'200px', borderWidth:'0 0 2px'
+          {/* <textarea style={{width:'450px',height:'200px', borderWidth:'0 0 2px'
             ,textAlign:'start', outline:'none', fontSize:"18px"
-          }} type='text' placeholder="What's on your mind?" />
+          }} type='text' placeholder="What's on your mind?" /> */}
           {currentPage === "choose-img" ? (
               <FileInput onImageSelected={onImageSelected}/> 
           ) : currentPage === "crop-img" ? (
@@ -288,7 +288,7 @@ const onCropDone = (imgCroppedArea) => {
 
               <div className="info-details-list">
                 <EmailOutlinedIcon />
-                <span>{userData.email}</span>
+                <span>{userData?.email}</span>
               </div>
 
               <div className="info-details-list">

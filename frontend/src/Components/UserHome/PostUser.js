@@ -27,13 +27,16 @@ import { UserContext } from '../../App';
 
 import SharedPost from '../Share/SharedPost';
 import API_PATHS from '../../api/apiPath';
+import { handleDateDiff } from '../../utils/utils'
+import { commentOnPost } from '../../api/services/Comments';
 
 import { useAlert } from 'react-alert'
 const PostUser = ({posts,post,setPosts,profileImg,modelDetails,images}) => {
   const userData = useContext(UserContext)
   const [comments,setComments] =useState([])
+  const [totalComment,setTotalComment] = useState(post?.comments_count || 0)
 
-  const [like,setLike] =useState(post.like)
+  const [like,setLike] = useState(post.like)
   const [unlike,setUnlike] =useState(false)
 
   const [filledLike,setFilledLike] =useState(<FavoriteBorderOutlinedIcon />)
@@ -80,34 +83,32 @@ const handleDelete=(id)=>{
  
   const [commentInput,setCommentInput] =useState("")
 
-  const handleCommentInput=(e)=>{
+  const handleCommentInput = async (e)=>{
      e.preventDefault()
 
-    const id=comments.length ? comments[comments.length -1].id +1 : 1
-    const profilePic =profileImg
-    const username=modelDetails.ModelName
-    const comment =commentInput
-    const time= moment.utc(new Date(), 'yyyy/MM/dd kk:mm:ss').local().startOf('seconds').fromNow()
-
+    
+    const avatar_url = userData.image
+    const profile_name = userData.profile_name
+    const content = commentInput
+    const created_at = new Date(Date.now())
     const commentObj ={
-      id:id,
-      profilePic:profilePic,
-      likes:0,
-      username:username,
-      comment:comment,
-      time:time
+      avatar_url: avatar_url,
+      likes: 0,
+      username: profile_name,
+      content: content,
+      created_at: created_at
     }
-    const insert =[...comments,commentObj]
-    setComments(insert)
-    setCommentInput("")
+    const response = await commentOnPost(userData.token, post.post_id, commentInput);
+    console.log(response)
+    if(response?.status === 201){
+      const insert =[commentObj, ...comments]
+      setTotalComment (totalComment + 1)
+      setComments(insert)
+      setCommentInput("")
+    }
+    
   }
 
-  const dateDiff = ((date) => {
-    const diffTime = Math.abs(Date.now() - new Date(date));
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
-    return diffDays
-  })
-  
   const [socialIcons,setSocialIcons] = useState(false)
 
   return (
@@ -116,16 +117,12 @@ const handleDelete=(id)=>{
         <div className='post-user' style={{cursor:"pointer"}}>
             <img src={userData.image} className='p-img' alt="" />
             <h2>{userData.profile_name}</h2>
-            <p className='datePara'>{new Date(post.created_at).toLocaleDateString(undefined, { day: 'numeric', month: 'long', year: 'numeric' }).replace(',', '')}</p>            
+            <p className='datePara'>{handleDateDiff(new Date(post.created_at))}</p>            
         </div>  
          <div className='delete'>
          {showDelete && (
          <div className="options">
-         <button><PiSmileySad />Not Interested in this post</button>
-         <button><IoVolumeMuteOutline />Mute this user</button>
-         <button><MdBlockFlipped />Block this user</button>
          <button onClick={()=>handleDelete(post.post_id)}><AiOutlineDelete />Delete</button>
-         <button><MdReportGmailerrorred />Report post</button>
          </div>
          )}
           <MoreVertRoundedIcon className='post-vertical-icon' onClick={()=>setShowDelete(!showDelete)}/>
@@ -197,24 +194,6 @@ const handleDelete=(id)=>{
                 }/> */}
                 <PostAddIcon className='social-links'/>
               </div>             
-            </a>
-            
-            <a href="https://pinterest.com/" target="blank"  className="social-margin">
-              <div className="social-icon instagram">
-                <FiInstagram className='social-links'/>
-              </div>
-            </a>
-            
-            <a href="http://linkedin.com/" className="social-margin" target="blank">
-              <div className="social-icon linkedin">
-                <BiLogoLinkedin className='social-links'/>
-              </div> 
-            </a>
-         
-            <a href="https://github.com/"  target="blank"  className="social-margin">
-              <div className="social-icon github">
-                <FiGithub className='social-links'/>
-              </div>
             </a>
             
             <a href="http://youtube.com/" target="blank"  className="social-margin">

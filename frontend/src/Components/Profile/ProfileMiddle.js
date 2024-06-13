@@ -9,6 +9,7 @@ import ProfileInputPost from './ProfileComponents/ProfileInputPost'
 import axios from 'axios'
 import API_PATHS from '../../api/apiPath'
 import { UserContext } from '../../App'
+
 const ProfileMiddle = ({
                         search,
                         images,

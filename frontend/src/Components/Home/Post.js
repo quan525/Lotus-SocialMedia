@@ -185,7 +185,7 @@ const Post = ({post,posts,setPosts,setFriendsProfile,images}) => {
     }
   };
 
-  const deleteImage = (postId) => () => {
+  const deleteCommentImage = (postId) => () => {
     setCommentImages(prevCommentImages => ({
       ...prevCommentImages,
       [postId]: null
@@ -333,24 +333,7 @@ const Post = ({post,posts,setPosts,setFriendsProfile,images}) => {
                     <FiInstagram className='social-links'/>
                   </div>
                 </a>
-                
-                <a href="http://linkedin.com/" className="social-margin" target="blank">
-                  <div className="social-icon linkedin">
-                    <BiLogoLinkedin className='social-links'/>
-                  </div> 
-                </a>
-             
-                <a href="https://github.com/"  target="blank"  className="social-margin">
-                  <div className="social-icon github">
-                    <FiGithub className='social-links'/>
-                  </div>
-                </a>
-                
-                <a href="http://youtube.com/" target="blank"  className="social-margin">
-                  <div className="social-icon youtube">
-                  <AiFillYoutube className='social-links'/>
-                  </div> 
-                </a>
+               
            </div>
           )}
         </div>
@@ -401,7 +384,7 @@ const Post = ({post,posts,setPosts,setFriendsProfile,images}) => {
                 objectFit: 'contain', 
                 overflow: 'hidden'
               }}  />
-              <button onClick={deleteImage(post.post_id)}>Delete Image</button>
+              <button onClick={deleteCommentImage(post.post_id)}>Delete Image</button>
             </div>
           )}
         </form>

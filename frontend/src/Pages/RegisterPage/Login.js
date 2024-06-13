@@ -64,9 +64,9 @@ const Login = () => {
         if(data.username === ""){
             error.username = "* Username is Required"
         }
-        if(data.username?.length < 6) {
-            error.username = "* Username must be at least 6 characters long"
-        }
+        // if(data.username?.length < 6) {
+        //     error.username = "* Username must be at least 6 characters long"
+        // }
         
         if(data.password === ""){
             error.password = "* Password is Required"

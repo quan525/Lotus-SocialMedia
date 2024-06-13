@@ -17,3 +17,4 @@ export const sharePost = async(token, postId, content) => {
         return err
     }
 }
+

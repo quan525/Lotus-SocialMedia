@@ -54,7 +54,8 @@ const Register = async (req, res, next) => {
       created_at : formattedDate,
       token,
       image: avatar_url,
-      cover_url
+      cover_url,
+      email
     });
   } catch (error) {
     if (uploadedImagePublicId) {
@@ -178,7 +179,12 @@ const UpdateAvatar = async (req, res) => {
     let uploadedImagePublicId;
     try {  
       const filePath = file.path;
-      const userId = req.userId; // Assuming you have the userId available in req.userId  
+      const userId = req.userId; // Assuming you have the userId available in req.userId
+      const currentAvatarResult = await pool.query('SELECT avatar_url FROM users WHERE user_id = $1', [userId]);
+      const currentAvatarUrl = currentAvatarResult.rows[0].avatar_url;  
+      if(currentAvatarResult !== "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg"){
+        await cloudinary.uploader.destroy(currentAvatarUrl);
+      }
       const upload = await cloudinary.uploader.upload(filePath);
       const secure_url = upload.secure_url;
       uploadedImagePublicId = upload.public_id; 
