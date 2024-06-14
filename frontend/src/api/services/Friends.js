@@ -92,7 +92,7 @@ export const getFriends = async (token) => {
                 Authorization: `Bearer ${token}`
             }       
         }
-        const result = await axios.get(`${API_PATHS.api}/friends/`, config);
+        const result = await axios.get(`${API_PATHS.api}/friends`, config);
         return result;
     } catch(error) {
         console.log(error)
