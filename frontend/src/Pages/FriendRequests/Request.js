@@ -3,7 +3,6 @@ import React, { useContext, useState} from 'react';
 import { Link } from 'react-router-dom';
 import { acceptRequest, handleAcceptRequest } from '../../api/axios';
 import { refuseRequest } from '../../api/services/Friends';
-import { handleDateDiff } from '../../Components/Home/Post';
 import './FriendRequests.css';
 import { UserContext } from '../../App';
 
@@ -27,7 +26,7 @@ const Request = ({ request, handleFriendsId, friendRequests, setFriendRequests }
   return (
     <div className="notification-section" key={request.user_id}>
       <div className="notification-msg">
-        <Link to="/FriendsId" style={{textDecoration:"none"}}>
+        <Link to={{pathname: `/users/${user.user_id}`}} style={{textDecoration:"none"}}>
           <img 
             src={request.avatar_url} 
             alt="" 

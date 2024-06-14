@@ -14,9 +14,9 @@ import PasswordReset from './Pages/RegisterPage/PasswordReset'
 import  { jwtDecode } from 'jwt-decode';
 
 import Chat from './Pages/Chat/Chat'
-import axios from 'axios'
 import { requestNotification, requestNotificationOnLogin } from './api/services/Notification'
-import { getFriends, fetchFriendRequests } from './api/services/Friends'
+import { getFriends } from './api/services/Friends'
+import { fetchFriendRequests } from './api/axios'
 import { GetFriendsSuggestion } from './api/services/User'
 import VideoCall from './Pages/VideoCall/Call'
 // import ChatBox from './Components/ChatBoxComponent/ChatBox'
@@ -135,17 +135,20 @@ const App = () => {
         }
       }
       const getFriendRequests = async () => {
-        await fetchFriendRequests(items.token)
-        .then(res => {
+        try {
+          const res = await fetchFriendRequests(items.token);
           console.log(typeof res); 
-          console.log(res)
+          console.log(res);
           setFriendRequests(request => {
-              if(Array.isArray(res)) {
-              const uniqueRes = res?.filter(r => !request.some(req => req.user_id === r.user_id));
+            if(Array.isArray(res)) {
+              const uniqueRes = res.filter(r => !request.some(req => req.user_id === r.user_id));
               return [...request, ...uniqueRes];
             }
+            return request;
           });        
-        })
+        } catch (error) {
+          console.error(error);
+        }
       }
       const getFriendsSuggestion = async () => {
         await GetFriendsSuggestion(items.token).then((response) => {
@@ -191,7 +194,13 @@ const App = () => {
           "profile_name" : noti.sender_name,
           "user_id" : noti.sender_id
         }
-        setFriendRequests((prev) => [...prev, request])
+        setFriendRequests((prev) => {
+          if(!prev.some((prevRequest) => prevRequest.user_id == request.user_id )){
+          return [...prev, request]
+          }
+          return prev
+        }
+      )
         setNotifications((prev) => prev.filter((item) => item !== noti))
       }
     })

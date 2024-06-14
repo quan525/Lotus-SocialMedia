@@ -5,7 +5,7 @@ import ProfileImg from "../../assets/profile.jpg"
 import { Link } from 'react-router-dom'
 
 import { UserContext } from '../../App'
-import { handleAcceptRequest, handleRefuseRequest, fetchFriendRequests } from '../../api/axios'
+import {fetchFriendRequests } from '../../api/axios'
 import Request from './Request';
 
 import axios from 'axios'
