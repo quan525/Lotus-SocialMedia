@@ -1,5 +1,5 @@
 const { authenticateToken } = require("../middleware/authorization");
-const { GetUserRooms, CreateSingleChat, CreateGroupChat, GetRoomById, UpdateRoomName, DeleteRoom, QuitRoom } = require("../controllers/RoomController");
+const { GetUserRooms, CreateSingleChat, CreateGroupChat, GetRoomById, UpdateRoomName, DeleteRoom, QuitRoom, RemoveMember } = require("../controllers/RoomController");
 
 const express = require("express")
 const router = express.Router()
@@ -13,6 +13,8 @@ router.put('/:roomId', authenticateToken, UpdateRoomName);
 // router.delete('/:roomId', authenticateToken, DeleteRoom);
 
 router.delete('/:roomId/users/:userId', authenticateToken, QuitRoom);
+
+router.delete('/:roomId/admin/users/:memberId', authenticateToken, RemoveMember);
 
 router.get("/:roomId/validate", authenticateToken, ValidateMeeting)
 router.post("/:roomId/create-meeting-room", authenticateToken, CreateMeetingRoom)

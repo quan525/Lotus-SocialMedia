@@ -39,7 +39,7 @@ import EmojiPicker, { Emoji } from 'emoji-picker-react';
 import './Chat.css';
 
 import { UserContext, FriendsContext } from '../../App';
-import { leaveChatRoom, fetchChatRooms, loadChatMessage, sendMessage } from '../../api/services/Messages';
+import { leaveChatRoom, fetchChatRooms, loadChatMessage, sendMessage, removeParticipant} from '../../api/services/Messages';
 import { IconButton } from '@material-ui/core';
 
 const useStyles = makeStyles({
@@ -323,7 +323,19 @@ const Chat = () => {
         } catch (error) {
             console.error('Error leaving chat room:', error);
         }
-    
+    }
+
+    const handleRemoveMember = async (userId) => {
+        try{
+            const memberId = userId
+            const res = await removeParticipant(userData.token, memberId, currentRoomId) 
+            if(res.status === 200) {
+                setChatRoomUsers(chatRoomUsers.map(user => user.user_id != memberId))
+                setFetchRooms(true)
+            }
+        }catch (err){
+            
+        }
     }
     
     const handleCall = async (roomId) => {
@@ -567,7 +579,7 @@ const Chat = () => {
                                                     </ListItemIcon>
                                                     <ListItemText primary={user.profile_name} />
                                                     {currentRoomAdmin == userData?.user_id && 
-                                                        <PersonRemoveIcon/>
+                                                        <PersonRemoveIcon style={{ color: 'red' }} onClick={() => handleRemoveMember(user.user_id)}/>
                                                     }
                                                 </ListItemButton>
                                             </List>
