@@ -52,6 +52,7 @@ const Register = async (req, res, next) => {
     return res.status(201).json({
       profile_name,
       created_at : formattedDate,
+      user_id,
       token,
       image: avatar_url,
       cover_url,
@@ -89,6 +90,7 @@ const Login = async (req, res) => {
               res.status(200).json({
                 profile_name : profileName,
                 created_at : formattedDate,
+                user_id : user.rows[0].user_id,
                 token : generateToken( user.rows[0].user_id),
                 cover_url : user.rows[0].cover_url,
                 image: user.rows[0].avatar_url,

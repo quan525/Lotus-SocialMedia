@@ -14,9 +14,19 @@ const AddComment = async (req, res) => {
     let values;
 
     if (image) {
+      const uploadedItem = cloudinary.uploader.upload(file)
+      const image_url = uploadedItem.secure_url;
       // If an image is uploaded, update the comment with image
-      query = 'INSERT INTO comments (content, image_url, user_id, post_id) VALUES ($1, $2, $3, $4)';
-      values = [comment, image.path, userId, postId];
+      query = `WITH inserted_row as (
+                  INSERT INTO comments (content, image_url, user_id, post_id) 
+                  VALUES ($1, $2, $3, $4)
+                  RETURNING *
+                )
+              SELECT  
+              (SELECT user_id from posts WHERE post_id = $3) AS referenced_user_id,
+              * 
+              FROM inserted_row `;
+      values = [comment, image_url, userId, postId];
     } else {
       // If no image is uploaded, update the comment without image
       query = ` WITH inserted_row AS (
@@ -25,9 +35,9 @@ const AddComment = async (req, res) => {
                     RETURNING *
                 )
                 SELECT 
-                        (SELECT user_id FROM posts WHERE post_id = $3) AS referenced_user_id,
-                        *
-                    FROM inserted_row`;
+                    (SELECT user_id FROM posts WHERE post_id = $3) AS referenced_user_id,
+                    *
+                FROM inserted_row`;
       values = [comment, userId, postId];
     } 
 
@@ -35,7 +45,9 @@ const AddComment = async (req, res) => {
     const result = await pool.query(query, values);
     const receiverId= result.rows[0].referenced_user_id;
     // Check if any rows were affected by the update
-    if (result) {
+    if(result.rowCount === 0) {
+      return res.status(404).json({ message: 'No comment found to add' });
+    }else {
       const message = {
         noti_type: 'COMMENT_POST',
         item_id : postId,

@@ -1,6 +1,7 @@
 const e = require('cors');
 const pool = require('../config/postgresdb')
 const asyncHandler = require('express-async-handler')
+const producer = require('../services/Producer')
 
 const GetUserRooms = asyncHandler(async (req, res) => {
     try {
@@ -92,26 +93,28 @@ const CreateGroupChat = asyncHandler(async (req, res) => {
         console.log(members)
         console.log(req.body)
         // Validate request body
-        if (name === null || !members || members.length < 2) {
+        if (!members || members.length < 2) {
             return res.status(400).json({ success: false, message: 'Name and at least two members are required' });
         }
 
         // Get all rooms of the current user
-        const userRoomsQuery = `SELECT room_id FROM user_room WHERE user_id = $1`;
-        const userRoomsResult = await pool.query(userRoomsQuery, [userId]);
-        const userRooms = userRoomsResult.rows.map(row => row.room_id);
+        // const userRoomsQuery = `SELECT room_id FROM user_room WHERE user_id = $1`;
+        // const userRoomsResult = await pool.query(userRoomsQuery, [userId]);
+        // // const userRooms = userRoomsResult.rows.map(row => row.room_id);
 
-        // Check if a chat room already exists with these members
-        for (let roomId of userRooms) {
-            const roomMembersQuery = `SELECT user_id FROM user_room WHERE room_id = $1`;
-            const roomMembersResult = await pool.query(roomMembersQuery, [roomId]);
-            const roomMembers = roomMembersResult.rows.map(row => row.user_id);
+        // // Check if a chat room already exists with these members
+        // for (let roomId of userRooms) {
+        //     const roomMembersQuery = `SELECT user_id FROM user_room WHERE room_id = $1`;
+        //     const roomMembersResult = await pool.query(roomMembersQuery, [roomId]);
+        //     const roomMembers = roomMembersResult.rows.map(row => row.user_id);
 
-            if (roomMembers.sort().join(',') === [userId, ...members].sort().join(',')) {
-                return res.status(400).json({ success: true, message: 'Chat room already exists', roomId });
-            }
+        //     if (roomMembers.sort().join(',') === [userId, ...members].sort().join(',')) {
+        //         return res.status(400).json({ success: true, message: 'Chat room already exists', roomId });
+        //     }
+        // }
+        if(name === null || name === undefined || name == '') {
+            name = null
         }
-
         // Start a transaction to ensure atomicity
         const client = await pool.connect();
         try {
@@ -132,12 +135,28 @@ const CreateGroupChat = asyncHandler(async (req, res) => {
 
             // Commit the transaction
             await client.query('COMMIT');
+            // const message = {
+            //   noti_type: 'CHAT_ROOM_ADDED',
+            //   item_id : ,
+            //   sender_id: userId,
+            //   receiver_id: receiverId,
+            //   date : new Date().toUTCString()
+            // };
+            // await producer.publishMessage(receiverId, message)
 
             res.json({ success: true, message: 'Group chat created successfully' });
         } catch (error) {
             // Rollback the transaction on error
             await client.query('ROLLBACK');
-            throw error; // Re-throw the error to be caught by the outer catch block
+            if (error.constraint === 'chat_rooms_name_key') {
+              res.status(400).json({ success: false, message: 'A group chat with this name already exists' });
+            } else if (error.constraint === 'user_room_user_id_fkey') {
+              res.status(400).json({ success: false, message: 'One or more user IDs are invalid' });
+            } else {
+              console.error('Error creating group chat:', error);
+              res.status(500).json({ success: false, message: 'Error creating group chat' });
+            }
+
         } finally {
             client.release(); // Release the client back to the pool
         }
@@ -174,24 +193,43 @@ const UpdateRoomName = asyncHandler(async (req, res) => {
     }
 });
 
-const DeleteRoom = asyncHandler(async (req, res) => {
-    try {
-        const userId = req.userId;
-        const roomId = req.params.roomId;
-        const query = 'DELETE FROM chat_rooms WHERE room_id = $1';
-        const values = [roomId];
-        const result = await pool.query(query, values);
-        if(result.rowCount == 1){
-            res.status(200).json({ success: true, message: 'Room deleted successfully' });
-        }else {
-            res.status(404).json({ success: false, message: 'Room not found' });
-        }
-    }
-    catch(error) {
-        console.log(err)
-        res.status(500).json({ success: false, message: 'Error deleting room' })
-    }
-});
+// const DeleteRoom = asyncHandler(async (req, res) => {
+//     try {
+//         const userId = req.userId;
+//         const roomId = req.params.roomId;
+//         const query = 'DELETE FROM chat_rooms WHERE room_id = $1 and admin = $2';
+//         const values = [roomId, userId];
+//         const result = await pool.query(query, values);
+//         if(result.rowCount === 1){
+//             res.status(200).json({ success: true, message: 'Room deleted successfully' });
+//         }else {
+//             res.status(404).json({ success: false, message: 'Room not found' });
+//         }
+//     }
+//     catch(error) {
+//         console.log(err)
+//         res.status(500).json({ success: false, message: 'Error deleting room' })
+//     }
+// });
+
+// const DeleteChatMessage = asyncHandler(async (req, res) => {
+//     try {
+//         const userId = req.userId;
+//         const roomId = req.params.roomId;
+//         const query = 'DELETE FROM user_room WHERE user_id = $1 and room_id = $2';
+//         const values = [userId, roomId];
+//         const result = await pool.query(query, values);
+//         if(result.rowCount === 1){
+//             res.status(200).json({ success: true, message: 'Room deleted successfully' });
+//         }else {
+//             res.status(404).json({ success: false, message: 'Room not found' });
+//         }
+//     }
+//     catch(error) {
+//         console.log(err)
+//         res.status(500).json({ success: false, message: 'Error deleting room' })
+//     }
+// })
 
 const QuitRoom = async (req, res) => {
     
@@ -218,6 +256,6 @@ module.exports = {
     CreateGroupChat,
     GetRoomById,
     UpdateRoomName,
-    DeleteRoom,
+    // DeleteChatMessage,
     QuitRoom
 }

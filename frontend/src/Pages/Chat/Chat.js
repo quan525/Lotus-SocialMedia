@@ -29,6 +29,7 @@ import ExpandMore from '@mui/icons-material/ExpandMore';
 import NavChat from '../../Components/Chat/NavChat';
 import AddGroupChat from '../../Components/Chat/AddGroupChatModal'
 import LogoutIcon from '@mui/icons-material/Logout';
+import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 import { styled } from '@mui/material/styles';
 import { BsTelephoneFill } from "react-icons/bs";
 import { handleDateDiff } from '../../utils/utils';
@@ -87,6 +88,7 @@ const Chat = () => {
     const [chatRooms, setChatRooms] = useState([])
     const [currentRoomId, setCurrentRoomId] = useState(null)
     const [chatMessage, setChatMessage] = useState([])
+    const [currentRoomAdmin, setCurrentRoomAdmin] = useState(null)
     const [chatRoomUsers, setChatRoomUsers] = useState([])
     const [onlineRoom, setOnlineRoom] = useState([])
     const [openAddChat, setOpenAddChat] = useState(false);
@@ -286,6 +288,7 @@ const Chat = () => {
             });
             setChatMessage([...res.data])
             setCurrentRoomId(roomId)
+            setCurrentRoomAdmin(chatRooms.find(room => room.room_id === roomId)?.admin)
         } catch (error) {
             console.error('Error loading chat messages:', error);
         }
@@ -315,6 +318,7 @@ const Chat = () => {
                 setCurrentRoomId(null)
                 setChatRoomUsers([])
                 setFetchRooms(true)
+                setCurrentRoomAdmin(null)
             }
         } catch (error) {
             console.error('Error leaving chat room:', error);
@@ -562,6 +566,9 @@ const Chat = () => {
                                                         <Avatar alt={user.profile_name} src={user.avatar_url} />
                                                     </ListItemIcon>
                                                     <ListItemText primary={user.profile_name} />
+                                                    {currentRoomAdmin == userData?.user_id && 
+                                                        <PersonRemoveIcon/>
+                                                    }
                                                 </ListItemButton>
                                             </List>
                                         )
@@ -574,7 +581,7 @@ const Chat = () => {
                     {
                         chatRoomUsers?.length > 2 
                         ? 
-                        <ListItemButton onClick={() => handleLeaveChat(currentRoomId)} style={{ visibility: chatRoomUsers.length > 2 ? 'visible' : 'hidden' }}>
+                        <ListItemButton onClick={() => handleLeaveChat(currentRoomId)} style={{ visibility: chatRoomUsers.length > 2  ? 'visible' : 'hidden' }}>
                             <ListItemIcon>
                                 <LogoutIcon/>                                                    
                             </ListItemIcon>

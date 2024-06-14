@@ -10,7 +10,7 @@ router.post('/singlechat', authenticateToken, CreateSingleChat);
 router.post('/group', authenticateToken, CreateGroupChat);
 router.get('/:roomId', authenticateToken, GetRoomById);
 router.put('/:roomId', authenticateToken, UpdateRoomName);
-router.delete('/:roomId', authenticateToken, DeleteRoom);
+// router.delete('/:roomId', authenticateToken, DeleteRoom);
 
 router.delete('/:roomId/users/:userId', authenticateToken, QuitRoom);
 
