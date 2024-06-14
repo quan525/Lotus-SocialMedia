@@ -578,7 +578,7 @@ const Chat = () => {
                                                         <Avatar alt={user.profile_name} src={user.avatar_url} />
                                                     </ListItemIcon>
                                                     <ListItemText primary={user.profile_name} />
-                                                    {currentRoomAdmin == userData?.user_id && 
+                                                    {currentRoomAdmin == userData?.user_id &&  user.user_id != userData.user_id
                                                         <PersonRemoveIcon style={{ color: 'red' }} onClick={() => handleRemoveMember(user.user_id)}/>
                                                     }
                                                 </ListItemButton>
