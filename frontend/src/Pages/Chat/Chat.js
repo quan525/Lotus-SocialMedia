@@ -334,7 +334,7 @@ const Chat = () => {
                 setFetchRooms(true)
             }
         }catch (err){
-            
+            console.log(err)
         }
     }
     

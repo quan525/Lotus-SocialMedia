@@ -243,12 +243,11 @@ const RemoveMember = async (req, res) => {
                                             SELECT 1 
                                             FROM chat_rooms 
                                             WHERE admin = $1 
-                                            AND room_id = $2
-                                        )`, [userId, roomId, memberId]);
+                                            AND room_id = $2)`, [userId, roomId, memberId]);
         if(result.rowCount == 1){
-            res.status(200).json({ success: true, message: 'Room deleted successfully' });
+            res.status(200).json({ success: true, message: 'Member removed successfully' });
         }else {
-            res.status(404).json({ success: false, message: 'Room not found' });
+            res.status(404).json({ success: false, message: 'Member removed fail' });
         }
     }catch (err) {
         console.log(err)
@@ -265,9 +264,9 @@ const QuitRoom = async (req, res) => {
         const values = [userId, roomId];
         const result = await pool.query(query, values);
         if(result.rowCount == 1){
-            res.status(200).json({ success: true, message: 'Room deleted successfully' });
+            res.status(200).json({ success: true, message: 'Quit roomsuccessfully' });
         }else {
-            res.status(404).json({ success: false, message: 'Room not found' });
+            res.status(404).json({ success: false, message: 'Failed quitting room' });
         }
     } catch(err){
         res.status(500).json({ success: false, message: 'Error deleting room' })
