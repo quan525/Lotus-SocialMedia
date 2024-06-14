@@ -96,8 +96,6 @@ const RemoveRequest = async ( req, res) => {
     const query = "DELETE FROM friends WHERE (person1_id = $1 AND person2_id = $2 AND status = $3) OR (person1_id = $2 AND person2_id = $3 AND status = $3)";
     const values = [user2Id, user1Id, 'Pending'];
     const removeResponse = await pool.query(query, values)
-    .then(res =>{ return res})
-    
     if(removeResponse.rowCount > 0){
         res.status(200).json({ status: "Request removed" });
     }else{

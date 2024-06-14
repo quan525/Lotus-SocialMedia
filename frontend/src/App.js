@@ -16,7 +16,7 @@ import  { jwtDecode } from 'jwt-decode';
 import Chat from './Pages/Chat/Chat'
 import axios from 'axios'
 import { requestNotification, requestNotificationOnLogin } from './api/services/Notification'
-import { getFriends } from './api/services/Friends'
+import { getFriends, fetchFriendRequests } from './api/services/Friends'
 import { GetFriendsSuggestion } from './api/services/User'
 import VideoCall from './Pages/VideoCall/Call'
 // import ChatBox from './Components/ChatBoxComponent/ChatBox'
@@ -99,7 +99,6 @@ const App = () => {
   }, [isLoggedIn]);
 
   useEffect(() => {
-    console.log("new token")
     const fetchFriends = async () => {
       try {
         const response = await getFriends(items.token)
@@ -112,36 +111,49 @@ const App = () => {
     };
 
     if (items.token) {
-  const token = items.token;
-  const getNotificationsOnLogin = async () => {
-    try {
-      const res = await requestNotificationOnLogin(token)
-      setNotifications(prevNoti => [...prevNoti, ...res.data]);
+      const token = items.token;
+      const getNotificationsOnLogin = async () => {
+        try {
+          const res = await requestNotificationOnLogin(token)
+          setNotifications(prevNoti => [...prevNoti, ...res.data]);
 
-      console.log(res)
-      setTimeout(getNotifications, 3000);
-    } catch (err) {
-      console.log(err);
-    }
-  }
+          console.log(res)
+          setTimeout(getNotifications, 3000);
+        } catch (err) {
+          console.log(err);
+        }
+      }
 
-  const getNotifications = async () => {
-    try {
-      const res = await requestNotification(token);
-      console.log(res);
-      setNotifications(prevNoti => [...prevNoti, ...res.data]);
-      setTimeout(getNotifications, 5000);
-    } catch (err) {
-      console.log(err);
-    }
-  }
-
+      const getNotifications = async () => {
+        try {
+          const res = await requestNotification(token);
+          console.log(res);
+          setNotifications(prevNoti => [...prevNoti, ...res.data]);
+          setTimeout(getNotifications, 5000);
+        } catch (err) {
+          console.log(err);
+        }
+      }
+      const getFriendRequests = async () => {
+        await fetchFriendRequests(items.token)
+        .then(res => {
+          console.log(typeof res); 
+          console.log(res)
+          setFriendRequests(request => {
+              if(Array.isArray(res)) {
+              const uniqueRes = res?.filter(r => !request.some(req => req.user_id === r.user_id));
+              return [...request, ...uniqueRes];
+            }
+          });        
+        })
+      }
       const getFriendsSuggestion = async () => {
         await GetFriendsSuggestion(items.token).then((response) => {
           setFriendsSuggestion(response.data)
           console.log(response)
         })
       }
+      getFriendRequests();
       fetchFriends();
       getNotificationsOnLogin();
       getFriendsSuggestion()
