@@ -1,5 +1,5 @@
 const { authenticateToken } = require("../middleware/authorization");
-const { GetUserRooms, CreateSingleChat, CreateGroupChat, GetRoomById, UpdateRoomName, AddMember, DeleteRoom, QuitRoom, RemoveMember } = require("../controllers/RoomController");
+const { GetUserRooms, CreateSingleChat, CreateGroupChat, GetRoomById, UpdateRoomName, AddMembers, AddMember, DeleteRoom, QuitRoom, RemoveMember } = require("../controllers/RoomController");
 
 const express = require("express")
 const router = express.Router()
