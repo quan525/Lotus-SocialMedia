@@ -21,20 +21,3 @@ export const fetchFriendRequests = async (token) => {
   return responseData;
 };
 
-export const acceptRequest = async (token, friendId) => {
-  let responseData
-  const url = `${API_PATHS}/api/friends/${friendId}/accept`;
-  const config =  { 
-    headers: {"Authorization" : `Bearer ${token}` }
-  } 
-  await axios.put(url, null, config)
-  .then((res) => {
-    responseData = res
-    console.log(res)
-    
-  }).catch((error) => {
-    console.error("Error accept friend request:", error);
-  });
-  return responseData
-}
-

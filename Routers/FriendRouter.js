@@ -26,7 +26,7 @@ router.delete("/:userId/remove", authenticateToken, RemoveFriend)
 
 
 //Remove request
-router.delete("/:userId/refuse", authenticateToken, RemoveRequest)
+router.delete("/:userId/remove-request", authenticateToken, RemoveRequest)
 
 module.exports = router
 

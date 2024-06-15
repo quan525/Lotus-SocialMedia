@@ -1,8 +1,7 @@
 // FriendRequest.js
 import React, { useContext, useState} from 'react';
 import { Link } from 'react-router-dom';
-import { acceptRequest, handleAcceptRequest } from '../../api/axios';
-import { refuseRequest } from '../../api/services/Friends';
+import { removeRequest, acceptRequest } from '../../api/services/Friends';
 import './FriendRequests.css';
 import { UserContext } from '../../App';
 
@@ -20,7 +19,7 @@ const Request = ({ request, handleFriendsId, friendRequests, setFriendRequests }
     const handleRefuseRequest = async (userId)=> {
       setRefuse(true)
       setAccept(false)
-      await refuseRequest(user.token, request.user_id)
+      await removeRequest(user.token, request.user_id)
       setFriendRequests(friendRequests.filter(request => request.user_id != userId))
     }
   return (

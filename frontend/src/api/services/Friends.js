@@ -16,13 +16,13 @@ export const addFriend = async (token, friendId) => {
     }
 }
 
-export const refuseRequest = async (token, userId) => {
+export const removeRequest = async (token, userId) => {
     const config = {
         headers : {
             Authorization : `Bearer ${token}`
         }
     }
-    const url = `${API_PATHS.api}/friends/${userId}/refuse`
+    const url = `${API_PATHS.api}/friends/${userId}/remove-request`
     const result = await axios.delete(url, config)
     return result
 }
