@@ -3,7 +3,7 @@ import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import CalendarMonthRoundedIcon from '@mui/icons-material/CalendarMonthRounded';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import "./InfoFriend.css"
-import { addFriend, checkRelationship, acceptRequest, refuseRequest, removeFriend } from '../../../api/services/Friends';
+import { addFriend, checkRelationship, acceptRequest, removeRequest, removeFriend } from '../../../api/services/Friends';
 import { UserContext } from '../../../App';
 import {LiaEdit} from "react-icons/lia";
 const InfoFriends = ({val, friendsList, setShowFriendsList, friendPosts}) => {
@@ -57,7 +57,7 @@ const handleFriendAction = async (action, token, otherUserId) => {
         setButtonText('Friends');
         break;
       case 'Pending':
-        result = await refuseRequest(token, otherUserId);
+        result = await removeRequest(token, otherUserId);
         setButtonText('Add Friend');
         break;
       case 'Add Friend':
