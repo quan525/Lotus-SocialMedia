@@ -31,6 +31,21 @@ export const leaveChatRoom = async (token, userId, roomId) => {
 
 }
 
+export const deleteChatMessage = async (token, roomId) => {
+    try {
+        const response = await axios.put(`${API_PATHS.api}/message/${roomId}/delete-messages`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        return response;
+    } catch (err) {
+        console.log(err)
+        return err
+    }
+
+}
+
 export const removeParticipant = async (token, memberId, roomId) => {
     try {
         const response = await axios.delete(`${API_PATHS.api}/chats/${roomId}/admin/users/${memberId}`, {

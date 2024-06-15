@@ -213,24 +213,7 @@ const UpdateRoomName = asyncHandler(async (req, res) => {
 //     }
 // });
 
-// const DeleteChatMessage = asyncHandler(async (req, res) => {
-//     try {
-//         const userId = req.userId;
-//         const roomId = req.params.roomId;
-//         const query = 'DELETE FROM user_room WHERE user_id = $1 and room_id = $2';
-//         const values = [userId, roomId];
-//         const result = await pool.query(query, values);
-//         if(result.rowCount === 1){
-//             res.status(200).json({ success: true, message: 'Room deleted successfully' });
-//         }else {
-//             res.status(404).json({ success: false, message: 'Room not found' });
-//         }
-//     }
-//     catch(error) {
-//         console.log(err)
-//         res.status(500).json({ success: false, message: 'Error deleting room' })
-//     }
-// })
+
 
 // const AddMember = async (req, res) => {
 //     try {
@@ -334,7 +317,6 @@ module.exports = {
     CreateGroupChat,
     GetRoomById,
     UpdateRoomName,
-    // DeleteChatMessage,
     RemoveMember,
     AddMembers,
     // AddMember,

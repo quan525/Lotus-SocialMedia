@@ -39,7 +39,7 @@ import EmojiPicker from 'emoji-picker-react';
 import './Chat.css';
 
 import { UserContext } from '../../App';
-import { leaveChatRoom, fetchChatRooms, loadChatMessage, sendMessage, removeParticipant} from '../../api/services/Messages';
+import { leaveChatRoom, fetchChatRooms, loadChatMessage, sendMessage, removeParticipant, deleteChatMessage} from '../../api/services/Messages';
 import { IconButton } from '@material-ui/core';
 
 const useStyles = makeStyles({
@@ -309,9 +309,9 @@ const Chat = () => {
       setMessage('');
     } 
 
-    const handleLeaveChat = async () => {
+    const handleLeaveChat = async (roomId) => {
         try {
-            const res = await leaveChatRoom(userData.token, userData.user_id, currentRoomId);
+            const res = await leaveChatRoom(userData.token, userData.user_id, roomId);
             console.log(res)
             if(res.status === 200) {
                 setChatRooms(chatRooms.filter((room) => room.room_id !== currentRoomId))
@@ -323,6 +323,22 @@ const Chat = () => {
             }
         } catch (error) {
             console.error('Error leaving chat room:', error);
+        }
+    }
+
+    const handleDeleteChat = async (roomId) => {
+        try {
+            const res = await deleteChatMessage(userData.token, roomId);
+            if(res.status === 200) {
+                setCurrentRoomId(null)
+                setChatRoomUsers([])
+                setFetchRooms(true)
+                setCurrentRoomAdmin(null)
+                setChatMessage([])
+            }
+        }
+        catch(error) {
+            console.log(error)
         }
     }
 
@@ -618,7 +634,7 @@ const Chat = () => {
                             <ListItemText primary={"Leave Group Chat"} />
                         </ListItemButton> : chatRoomUsers.length <= 2 && chatRoomUsers.length > 0 
                         ? 
-                        <ListItemButton onClick={() => handleLeaveChat(currentRoomId)} style={{ visibility: chatRoomUsers.length <= 2 && chatRoomUsers.length > 0 ? 'visible' : 'hidden' }}>
+                        <ListItemButton onClick={() => handleDeleteChat(currentRoomId)} style={{ visibility: chatRoomUsers.length <= 2 && chatRoomUsers.length > 0 ? 'visible' : 'hidden' }}>
                             <ListItemIcon>
                                 <LogoutIcon/>                                                    
                             </ListItemIcon>
