@@ -267,14 +267,15 @@ const GetSingleUser = async (req,res) => {
 }
 
 const SearchUser = async (req, res) => {
+  const userId = req.userId;
   const searchTerm = req.query.q; // Extract the query parameter 'q'
     if (!searchTerm) {
       return res.status(400).send('Search term is required');
     }
    
     try {
-      const query = 'SELECT u.profile_name, u.user_id, u.avatar_url FROM users u WHERE profile_name ILIKE $1';
-      const values = [`%${searchTerm}%`];
+      const query = 'SELECT u.profile_name, u.user_id, u.avatar_url FROM users u WHERE profile_name ILIKE $1 AND u.user_id != $2 LIMIT 10';
+      const values = [`%${searchTerm}%`, userId];
       const data = await pool.query(query, values);
       res.status(200).json(data);
     } catch (error) {

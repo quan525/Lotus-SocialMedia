@@ -14,31 +14,31 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemButton from '@mui/material/ListItemButton';
 import Badge from '@material-ui/core/Badge';
 import Collapse from '@mui/material/Collapse';
-import StarBorder from '@mui/icons-material/StarBorder';
 import Avatar from '@material-ui/core/Avatar';
 import Fab from '@material-ui/core/Fab';
 import SendIcon from '@mui/icons-material/Send';
 import SearchIcon from '@mui/icons-material/Search';
 import GroupIcon from '@mui/icons-material/Group';
 import InputAdornment from '@mui/material/InputAdornment';
-import Stack from '@mui/system/Stack';
+import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import NavChat from '../../Components/Chat/NavChat';
 import AddGroupChat from '../../Components/Chat/AddGroupChatModal'
+import AddMembersModal from '../../Components/Chat/AddMembersModal';
 import LogoutIcon from '@mui/icons-material/Logout';
 import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 import { styled } from '@mui/material/styles';
 import { BsTelephoneFill } from "react-icons/bs";
 import { handleDateDiff } from '../../utils/utils';
 import SentimentSatisfiedRoundedIcon from '@mui/icons-material/SentimentSatisfiedRounded';
-import EmojiPicker, { Emoji } from 'emoji-picker-react';
+import EmojiPicker from 'emoji-picker-react';
 
 import './Chat.css';
 
-import { UserContext, FriendsContext } from '../../App';
+import { UserContext } from '../../App';
 import { leaveChatRoom, fetchChatRooms, loadChatMessage, sendMessage, removeParticipant} from '../../api/services/Messages';
 import { IconButton } from '@material-ui/core';
 
@@ -319,12 +319,20 @@ const Chat = () => {
                 setChatRoomUsers([])
                 setFetchRooms(true)
                 setCurrentRoomAdmin(null)
+                setChatMessage([])
             }
         } catch (error) {
             console.error('Error leaving chat room:', error);
         }
     }
 
+    const [openAddMembers, setOpenAddMembers] = useState(false);
+    const handleOpenAddMembers = () => {
+      setOpenAddMembers(true);
+    };
+    const handleCloseAddMembers = () => {
+      setOpenAddMembers(false);
+    }
     const handleRemoveMember = async (userId) => {
         try{
             const memberId = userId
@@ -347,11 +355,10 @@ const Chat = () => {
     }, [currentRoomId])
     
     const handleOpen = () => {
-      setOpenAddChat(!openAddChat);
-      
+      setOpenAddChat(true);
     };
     const handleClose = () => {
-      setOpenAddChat(!openAddChat);
+      setOpenAddChat(false);
     };
 
     useEffect(()=> {
@@ -410,8 +417,7 @@ const Chat = () => {
                                     </Badge>     
                                     }                   
                                     <ListItemText secondary={onlineRoom[room.room_id] == true ? "online" : "offline"} align='right' />
-                       
-                                    </ListItem>
+                                </ListItem>
                             );
                         })
                     }
@@ -479,31 +485,31 @@ const Chat = () => {
                                 const user = chatRoomUsers.find(user=> user.user_id === msg.sender_id)
                                 return (
                                     <ListItem key={idx}>
-    <Grid container spacing={2} justifyContent='flex-start'>
-        <Grid item xs={1}>
-            <ListItemIcon>
-                <Avatar alt={user?.profile_name} src={user?.avatar_url} />
-            </ListItemIcon>
-        </Grid>
-        <Grid item xs={6}>
-            <Typography align="left">{user?.profile_name}</Typography>
-            <StyledPaper style={{
-                p: 2,
-                overflow: 'auto',
-                textAlign: 'left',
-            }}>
-                <Typography align="left" wrap="nowrap">{msg.content}</Typography>
-            </StyledPaper>
-        </Grid>        
-        <Grid item xs={5}>    
-        </Grid>        
-        <Grid item xs={1}>    
-        </Grid>
-        <Grid item xs={11}>
-            <ListItemText align="left" secondary={handleDateDiff(msg.created_at)}></ListItemText>
-        </Grid>
-    </Grid>
-</ListItem>
+                                        <Grid container spacing={2} justifyContent='flex-start'>
+                                            <Grid item xs={1}>
+                                                <ListItemIcon>
+                                                    <Avatar alt={user?.profile_name} src={user?.avatar_url} />
+                                                </ListItemIcon>
+                                            </Grid>
+                                            <Grid item xs={6}>
+                                                <Typography align="left">{user?.profile_name}</Typography>
+                                                <StyledPaper style={{
+                                                    p: 2,
+                                                    overflow: 'auto',
+                                                    textAlign: 'left',
+                                                }}>
+                                                    <Typography align="left" wrap="nowrap">{msg.content}</Typography>
+                                                </StyledPaper>
+                                            </Grid>        
+                                            <Grid item xs={5}>    
+                                            </Grid>        
+                                            <Grid item xs={1}>    
+                                            </Grid>
+                                            <Grid item xs={11}>
+                                                <ListItemText align="left" secondary={handleDateDiff(msg.created_at)}></ListItemText>
+                                            </Grid>
+                                        </Grid>
+                                    </ListItem>
                                 )
                             }
                         })
@@ -514,12 +520,12 @@ const Chat = () => {
                 <Divider />
                 <Grid container style={{padding: '20px'}}>
                     <Grid item xs={11}>            
-        <div style={{position: 'relative'}}>
-            {showEmojiPicker && (
-                <EmojiPicker style={{position:'absolute', zIndex:"10", bottom: '50px', right: '0'}} onEmojiClick={onEmojiClick} />
-            )}
-            <SentimentSatisfiedRoundedIcon  className='emoji' onClick={()=> setShowEmojiPicker(!showEmojiPicker)} style={{ visibility: currentRoomId ? 'visible' : 'hidden'}} />
-        </div>
+                        <div style={{position: 'relative'}}>
+                            {showEmojiPicker && (
+                                <EmojiPicker style={{position:'absolute', zIndex:"10", bottom: '50px', right: '0'}} onEmojiClick={onEmojiClick} />
+                            )}
+                            <SentimentSatisfiedRoundedIcon  className='emoji' onClick={()=> setShowEmojiPicker(!showEmojiPicker)} style={{ visibility: currentRoomId ? 'visible' : 'hidden'}} />
+                        </div>
 
                         <TextField id="outlined-basic-email" 
                         value = {message}
@@ -557,6 +563,19 @@ const Chat = () => {
                             )
                         })
                     }
+                    <Grid item xs={12} style={{width: '100%'}}>
+                        <ListItemButton onClick={handleOpenAddMembers} > 
+                            <ListItemIcon>
+                                <PersonAddAlt1Icon/>
+                            </ListItemIcon>
+                            <ListItemText primary="Add Members" />
+                        </ListItemButton>
+                                            <AddGroupChat open={openAddMembers} handleClose={handleClose} setChatRooms={setChatRooms} chatRooms={chatRooms} setFetchRooms={setFetchRooms}/>
+
+                        <AddMembersModal open={openAddMembers} onClose={handleCloseAddMembers} roomId={currentRoomId} roomMembers={chatRooms.filter((room) => {
+                                    return room.room_id === currentRoomId
+                                }).users} setFetchRooms={setFetchRooms}/>
+                    </Grid>
                     <Grid item xs={12} style={{width: '100%'}}>
                         <ListItemButton onClick={handleClick}>
                             <ListItemIcon>

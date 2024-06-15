@@ -111,3 +111,33 @@ export const sendMessage = async (token, roomId, payload) => {
         console.log(err)
     }
 }
+
+export const addMember = async (token, roomId, memberId) => {
+    try {
+        const response = await axios.post(`${API_PATHS.api}/chats/${roomId}/add-member/${memberId}`, {
+            headers : {
+                Authorization : `Bearer ${token}`
+            }
+        })
+        return response
+    }catch (err){
+        throw new Error(err)
+    }
+}
+export const addMembers = async (token, memberIds, roomId) => {
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+    }
+    const payload = {
+        "membersIds" : memberIds
+    }
+    try{
+        const response = await axios.post(`${API_PATHS.api}/chats/${roomId}/add-members`, JSON.stringify(payload), config)
+        return response;
+    }catch (err) {
+        return err
+    }
+}

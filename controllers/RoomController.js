@@ -145,7 +145,7 @@ const CreateGroupChat = asyncHandler(async (req, res) => {
             // };
             // await producer.publishMessage(receiverId, message)
 
-            res.json({ success: true, message: 'Group chat created successfully' });
+            res.status(200).json({ success: true, message: 'Group chat created successfully' });
         } catch (error) {
             // Rollback the transaction on error
             await client.query('ROLLBACK');
@@ -232,6 +232,60 @@ const UpdateRoomName = asyncHandler(async (req, res) => {
 //     }
 // })
 
+// const AddMember = async (req, res) => {
+//     try {
+//         const userId = req.userId;
+//         const { memberId, roomId } = req.params
+//         const result = await pool.query(`DO
+//                                         $do$
+//                                         BEGIN
+//                                            IF EXISTS (SELECT 1 FROM user_room WHERE user_id = $1 AND room_id = $2) THEN
+//                                               INSERT INTO user_room (user_id, room_id) VALUES ($3, $2);
+//                                            END IF;
+//                                         END
+//                                         $do$`, [userId, memberId, roomId])
+//         res.status(200).json({ success: true, message: 'Member added successfully' });
+//     }catch (err) {
+//         res.status(500).json({ success: false, message: 'Error adding member' });
+//     }
+// }
+
+const AddMembers = async (req, res) => {
+    try {
+        const userId = req.userId;
+        const { roomId } = req.params;
+        const memberIds = req.body.memberIds;
+        const query = await pool.query("SELECT 1 FROM user_room WHERE user_id = $1 AND room_id = $2 LIMIT 1", [userId, roomId]);
+        if(query.rowCount > 0){
+            const client = await pool.connect();
+            try {
+                await client.query('BEGIN');
+            
+                // Associate members with the chat room
+                const allMembers = [userId, ...memberIds]; // Include the userId in the members array
+                const placeholders = allMembers.map((_, i) => `($${i * 2 + 1}, $${i * 2 + 2})`).join(', ');
+                const userRoomQuery = `INSERT INTO user_room (user_id, room_id) VALUES ${placeholders} ON CONFLICT DO NOTHING`;
+                const userRoomValues = [].concat(...allMembers.map(memberId => [memberId, roomId]));
+                await client.query(userRoomQuery, userRoomValues);
+            
+                // Commit the transaction
+                await client.query('COMMIT');
+            
+                res.status(200).json({ success: true, message: 'Members added successfully' });
+            } catch (err) {
+                await client.query('ROLLBACK');
+                throw err;
+            } finally {
+                client.release();
+            }
+        }else {
+            res.status(400).send("You are not authorized to add members to this room")
+        }
+    } catch (err) {
+        res.status(500).json({ success: false, message: 'Error adding members' });
+    }
+}
+
 const RemoveMember = async (req, res) => {
     try {
         const userId = req.userId;
@@ -282,5 +336,7 @@ module.exports = {
     UpdateRoomName,
     // DeleteChatMessage,
     RemoveMember,
+    AddMembers,
+    // AddMember,
     QuitRoom
 }
