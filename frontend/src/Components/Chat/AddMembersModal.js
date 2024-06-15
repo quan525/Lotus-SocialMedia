@@ -81,7 +81,7 @@ const AddMembersModal = ({ open, handleClose, setFetchRooms, roomMembers, roomId
         setSelectedUsers(selectedUsers)
       }
       if(selectedUsers.length > 0) {
-        await addMembers(user.token, selectedUsers, roomId)
+        const response = await addMembers(user.token, selectedUsers, roomId)
       }
 
     }

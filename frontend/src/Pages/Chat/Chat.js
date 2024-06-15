@@ -570,11 +570,7 @@ const Chat = () => {
                             </ListItemIcon>
                             <ListItemText primary="Add Members" />
                         </ListItemButton>
-                                            <AddGroupChat open={openAddMembers} handleClose={handleClose} setChatRooms={setChatRooms} chatRooms={chatRooms} setFetchRooms={setFetchRooms}/>
-
-                        <AddMembersModal open={openAddMembers} onClose={handleCloseAddMembers} roomId={currentRoomId} roomMembers={chatRooms.filter((room) => {
-                                    return room.room_id === currentRoomId
-                                }).users} setFetchRooms={setFetchRooms}/>
+                        <AddMembersModal open={openAddMembers} handleClose={handleCloseAddMembers} roomId={currentRoomId} roomMembers={chatRoomUsers} setFetchRooms={setFetchRooms}/>
                     </Grid>
                     <Grid item xs={12} style={{width: '100%'}}>
                         <ListItemButton onClick={handleClick}>
