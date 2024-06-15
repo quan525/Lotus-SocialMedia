@@ -255,7 +255,7 @@ const AddMembers = async (req, res) => {
         const userId = req.userId;
         const { roomId } = req.params;
         const memberIds = req.body.memberIds;
-        const query = await pool.query("SELECT 1 FROM user_room WHERE user_id = $1 AND room_id = $2 LIMIT 1", [userId, roomId]);
+        const query = await pool.query("SELECT 1 FROM user_room WHERE user_id = $1 AND room_id = $2 AND admin != NULL LIMIT 1", [userId, roomId]);
         if(query.rowCount > 0){
             const client = await pool.connect();
             try {
@@ -279,7 +279,7 @@ const AddMembers = async (req, res) => {
                 client.release();
             }
         }else {
-            res.status(400).send("You are not authorized to add members to this room")
+            res.status(400).send("Unable to add members")
         }
     } catch (err) {
         res.status(500).json({ success: false, message: 'Error adding members' });

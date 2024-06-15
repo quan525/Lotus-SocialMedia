@@ -563,15 +563,18 @@ const Chat = () => {
                             )
                         })
                     }
-                    <Grid item xs={12} style={{width: '100%'}}>
-                        <ListItemButton onClick={handleOpenAddMembers} > 
-                            <ListItemIcon>
-                                <PersonAddAlt1Icon/>
-                            </ListItemIcon>
-                            <ListItemText primary="Add Members" />
-                        </ListItemButton>
-                        <AddMembersModal open={openAddMembers} handleClose={handleCloseAddMembers} roomId={currentRoomId} roomMembers={chatRoomUsers} setFetchRooms={setFetchRooms}/>
-                    </Grid>
+                    {
+                        currentRoomAdmin != null || currentRoomAdmin != 'NULL' &&
+                        <Grid item xs={12} style={{width: '100%'}}>
+                            <ListItemButton onClick={handleOpenAddMembers} > 
+                                <ListItemIcon>
+                                    <PersonAddAlt1Icon/>
+                                </ListItemIcon>
+                                <ListItemText primary="Add Members" />
+                            </ListItemButton>
+                            <AddMembersModal open={openAddMembers} handleClose={handleCloseAddMembers} roomId={currentRoomId} roomMembers={chatRoomUsers} setFetchRooms={setFetchRooms}/>
+                        </Grid>
+                    }
                     <Grid item xs={12} style={{width: '100%'}}>
                         <ListItemButton onClick={handleClick}>
                             <ListItemIcon>
