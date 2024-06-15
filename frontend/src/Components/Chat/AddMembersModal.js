@@ -13,14 +13,12 @@ import Avatar from '@material-ui/core/Avatar';
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import Input from '@mui/material/Input';
-import InputLabel from '@mui/material/InputLabel';
-import FormControl from '@mui/material/FormControl';
 
 import { UserContext } from '../../App';
 import { SearchUsers } from '../../api/services/User';
 
-import { addMembers } from '../../../../controllers/RoomController';
+import { addMembers } from '../../api/services/Messages';
+
 const style = {
   position: 'absolute',
   top: '50%',
