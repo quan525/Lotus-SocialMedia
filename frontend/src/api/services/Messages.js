@@ -135,7 +135,7 @@ export const addMembers = async (token, memberIds, roomId) => {
         "membersIds" : memberIds
     }
     try{
-        const response = await axios.post(`${API_PATHS.api}/chats/${roomId}/add-members`, JSON.stringify(payload), config)
+        const response = await axios.post(`${API_PATHS.api}/chats/${roomId}/users/add-members`, JSON.stringify(payload), config)
         return response;
     }catch (err) {
         return err
