@@ -12,7 +12,7 @@ const app = express();
 
 
 const jwt = require('jsonwebtoken');
-const pool = require('../config/postgresdb');
+const pool = require('./config/postgresdb');
 const url = require('url');
 
 
