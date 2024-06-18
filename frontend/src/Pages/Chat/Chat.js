@@ -148,7 +148,6 @@ const Chat = ({socket}) => {
 
     
     useEffect(() => {
-        if(!userData.token) return;
         const socket = new WebSocket(`wss://lotus-api-n5eq.onrender.com?token=${userData.token}` );
         
         socket.onopen = (event) => { 
@@ -195,7 +194,7 @@ const Chat = ({socket}) => {
             socket.close();    
             clearTimeout(setOnlineStatus);
         }
-    }, []); 
+    }, [userData.token]); 
     
     useEffect(()=>{
         if (fetchRooms || userData.token) {
