@@ -170,7 +170,7 @@ const AddGroupChat = ({ open, handleClose, setChatRooms, chatRooms, setFetchRoom
                 })
             }
             <Button variant="contained" endIcon={<AddCircleIcon />} spacing={1} style={{ marginTop: '10px' }} onClick={()=> handleCreateGroupChat()}>
-              Create Group
+              Create Chat
             </Button>
         </Box>      
       </div>

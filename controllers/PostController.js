@@ -123,6 +123,7 @@ const GetUserPosts = async (req, res) => {
   }
   const query =`SELECT 
     p.*, su.profile_name, su.avatar_url,
+    JSON_ARRAYAGG(l.user_id) AS user_like_ids,
     CASE 
         WHEN p.shared_post IS NOT NULL THEN (
             SELECT 
@@ -142,6 +143,8 @@ const GetUserPosts = async (req, res) => {
     FROM posts p
     INNER JOIN users su
     ON p.user_id = su.user_id
+    LEFT JOIN likes l 
+    ON p.post_id = l.post_id
     WHERE p.user_id = $1
     ORDER BY p.created_at DESC`
   // const query = 

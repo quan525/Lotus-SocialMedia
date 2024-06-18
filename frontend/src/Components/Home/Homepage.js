@@ -16,7 +16,7 @@ const Homepage = ({posts,setPosts,setFriendsProfile,images}) => {
                         /> 
         :
         (<p style={{textAlign:"center",marginTop:"40px"}}>
-            NO POSTS ARE HERE
+            NO POST IS HERE
         </p>)
         }
     </main>

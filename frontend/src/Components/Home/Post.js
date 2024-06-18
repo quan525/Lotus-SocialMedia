@@ -253,9 +253,7 @@ const Post = ({post,posts,setPosts,setFriendsProfile,images}) => {
          <div className='delete'>
          {showDelete && (<div className="options">
             <button><PiSmileySad />Not Interested in this post</button>
-            <button><IoVolumeMuteOutline />Mute this user</button>
             <button><MdBlockFlipped />Block this user</button>
-            <button onClick={()=>handleDelete(post.post_id)}><AiOutlineDelete />Delete</button>
             <button><MdReportGmailerrorred />Report post</button>
          </div>
         

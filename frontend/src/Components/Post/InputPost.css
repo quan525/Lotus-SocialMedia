@@ -71,26 +71,32 @@
     font-weight: 500;
     padding: 0px 4px;
 }
-.displayImg{
-    width: 55%;
-    height: 250px;
+.displayImgs {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    /* Creates three equal columns */
+    gap: 10px;
+    /* Adds a gap between grid items */
+    width: 100%;
+    min-height: 250px;
     position: relative;
     padding: 13px;
-    border: 1px solid #dedede;
     margin-top: 30px;
-    border-radius:10px ;
 }
-.displayImg img{
+
+.displayImgs img {
     width: 100%;
+    /* The image will take the full width of the grid cell */
     height: 100%;
-    object-fit: cover;
+    /* The image will take the full height of the grid cell */
+    object-fit: contain;
     object-position: center;
     border-radius: 10px;
 }
-.displayImg svg{
-    position:absolute;
-    right:3px;
-    top:3px;
+
+.img svg {
+    position: relative;
+    top: 3px;
     background-color: black;
     color: #fff;
     border-radius: 50%;

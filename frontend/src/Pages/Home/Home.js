@@ -17,15 +17,27 @@ const Home = ({setFriendsProfile, friendRequests}) => {
 
   const [searchResults,setSearchResults] =useState("")
   const [posts,setPosts] = useState([])
-    
+  const [files, setFiles] = useState(null)
+
   const user = useContext(UserContext)
 
   const [body,setBody] =useState("")
-  const [importFile,setImportFile] =useState("")
       
   const [images,setImages] =  useState(null)
   const items = useContext(UserContext);
+  const handleFileChange = (event) => {
 
+    const files = Array.from(event.target.files);
+    const fileURLs = files.map(file => URL.createObjectURL(file));
+    console.log(fileURLs)
+    setFiles(fileURLs);
+  };
+  
+  const handleImageClick = (index) => {
+    const newFiles = [...files];
+    newFiles.splice(index, 1);
+    setFiles(newFiles);
+  };
   const fetchPosts = async () => {
     const token = user.token;
     // Define the request headers including the Authorization header with the token
@@ -124,20 +136,21 @@ const Home = ({setFriendsProfile, friendRequests}) => {
    
         <Left />
 
-        <Middle 
-        handleSubmit={handleSubmit}
-        body ={body}
-        searchResults = { searchResults }
-        setSearchResults = { setSearchResults }
-        setBody ={setBody}
-        importFile ={importFile}
-        setImportFile ={setImportFile}
-        posts={posts}
-        setPosts={setPosts}
-        search={search}
-        setFriendsProfile={setFriendsProfile}
-        images={images}
-        setImages={setImages}
+        <Middle                 
+          handleFileChange={handleFileChange}
+          handleImageClick={handleImageClick}
+          files={files}
+          handleSubmit={handleSubmit}
+          body ={body}
+          searchResults = { searchResults }
+          setSearchResults = { setSearchResults }
+          setBody ={setBody}
+          posts={posts}
+          setPosts={setPosts}
+          search={search}
+          setFriendsProfile={setFriendsProfile}
+          images={images}
+          setImages={setImages}
         />
 
         <Right

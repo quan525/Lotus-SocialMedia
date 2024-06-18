@@ -3,6 +3,13 @@ const asyncHandler = require('express-async-handler');
 
 const GetAllMessages = asyncHandler(async (req, res) => {
     const userId = req.userId;
+    const roomId = req.params.roomId;
+
+    // Input validation
+    if (!userId || !roomId) {
+        return res.status(400).json({ error: 'User ID and Room ID are required' });
+    }
+
     const query = `SELECT DISTINCT messages.*
                     FROM messages
                     INNER JOIN user_room ON messages.room_id = user_room.room_id
@@ -10,9 +17,21 @@ const GetAllMessages = asyncHandler(async (req, res) => {
                     AND user_room.user_id = $2
                     AND messages.created_at > user_room.joined_at
                     ORDER BY messages.created_at ASC`;
-    const values = [req.params.roomId, userId];
-    const result = await pool.query(query, values);
-    res.json(result.rows);
+    const values = [roomId, userId];
+
+    try {
+        const result = await pool.query(query, values);
+
+        // Check if messages were found
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: 'No messages found' });
+        }
+
+        res.status(200).json(result.rows);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'An error occurred while fetching messages' });
+    }
 });
 
 const DeleteChatMessage = asyncHandler(async (req, res) => {

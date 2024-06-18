@@ -171,7 +171,7 @@ const InfoFriendPost = ({val}) => {
       
 
       <div className="like-comment-details">
-        <span className='post-like'>{val.likes_count} people like it,</span>
+        <span className='post-like'>{like} likes ,</span>
         <span className='post-comment'>{val.comments_count} comments</span>
       </div>
       

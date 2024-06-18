@@ -91,10 +91,10 @@ const Login = async (req, res) => {
                 profile_name : profileName,
                 created_at : formattedDate,
                 user_id : user.rows[0].user_id,
+                email : user.rows[0].email,
                 token : generateToken( user.rows[0].user_id),
                 cover_url : user.rows[0].cover_url,
                 image: user.rows[0].avatar_url,
-                user_id : user.rows[0].user_id,
                 gender: user.rows[0].gender
               })
             }else{
@@ -253,7 +253,7 @@ const GetAllUsers = async (req, res) => {
 const GetSingleUser = async (req,res) => {
   const userId = req.userId;
   const userSearchId = req.params.userId
-  const query = `SELECT user_id, profile_name, created_at, avatar_url, cover_url, gender
+  const query = `SELECT user_id, profile_name, created_at, avatar_url, cover_url, gender, email
                  FROM users
                  WHERE user_id = $1`
   const values = [userSearchId]

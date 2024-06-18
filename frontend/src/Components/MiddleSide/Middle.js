@@ -8,9 +8,11 @@ import axios from 'axios';
 const Middle = ({handleSubmit,
                 body,
                 setBody,
-                setImportFile,
                 posts,
                 setPosts,
+                handleFileChange,
+                handleImageClick,
+                files,
                 search,
                 searchResults,
                 setSearchResults,
@@ -30,13 +32,15 @@ const Middle = ({handleSubmit,
   return (
     <div className='M-features'>
         <InputPost
+        handleImageClick={handleImageClick}
+        handleFileChange={handleFileChange}
+        files={files}
         handleSubmit={handleSubmit}
         body ={body}
         setBody ={setBody}
         posts = { searchResults }
         setSearchResults = { setSearchResults }
         setPosts = { setPosts }
-        setImportFile ={setImportFile}
         images={images}
         handleImageChange={handleImageChange}
         emptImg ={emptImg}

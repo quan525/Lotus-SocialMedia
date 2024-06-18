@@ -9,10 +9,13 @@ import { useContext } from "react";
 
 import { UserContext } from "../../App";
 const InputPost = ({handleSubmit,
-                   setBody,
-                   body,
-                   images,
-                   setImages
+                    handleImageClick,
+                    handleFileChange,
+                    files,
+                    setBody,
+                    body,
+                    images,
+                    setImages
                   }) => {
 
   const userData = useContext(UserContext)
@@ -64,18 +67,30 @@ const InputPost = ({handleSubmit,
             type="file" 
             id="file"
             name="media"
+            multiple
             accept=".png,jpeg,.jpg"
-            onChange={(e)=>setImages(e.target.files[0])}
+            onChange={handleFileChange}
              />
           </div>
 
-        {images && (
+        {/* {images && (
           <div className="displayImg">
             <CloseRoundedIcon onClick={()=>setImages(null)}/>
             <img src={URL.createObjectURL(images)} alt="" />
           </div>
-        )}
+        )} */}
 
+        {files && (
+          <div className="displayImgs">
+            {files.map((file, index) => (
+              <div key={index} className="img">
+              
+                <CloseRoundedIcon onClick={() => handleImageClick(index)} />
+                <img src={file} alt="" onClick={() => handleImageClick(index)} />
+              </div>
+            ))}
+          </div>
+        )}
         </form>
      </div>
   )

@@ -77,7 +77,7 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.primary,
 }));
 
-const Chat = () => {
+const Chat = ({socket}) => {
     const scrollRef = useRef(null);
     const connection = useRef(null)
     const classes = useStyles();
@@ -148,7 +148,8 @@ const Chat = () => {
 
     
     useEffect(() => {
-        const socket = new WebSocket('wss://lotus-api-n5eq.onrender.com' );
+        if(!userData.token) return;
+        const socket = new WebSocket(`wss://lotus-api-n5eq.onrender.com?token=${userData.token}` );
         
         socket.onopen = (event) => { 
           console.log("Joining room", currentRoomId);
@@ -197,8 +198,6 @@ const Chat = () => {
     }, []); 
     
     useEffect(()=>{
-        
-        console.log(fetchRooms)
         if (fetchRooms || userData.token) {
             console.log("fetching room");
             const fetchData = async () => {
@@ -353,9 +352,16 @@ const Chat = () => {
         try{
             const memberId = userId
             const res = await removeParticipant(userData.token, memberId, currentRoomId) 
+
             if(res.status === 200) {
-                setChatRoomUsers(chatRoomUsers.map(user => user.user_id != memberId))
+                
+                setChatRoomUsers(chatRoomUsers.filter(user => user.user_id != memberId))
                 setFetchRooms(true)
+                connection.current.send(JSON.stringify({"type": "removeMember", 
+                                        "payload": {
+                                            "room_id": currentRoomId,
+                                            "user_id": memberId
+                                        }}))
             }
         }catch (err){
             console.log(err)
@@ -538,7 +544,7 @@ const Chat = () => {
                     <Grid item xs={11}>            
                         <div style={{position: 'relative'}}>
                             {showEmojiPicker && (
-                                <EmojiPicker style={{position:'absolute', zIndex:"10", bottom: '50px', right: '0'}} onEmojiClick={onEmojiClick} />
+                                <EmojiPicker style={{position:'absolute', zIndex:"10", bottom: '50px'}} onEmojiClick={onEmojiClick} />
                             )}
                             <SentimentSatisfiedRoundedIcon  className='emoji' onClick={()=> setShowEmojiPicker(!showEmojiPicker)} style={{ visibility: currentRoomId ? 'visible' : 'hidden'}} />
                         </div>

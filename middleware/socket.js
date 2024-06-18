@@ -17,6 +17,7 @@ function initWebSocketServer(server) {
 
     wss.on("connection", (ws) => {
         ws.uid = wss.getUniqueID();
+        
         ws.send(JSON.stringify({
             "peerId": ws.uid,
             "uid": ws.uid
@@ -47,6 +48,8 @@ function initWebSocketServer(server) {
                       }
                     }
                     break;
+                case 'removeMember' : 
+                    handleRemoveMember(ws,payload)
                 default:
                     console.log('Unknown message type:', type);
             }
@@ -117,13 +120,18 @@ function broadcastToChatRoom(sender, payload) {
     }
 }
 
-const sendOnlineNotify = ((ws, room_id, user_id) => {
+const sendOnlineNotify = async ((ws, room_id, user_id) => {
     const clients = chatRooms[room_id]
     clients.forEach(client => {
         if(client !== ws){
             client.send(JSON.stringify({ "online" : true, "room_id": room_id }))
         }
     })
+})
+
+const handleRemoveMember = async ((ws, payload) => {
+    const { room_id, user_id } = payload;
+    chatRooms[room_id] = chatRooms[room_id].filter(client => client.user_id != user_id)
 })
 
 function leaveAllChatRooms() {
