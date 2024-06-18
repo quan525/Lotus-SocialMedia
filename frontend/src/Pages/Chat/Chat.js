@@ -224,7 +224,7 @@ const Chat = ({socket}) => {
             }}))
 
         }
-        if (connection.current.readyState === WebSocket.OPEN) {
+        if (connection.current && connection.current.readyState === WebSocket.OPEN) {
             chatRooms.map((room) => {             
             const joinRoomMessage = {
               "type" : "join",
@@ -235,9 +235,7 @@ const Chat = ({socket}) => {
             })
         } 
 
-        
-
-    },[chatRooms])
+    },[chatRooms, connection.current.readyState])
 
     useEffect(()=> {
         console.log(onWaitMessage)
