@@ -120,7 +120,7 @@ function broadcastToChatRoom(sender, payload) {
     }
 }
 
-const sendOnlineNotify = async ((ws, room_id, user_id) => {
+const sendOnlineNotify = ((ws, room_id, user_id) => {
     const clients = chatRooms[room_id]
     clients.forEach(client => {
         if(client !== ws){
@@ -129,7 +129,7 @@ const sendOnlineNotify = async ((ws, room_id, user_id) => {
     })
 })
 
-const handleRemoveMember = async ((ws, payload) => {
+const handleRemoveMember =  ((ws, payload) => {
     const { room_id, user_id } = payload;
     chatRooms[room_id] = chatRooms[room_id].filter(client => client.user_id != user_id)
 })
