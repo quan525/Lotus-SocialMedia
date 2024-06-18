@@ -234,7 +234,7 @@ const Chat = ({socket}) => {
             })
         } 
 
-    },[chatRooms, connection.current.readyState])
+    },[chatRooms, connection.current?.readyState])
 
     useEffect(()=> {
         console.log(onWaitMessage)
