@@ -146,6 +146,7 @@ const GetUserPosts = async (req, res) => {
     LEFT JOIN likes l 
     ON p.post_id = l.post_id
     WHERE p.user_id = $1
+    GROUP BY p.post_id , su.profile_name, su.avatar_url
     ORDER BY p.created_at DESC`
   // const query = 
   // `SELECT 
