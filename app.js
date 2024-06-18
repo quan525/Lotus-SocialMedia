@@ -88,7 +88,6 @@ if (wss) {
 
 
 server.on('upgrade' , function upgrade(request, socket, head) {
-  socket.on('error', onSocketError);
   const token = url.parse(request.url).query.token;
 
 
