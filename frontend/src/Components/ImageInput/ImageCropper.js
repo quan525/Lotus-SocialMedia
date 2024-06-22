@@ -36,7 +36,7 @@ const ImageCropper = ({ image, onCropDone, onCropCancel}) => {
             },
           }}
         />
-        <div className='btn-container' style={{marginTop:"200px", display: "flex", justifyContent: "space-between", width: "210px", position:"absolute" }}>
+        <div className='btn-container' style={{ marginTop:"430px", display: "flex", justifyContent: "space-between", width: "210px", position:"absolute" }}>
           <button className='btn btn-outline' onClick={onCropCancel}>
             Cancel
           </button>

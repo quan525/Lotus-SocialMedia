@@ -87,36 +87,4 @@ if (wss) {
 }
 
 
-server.on('upgrade' , function upgrade(request, socket, head) {
-  const token = url.parse(request.url).query.token;
-
-  if (!token) {
-    console.log('No token provided');
-    socket.write('HTTP/1.1 401 Unauthorized\r\n\r\n');
-    socket.destroy();
-    return;
-  }
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    request.userId = decoded.userid;
-    pool.query('SELECT * FROM users WHERE user_id = $1', [request.userId], (err, user) => {
-      if (err || user.rows.length === 0) {
-        console.log('User not found');
-        socket.write('HTTP/1.1 403 Forbidden\r\n\r\n');
-        socket.destroy();
-        return;
-      }
-
-      wss.handleUpgrade(request, socket, head, function done(ws) {
-        wss.emit('connection', ws, request);
-        ws.user_id = request.userId;
-      });
-    });
-  } catch (error) {
-    console.log('Invalid token');
-    socket.write('HTTP/1.1 403 Forbidden\r\n\r\n');
-    socket.destroy();
-  }
-});
-
 module.exports = { authenticateToken }

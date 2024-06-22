@@ -84,6 +84,7 @@ const Login = async (req, res) => {
         bcrypt.compare(password, user.rows[0].password, function(err, result) {
             if (err) throw err;
             if(result === true){
+              console.log(user.rows[0])
               const profileName = user.rows[0].profile_name;
               const created_date = new Date(user.rows[0].created_at);
               const formattedDate = created_date.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }); // Get the formatted date

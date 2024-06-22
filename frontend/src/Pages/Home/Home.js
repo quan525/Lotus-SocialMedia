@@ -18,7 +18,7 @@ const Home = ({setFriendsProfile, friendRequests}) => {
   const [searchResults,setSearchResults] =useState("")
   const [posts,setPosts] = useState([])
   const [files, setFiles] = useState(null)
-
+  const [imagefiles, setImageFiles] = useState(null)
   const user = useContext(UserContext)
 
   const [body,setBody] =useState("")
@@ -30,12 +30,15 @@ const Home = ({setFriendsProfile, friendRequests}) => {
     const files = Array.from(event.target.files);
     const fileURLs = files.map(file => URL.createObjectURL(file));
     console.log(fileURLs)
+    setImageFiles(files);
     setFiles(fileURLs);
   };
   
   const handleImageClick = (index) => {
     const newFiles = [...files];
     newFiles.splice(index, 1);
+    const newImageFiles = [...imagefiles];
+    newImageFiles.splice(index, 1);
     setFiles(newFiles);
   };
   const fetchPosts = async () => {
@@ -62,23 +65,34 @@ const Home = ({setFriendsProfile, friendRequests}) => {
     // Define the request headers including the Authorization header with the token
     const config = {
         headers: {
+            'Content-type': 'multipart/form-data',
             'Authorization': 'Bearer ' + token
         }
     };
     
     // Define the URL where you want to post the data
     const url = `${API_PATHS.api}/post/posts`;
+    console.log(files)
+    const formData = new FormData();
+    formData.append('content', body);
+    imagefiles.forEach(element => {
+      formData.append('media',element)
+    });
     // Make a POST request to the URL using Axios
-    axios.post(url, { content: body, media: images }, config)
+    axios.post(url, formData, config)
         .then((response) => {
             console.log("Response:", response.data);
+            alert.success("Posted successfully");
+            setImageFiles(null);
+            setFiles(null);
             fetchPosts();
         })
         .catch((error) => {
             console.error("Error:", error);
+            alert.error("Error posting");
             // Handle errors if needed
     });
-    }
+  }
       
   useEffect(() => {
       fetchPosts().then(() => {

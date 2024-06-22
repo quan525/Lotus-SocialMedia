@@ -70,6 +70,7 @@ const handleDelete=(id)=>{
       console.log(response)
       if(response.status === 200) {
         const deleteFilter = posts.filter(val=> val.post_id !== id)
+        alert.success("Post deleted successfullyb ")
         setPosts(deleteFilter)
         setShowDelete(false)
       }else {

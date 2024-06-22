@@ -79,9 +79,9 @@ function ModelProfile({openEdit,setOpenEdit,handleModel,
                     /> */}
             <select name="cars" id="cars" onChange={(e)=> setEditGender(e.target.value)}>
               <option value="" disabled selected>Select your gender</option>
-              
               <option value="Male">Male</option>
               <option value="Female">Female</option>
+              <option value="">Prefer not to say</option>
             </select>
           </div>
         </div>

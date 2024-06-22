@@ -140,6 +140,10 @@ const onCropDone = (imgCroppedArea) => {
 
   const closeModal = () => {
     setModalIsOpen(false);
+    setImage("")
+    setBlob("")
+    setCurrentPage("choose-img")
+    setImgAfterCrop("")
   };
 
   const handleFile1=(e)=>{
@@ -164,17 +168,22 @@ const onCropDone = (imgCroppedArea) => {
   const [openEdit,setOpenEdit] =useState(false)
   const [countryName,setCountryName]= useState("")
   const [emailName,setEmailName]= useState("")
+  
   const userData = useContext(UserContext)
   
-  const handleLogOut = () => {
-    setLoggedIn(false)
-    localStorage.removeItem("data")
-    navigate('/')
-  }
+const handleLogOut = () => {
+  console.log("Logging out...");
+  localStorage.removeItem("data")
+  console.log("Removed user data from local storage");
+  setLoggedIn(false)
+  console.log("Set isLoggedIn to false");
+  console.log("Navigated to home page");
+}
 
   useEffect(()=> {
     setCoverImg(userData.cover_url)
     setProfileImg(userData.image)
+    setEmailName(emailName)
   },[userData])
   return (
 
@@ -288,7 +297,7 @@ const onCropDone = (imgCroppedArea) => {
 
               <div className="info-details-list">
                 <EmailOutlinedIcon />
-                <span>{userData?.email}</span>
+                <span>{emailName}</span>
               </div>
 
               <div className="info-details-list">
