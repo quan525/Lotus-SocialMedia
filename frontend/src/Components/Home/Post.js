@@ -287,11 +287,9 @@ const Post = ({post,posts,setPosts,setFriendsProfile,images}) => {
           ))}
       </div>
       ) : (
-          <div className="multi-img">
+          <div className="multi-img more-three-images">
               {post.images_url.map((img, index) => (
-                  <div key={index} className="multi-image">
-                      <img src={img} alt="" />
-                  </div>
+                  <img src={img} alt="" />
               ))}
           </div>
       )}

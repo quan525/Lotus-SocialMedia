@@ -304,7 +304,7 @@ const DeletePost = async (req, res) => {
     }else if (result.error) {
       res.status(500).send("Failed to delete: " + result.error.message);
     } else {
-      res.status(404).send("Post Not found");
+      res.status(400).send("Post Not found");
     }
 }
 

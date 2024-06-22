@@ -9,12 +9,14 @@ import Right from '../../Components/RightSide/Right'
 import Nav from '../../Components/Navigation/Nav'
 import SearchResultsList from '../../Components/Navigation/SearchResultsList'
 
+import { useAlert } from 'react-alert'
 import axios from 'axios'
 import { UserContext } from '../../App';
 import API_PATHS from '../../api/apiPath';
 
 const Home = ({setFriendsProfile, friendRequests}) => {
 
+  const alert = useAlert()
   const [searchResults,setSearchResults] =useState("")
   const [posts,setPosts] = useState([])
   const [files, setFiles] = useState(null)

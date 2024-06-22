@@ -23,12 +23,26 @@
 
 .two-images {
     grid-template-columns: repeat(2, 1fr);
+    object-fit: contain;
     /* Make the grid have exactly two columns when there are two images */
 }
 
+.more-three-images {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.more-three-images:nth-child(n+4) {
+    display: none;
+
+}
+
+.more-three-images img {
+    width: 100%;
+    height: auto;
+}
+
 .multi-image {
-    position: relative;
-    overflow: hidden;
+    grid-template-columns: repeat(2, 1fr);
 }
 
 .multi-image img {
