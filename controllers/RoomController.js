@@ -238,36 +238,39 @@ const AddMembers = async (req, res) => {
         const userId = req.userId;
         const { roomId } = req.params;
         const memberIds = req.body.memberIds;
-        const query = await pool.query("SELECT 1 FROM user_room WHERE user_id = $1 AND room_id = $2 AND admin != NULL LIMIT 1", [userId, roomId]);
-        if(query.rowCount > 0){
+
+        const query = await pool.query("SELECT 1 FROM user_room WHERE user_id = $1 AND room_id = $2 LIMIT 1", [userId, roomId]);
+
+        if (query.rowCount > 0) {
             const client = await pool.connect();
             try {
                 await client.query('BEGIN');
-            
+
                 // Associate members with the chat room
                 const allMembers = [userId, ...memberIds]; // Include the userId in the members array
                 const placeholders = allMembers.map((_, i) => `($${i * 2 + 1}, $${i * 2 + 2})`).join(', ');
                 const userRoomQuery = `INSERT INTO user_room (user_id, room_id) VALUES ${placeholders} ON CONFLICT DO NOTHING`;
                 const userRoomValues = [].concat(...allMembers.map(memberId => [memberId, roomId]));
                 await client.query(userRoomQuery, userRoomValues);
-            
-                // Commit the transaction
+
                 await client.query('COMMIT');
-            
+
                 res.status(200).json({ success: true, message: 'Members added successfully' });
             } catch (err) {
                 await client.query('ROLLBACK');
-                throw err;
+                console.error('Error adding members:', err);
+                res.status(500).json({ success: false, message: 'Error adding members' });
             } finally {
                 client.release();
             }
-        }else {
-            res.status(400).send("Unable to add members")
+        } else {
+            res.status(400).json({ success: false, message: 'Unable to add members' });
         }
     } catch (err) {
+        console.error('Error:', err);
         res.status(500).json({ success: false, message: 'Error adding members' });
     }
-}
+};
 
 const RemoveMember = async (req, res) => {
     try {
@@ -297,19 +300,26 @@ const QuitRoom = async (req, res) => {
     try{
         const userId = req.userId;
         const roomId = req.params.roomId;
-        const query = 'DELETE FROM user_room WHERE user_id = $1 AND room_id = $2';
+        const query = `DO $$
+                        BEGIN
+                            IF EXISTS (SELECT 1 FROM chat_rooms WHERE admin = $1 AND room_id = $2) THEN
+                                UPDATE chat_rooms
+                                SET admin = (SELECT user_id FROM user_room WHERE room_id = $2 LIMIT 1)
+                                WHERE room_id = $2;
+                            END IF;
+                            DELETE FROM user_room WHERE user_id = $1 AND room_id = $2;
+                        END $$;`;
         const values = [userId, roomId];
         const result = await pool.query(query, values);
         if(result.rowCount == 1){
-            res.status(200).json({ success: true, message: 'Quit roomsuccessfully' });
+            res.status(200).json({ success: true, message: 'Room deleted successfully' });
         }else {
-            res.status(404).json({ success: false, message: 'Failed quitting room' });
+            res.status(404).json({ success: false, message: 'Room not found' });
         }
     } catch(err){
         res.status(500).json({ success: false, message: 'Error deleting room' })
     }
-    
-}
+} 
 
 module.exports = {
     GetUserRooms,

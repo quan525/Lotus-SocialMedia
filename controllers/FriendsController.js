@@ -64,11 +64,11 @@ const AcceptFriend = async (req, res) => {
             await producer.publishMessage(userId2, message)
             res.status(200).json({ status: "Request accepted" });
         } else {
-            res.status(403).json({ error: "No friend request found" });        
+            res.status(403).send("No friend request found" );        
         }
     } catch (err) {
         console.log(err)
-        res.status(500).json({ error: "Internal server error" });
+        res.status(500).send("Internal server error");
     }
 }
 

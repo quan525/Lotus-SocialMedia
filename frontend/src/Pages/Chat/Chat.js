@@ -416,11 +416,13 @@ const Chat = ({socket}) => {
                     {
                         chatRooms.map((room) => {
                                 let roomName = room?.name 
-                                                || (room.users && room.users.length === 2 
+                                                || (room?.admin === null && room.users.length === 2 
                                                     ? room.users.find((user) => user.profile_name !== userData.profile_name).profile_name 
-                                                    : (room.users && room.users.length > 0 
-                                                        ? room.users.map((user,idx) =>idx < 3 ? user.profile_name : null).join(',') + "..." 
-                                                        : ''));
+                                                    : room?.admin != null && room.users.length <= 3 
+                                                    ? room.users.map((user,idx) =>idx < 3 ? user.profile_name : null).join(', ') 
+                                                    : room?.admin != null && room.users.length > 3 
+                                                    ? room.users.map((user,idx) =>idx < 3 ? user.profile_name : null).join(',') + "..." 
+                                                    : '');
                             return (
                                 <ListItem button key={room.room_id} onClick={() =>handleLoadChat(room.room_id)}>
                                     <ListItemIcon>
@@ -458,11 +460,13 @@ const Chat = ({socket}) => {
                                     />
                                 </ListItemIcon>
                                 <ListItemText primary={room?.name 
-                                                || (room.users && room.users.length === 2 
-                                                    ? room.users.find((user) => user.profile_name !== userData.profile_name).profile_name 
-                                                    : (room.users && room.users.length > 0 
-                                                        ? room.users.map((user,idx) =>idx < 3 ? user.profile_name : null).join(',') + "..." 
-                                                        : ''))} />  
+                                                || (room.admin === null && room.users.length === 2 
+                                                    ? chatRoomUsers?.find((user) => user?.profile_name !== userData.profile_name)?.profile_name 
+                                                    : (room.admin != null && room.users.length > 0 
+                                                    ? chatRoomUsers.map((user,idx) =>idx < 3 ? user.profile_name : null).join(',')
+                                                    : (room.admin != null) && chatRoomUsers?.length > 3 
+                                                    ? chatRoomUsers?.map((user,idx) =>idx < 3 ? user.profile_name : null).join(',') + "..."
+                                                    : ''))} />  
                                 <IconButton onClick={() => handleCall()}>
                                     <BsTelephoneFill />
                                 </IconButton>                        
@@ -573,7 +577,14 @@ const Chat = ({socket}) => {
                                         <Avatar style={{ height: '70px', width: '70px', marginTop: '40px' }} src={room.users.find((user) => user.profile_name !== userData.profile_name)?.avatar_url} />
                                     </Grid>     
                                     <Grid item xs={4}>
-                                        <Typography align="left" wrap="nowrap" >{room.name ? room.name : room.users.find((user) => user.profile_name !== userData.profile_name)?.profile_name }</Typography>
+                                        <Typography align="left" wrap="nowrap" >{room?.name 
+                                                || (room.admin === null && room.users.length === 2 
+                                                    ? chatRoomUsers?.find((user) => user?.profile_name !== userData.profile_name)?.profile_name 
+                                                    : (room.admin != null && room.users.length > 0 
+                                                    ? chatRoomUsers.map((user,idx) =>idx < 3 ? user.profile_name : null).join(',')
+                                                    : (room.admin != null) && chatRoomUsers?.length > 3 
+                                                    ? chatRoomUsers?.map((user,idx) =>idx < 3 ? user.profile_name : null).join(',') + "..."
+                                                    : ''))}</Typography>
                                     </Grid>
                                     <Grid item xs={4}>
                                         <NotificationsIcon style={{height: '30px', width:'30ox', marginTop:'20px'}}/>
@@ -583,7 +594,7 @@ const Chat = ({socket}) => {
                         })
                     }
                     {
-                        currentRoomAdmin != null || currentRoomAdmin != 'NULL' &&
+                        currentRoomAdmin != null  &&
                         <Grid item xs={12} style={{width: '100%'}}>
                             <ListItemButton onClick={handleOpenAddMembers} > 
                                 <ListItemIcon>
@@ -591,7 +602,7 @@ const Chat = ({socket}) => {
                                 </ListItemIcon>
                                 <ListItemText primary="Add Members" />
                             </ListItemButton>
-                            <AddMembersModal open={openAddMembers} handleClose={handleCloseAddMembers} roomId={currentRoomId} roomMembers={chatRoomUsers} setFetchRooms={setFetchRooms}/>
+                            <AddMembersModal open={openAddMembers} handleClose={handleCloseAddMembers} roomId={currentRoomId} chatRoomUsers={chatRoomUsers} setChatRoomUsers={setChatRoomUsers} setFetchRooms={setFetchRooms}/>
                         </Grid>
                     }
                     <Grid item xs={12} style={{width: '100%'}}>
@@ -607,7 +618,7 @@ const Chat = ({socket}) => {
                                 chatRooms.filter((room) => {
                                     return room.room_id === currentRoomId
                                 }).map((room) => {
-                                    return room.users.map((user) => {
+                                    return chatRoomUsers.map((user) => {
                                         return (
                                             <List component="div" disablePadding style={{width: '100%'}}>
                                                 <ListItemButton>

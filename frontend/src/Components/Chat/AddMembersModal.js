@@ -33,7 +33,7 @@ const style = {
   pb: 3,
 };
 
-const AddMembersModal = ({ open, handleClose, setFetchRooms, roomMembers, roomId }) => {  
+const AddMembersModal = ({ open, handleClose, setFetchRooms, roomMembers, roomId, chatRoomUsers, setChatRoomUsers }) => {  
     const user = useContext(UserContext);
     const [search, setSearch] = useState("");
     const [searchResult, setSearchResult] = useState([]);
@@ -50,7 +50,7 @@ const AddMembersModal = ({ open, handleClose, setFetchRooms, roomMembers, roomId
           console.log(response);
 
           setSearchResult(response.data.rows.filter(user=> {
-            return !roomMembers.some(member => member.user_id == user.user_id)
+            return !chatRoomUsers.some(member => member.user_id == user.user_id)
           }));
           }else{
             console.log(response) 
@@ -67,22 +67,31 @@ const AddMembersModal = ({ open, handleClose, setFetchRooms, roomMembers, roomId
         console.log(selectedUsers)
     }, [selectedUsers])
 
-    const handleSelectUser = (selectedUser) => {
-        if(selectedUsers.includes(selectedUser) || selectedUser.user_id === user.user_id){
-            console.log("already added");
+    const handleSelectUser = (selectUser) => {
+        if (selectedUsers.find(user => user.user_id === selectUser.user_id) || chatRoomUsers.find(member => member.user_id === selectUser.user_id) || selectUser.user_id === user.user_id) {
+            console.log("User already added or is in the room.");
             return;
         }
-        console.log(selectedUsers.map(user => user.user_id))
-        setSelectedUsers([user,...selectedUsers ])
+        setSelectedUsers(prevSelectedUsers => [...prevSelectedUsers, selectUser]);
     }
 
     const handleAddMembers = async () => {
-      if(!selectedUsers.some(selectedUser => selectedUser.user_id === user.user_id)){
-        setSelectedUsers(selectedUsers)
+      handleClose()
+      setSearchResult([])
+      setSearch("")
+      setSelectedUsers([])
+      const result = await addMembers(user.token, selectedUsers, roomId)
+      if(result.status === 200){
+        alert.success("Members added successfully")
+        setChatRoomUsers(chatRoomUsers => [...chatRoomUsers, ...selectedUsers])
+        setFetchRooms(true)
+      }else {
+        alert.error("Error adding members", result.data)
       }
-      if(selectedUsers.length > 0) {
-        const response = await addMembers(user.token, selectedUsers, roomId)
-      }
+      console.log(result)
+      // if(selectedUsers.length > 0) {
+      //   const response = await addMembers(user.token, selectedUsers, roomId)
+      // }
 
     }
     

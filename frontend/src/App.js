@@ -209,7 +209,7 @@ const App = () => {
     <UserContext.Provider value={items}>
       <LoginContext.Provider value={{isLoggedIn, setLoggedIn}}>
         <NotificationsContext.Provider value={notifications}>
-          <FriendsContext.Provider value={{friendsList, setFriendsList, friendsSuggestion}}>
+          <FriendsContext.Provider value={{friendsList, setFriendsList, friendsSuggestion, setFriendRequests, friendRequests}}>
             <div className='App'>
               <Routes>
                 <Route path='/home' element={<PrivateRoute><Home setFriendsProfile={setFriendsProfile} friendRequests={friendRequests}/></PrivateRoute>} />

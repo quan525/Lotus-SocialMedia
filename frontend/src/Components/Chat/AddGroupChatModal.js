@@ -73,13 +73,12 @@ const AddGroupChat = ({ open, handleClose, setChatRooms, chatRooms, setFetchRoom
         console.log(selectedUsers)
     }, [selectedUsers])
 
-    const handleSelectUser = (user) => {
-        if(selectedUsers.includes(user)){
-            console.log("already added");
+    const handleSelectUser = (selectUser) => {
+        if (selectedUsers.find(user => user.user_id === selectUser.user_id) || selectUser.user_id === user.user_id) {
+            console.log("User already added or is the current user.");
             return;
         }
-        console.log(selectedUsers.map(user => user.user_id))
-        setSelectedUsers([user,...selectedUsers ])
+        setSelectedUsers(prevSelectedUsers => [...prevSelectedUsers, selectUser]);
     }
 
     const handleCreateGroupChat = async () => {

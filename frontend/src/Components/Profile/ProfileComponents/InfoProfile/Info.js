@@ -20,6 +20,7 @@ import ImageCropper from '../../../ImageInput/ImageCropper.js';
 import { UserContext } from '../../../../App';
 import { LoginContext } from '../../../../App';
 import "../../../ImageInput/ImageCropper.css"
+import { useAlert } from 'react-alert';
 export const customStyles = {
   content: {
     top: '50%',
@@ -46,7 +47,7 @@ const Info = ({userPostData,
               setGender,
               friendsList,
               setShowFriendsList}) => {
-  
+  const alert = useAlert()
   const navigate = useNavigate()
   const {isLoggedIn, setLoggedIn} = useContext(LoginContext)
   const [coverImg,setCoverImg] =useState()
@@ -164,7 +165,15 @@ const onCropDone = (imgCroppedArea) => {
     }
   }
 
-
+  const handleUpdateAvatar = async (blob) => {
+    const result = await UpdateAvatar(userData?.token, blob );
+    if(result.status === 200){
+      alert.success("Avatar updated succesfully")
+    }else {
+      console.log(result)
+      alert.error("Avatar update failed")
+    }
+  }
   const [openEdit,setOpenEdit] =useState(false)
   const [countryName,setCountryName]= useState("")
   const [emailName,setEmailName]= useState("")
@@ -185,9 +194,8 @@ const handleLogOut = () => {
     setProfileImg(userData.image)
     setEmailName(emailName)
   },[userData])
+  
   return (
-
-
     <div className='info'>
         <div className="info-cover">
             <img src={coverImg} alt="cover image" />
@@ -238,7 +246,7 @@ const handleLogOut = () => {
                 setCurrentPage("choose-img");
                 setImage("");
                 closeModal();
-                UpdateAvatar(userData?.token, blob );
+                handleUpdateAvatar(blob);
               }}>
                 Upload
               </button>

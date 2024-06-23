@@ -195,7 +195,7 @@ const UpdateAvatar = async (req, res) => {
       const result = await pool.query('UPDATE users SET avatar_url = $1 WHERE user_id = $2', [secure_url, userId]);
       
       if (result.rowCount > 0) {
-        res.status(200).send("Successfully updated");
+        res.status(200).send("Avatar successfully updated");
       } else {
         res.status(400).send("No user found or avatar update failed");
       }

@@ -139,20 +139,26 @@ export const addMember = async (token, roomId, memberId) => {
         throw new Error(err)
     }
 }
-export const addMembers = async (token, memberIds, roomId) => {
+
+export const addMembers = async (token, members, roomId) => {
     const config = {
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
         }
     }
+    let memberIds = [];
+    for(const [key, value] of Object.entries(members)){
+        memberIds.push(value.user_id)
+    }
     const payload = {
-        "membersIds" : memberIds
+        "memberIds" : memberIds
     }
     try{
         const response = await axios.post(`${API_PATHS.api}/chats/${roomId}/users/add-members`, JSON.stringify(payload), config)
         return response;
     }catch (err) {
+        console.log(err)
         return err
     }
 }

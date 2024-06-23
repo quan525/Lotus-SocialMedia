@@ -5,11 +5,14 @@ import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import "./InfoFriend.css"
 import { addFriend, checkRelationship, acceptRequest, removeRequest, removeFriend } from '../../../api/services/Friends';
 import { UserContext } from '../../../App';
-import {LiaEdit} from "react-icons/lia";
+import { useAlert } from 'react-alert';
+import { FriendsContext } from '../../../App';
+
 const InfoFriends = ({val, friendsList, setShowFriendsList, friendPosts}) => {
+  const { friendRequests, setFriendRequests } = useContext(FriendsContext)
   const [relationshipState, setRelationshipState] = useState([])
   const [ buttonText, setButtonText] = useState(null)
-
+  const alert = useAlert()
   useEffect(() => {
     console.log("val: ", val)
   },[val])
@@ -47,14 +50,22 @@ const handleFriendAction = async (action, token, otherUserId) => {
       case 'Friends':
       const confirmUnfriend = window.confirm("Do you want to unfriend this person?");
       if(confirmUnfriend) {
-        removeFriend(token, otherUserId)
+        await removeFriend(token, otherUserId)
         setButtonText('Add Friend')
       }
       break;
       case 'Accept':
         result = await acceptRequest(token, otherUserId);
+
+        if(result.status === 200){
+          alert.success('Friend request accepted');
+          setButtonText('Friends');
+          setFriendRequests(friendRequests.filter((request) => request.user_id !== otherUserId));
+        }else {
+          alert.error(result.data)
+        }
         console.log(result);
-        setButtonText('Friends');
+        
         break;
       case 'Pending':
         result = await removeRequest(token, otherUserId);
