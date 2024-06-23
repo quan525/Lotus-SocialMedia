@@ -10,22 +10,17 @@ const GetAllMessages = asyncHandler(async (req, res) => {
         return res.status(400).json({ error: 'User ID and Room ID are required' });
     }
 
-    const query = `SELECT DISTINCT messages.*
+    const query = `SELECT messages.*
                     FROM messages
                     INNER JOIN user_room ON messages.room_id = user_room.room_id
                     WHERE messages.room_id = $1
                     AND user_room.user_id = $2
-                    AND messages.created_at > user_room.joined_at
+                    AND messages.created_at >= user_room.joined_at
                     ORDER BY messages.created_at ASC`;
     const values = [roomId, userId];
 
     try {
         const result = await pool.query(query, values);
-
-        // Check if messages were found
-        if (result.rows.length === 0) {
-            return res.status(404).json({ error: 'No messages found' });
-        }
 
         res.status(200).json(result.rows);
     } catch (error) {
