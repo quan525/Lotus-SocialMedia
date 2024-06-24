@@ -2,7 +2,7 @@ export default function validation(data){
     const error ={}
 
     const emailPattern= /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/;
-    const passwordPattern= /^[a-zA-Z0-9!@#\$%\^\&*_=+-]{8,12}$/g;
+    const passwordPattern= /^[a-zA-Z0-9!@#\$%\^\&*_=+-]{8,20}$/g;
 
     if(data.username === ""){
         error.username="* Name is Required!"

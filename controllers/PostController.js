@@ -143,10 +143,10 @@ const GetUserPosts = async (req, res) => {
     FROM posts p
     INNER JOIN users su
     ON p.user_id = su.user_id
-    LEFT JOIN likes l 
-    ON p.post_id = l.post_id
+    INNER JOIN likes l
+    ON l.post_id = p.post_id
     WHERE p.user_id = $1
-    GROUP BY p.post_id , su.profile_name, su.avatar_url
+    GROUP BY p.post_id, su.profile_name, su.avatar_url
     ORDER BY p.created_at DESC`
   // const query = 
   // `SELECT 

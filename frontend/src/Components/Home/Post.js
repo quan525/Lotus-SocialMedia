@@ -184,9 +184,7 @@ const Post = ({post,posts,setPosts,setFriendsProfile,images}) => {
   };
 
   const handleCommentInput = async (e)=>{
-     e.preventDefault()
-
-    
+    e.preventDefault()
     const avatar_url = user.image
     const profile_name = user.profile_name
     const content = commentInput
@@ -211,7 +209,6 @@ const Post = ({post,posts,setPosts,setFriendsProfile,images}) => {
         [post.post_id]: null
       }));
     }
-    
   }
 
    const handleFriendsId=(id)=>{

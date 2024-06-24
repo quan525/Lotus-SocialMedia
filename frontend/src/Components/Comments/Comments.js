@@ -8,9 +8,6 @@ import { handleDateDiff } from '../../utils/utils.js';
 const Comments = ({cmt}) => {
     const [booleonLike, setBooleonLike] = useState(false)
     const [likeCount, setLikeCount] = useState(cmt.likes)
-    useEffect(()=> {
-        console.log(cmt)
-    })
     return (
       <div className="overAllCommentList">
           <div className="commentList">

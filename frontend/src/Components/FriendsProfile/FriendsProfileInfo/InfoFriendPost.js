@@ -6,7 +6,6 @@ import SendRoundedIcon from '@mui/icons-material/SendRounded';
 import SentimentSatisfiedRoundedIcon from '@mui/icons-material/SentimentSatisfiedRounded';
 import MessageRoundedIcon from '@mui/icons-material/MessageRounded';
 import { useState } from 'react';
-import moment from "moment"
 
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import {FiInstagram} from "react-icons/fi"
@@ -17,15 +16,12 @@ import SharedPost from '../../Share/SharedPost'
 import Comments from '../../Comments/Comments';
 import { UserContext } from '../../../App';
 import { LikePost, UnLikePost } from '../../../api/services/Likes';
-import { commentOnPost, fetchPostComments } from '../../api/services/Comments';
-
+import { fetchPostComments, commentOnPost } from '../../../api/services/Comments';
 const InfoFriendPost = ({val}) => {
-  const [totalComment,setTotalComment] = useState(val.comments_count)
+
   const [comments,setComments] =useState([])
     
-  useEffect((val)=> {
-    console.log(val)
-  },[val])
+  const [totalComments,setTotalComments] = useState(val.comments_count)
   const user = useContext(UserContext)
   const [like,setLike] = useState(val.likes_count)
   const [unlike,setUnlike] =useState(false)
@@ -33,22 +29,9 @@ const InfoFriendPost = ({val}) => {
   const [filledLike,setFilledLike] =useState(<FavoriteBorderOutlinedIcon />)
   const [unFilledLike,setUnFilledLike] =useState(false)
 
-    useEffect(()=>{
-    if(val.user_like_ids.includes(user.user_id)){
-      setUnlike(true)
-      setFilledLike( <FavoriteRoundedIcon /> )
-      setUnFilledLike(true)
-    }else{
-      setUnlike(false)
-      setFilledLike( <FavoriteBorderOutlinedIcon /> )
-      setUnFilledLike(false)
-    }
-  }, [val.user_like_ids, user])
-
   const handlelikes= async (postId)=>{
     setLike(unlike ? like -1 :like +1)
     setUnlike(!unlike)
-    console.log(postId)
     setFilledLike(unFilledLike ?   <FavoriteBorderOutlinedIcon /> : <FavoriteRoundedIcon />)
     setUnFilledLike(!unFilledLike)
     if(unlike){
@@ -60,29 +43,10 @@ const InfoFriendPost = ({val}) => {
       .then((res) => console.log(res))
       setLike(like + 1)
     }
-
   }
-
   const [showComment,setShowComment] = useState(false)
 
- useEffect(() => {
-  if(showComment && user.token && val.post_id ){
-    const fetchData = async () => {
-      try {
-        const comment = await fetchPostComments(user.token, val.post_id);
-        if (comment) {
-          setComments(comment);
-        }
-      } catch (error) {
-        console.error('Error fetching post comments:', error);
-      }
-    };
-
-    fetchData();
-  }}, [showComment, user.token, val.post_id])
   const [commentInput,setCommentInput] =useState("")
-  const [commentImages, setCommentImages] = useState({});
-
   const handleCommentInput = async (e)=>{
      e.preventDefault()
 
@@ -91,7 +55,6 @@ const InfoFriendPost = ({val}) => {
     const profile_name = user.profile_name
     const content = commentInput
     const created_at = new Date(Date.now())
-    const image = commentImages[val.post_id]
     const commentObj ={
       avatar_url: avatar_url,
       likes: 0,
@@ -99,21 +62,39 @@ const InfoFriendPost = ({val}) => {
       content: content,
       created_at: created_at
     }
-    const response = await commentOnPost(user.token, val.post_id, commentInput, image);
-    console.log(response)
+    const response = await commentOnPost(user.token, val.post_id, commentInput);
     if(response?.status === 201){
       const insert =[commentObj, ...comments]
-      setTotalComment (totalComment + 1)
+      setTotalComments (totalComments + 1)
       setComments(insert)
       setCommentInput("")
-      setCommentImages(prevCommentImages => ({ // Reset the image for the current post
-        ...prevCommentImages,
-        [val.post_id]: null
-      }));
     }
-    
   }
+  useEffect(() => {
+    console.log(val)
+    if(val?.user_like_ids.includes(user.user_id)){
+      setFilledLike(<FavoriteRoundedIcon />)
+      setUnFilledLike(true)
+      setUnlike(true)
+    }
+  },[val])
 
+ useEffect(() => {
+  if(showComment && user.token && val.post_id ){
+    const fetchData = async () => {
+      try {
+        const comments = await fetchPostComments(user.token, val.post_id);
+        if (comments) {
+          setComments(comments);
+        }
+      } catch (error) {
+        console.error('Error fetching post comments:', error);
+      }
+    };
+    console.log("fetching comments")
+    fetchData();
+  }}, [showComment])
+  
   const [socialIcons,setSocialIcons] = useState(false)
 
   return (
@@ -211,8 +192,8 @@ const InfoFriendPost = ({val}) => {
       
 
       <div className="like-comment-details">
-        <span className='post-like'>{like} likes ,</span>
-        <span className='post-comment'>{val.comments_count} comments</span>
+        <span className='post-like'>{like} people like it,</span>
+        <span className='post-comment'>{totalComments} comments</span>
       </div>
       
      {showComment && (<div className="commentSection">

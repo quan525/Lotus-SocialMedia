@@ -17,7 +17,7 @@ const LikePost = async (req, res) => {
     // Check if the post is already liked by the user
     const likeExists = await pool.query('SELECT 1 FROM likes WHERE post_id = $1 AND user_id = $2', [postId, userId]);
     if (likeExists.rowCount > 0) {
-      return res.status(200).json({ messsage: "Post already liked" });
+      return res.status(403).json({ messsage: "Post already liked" });
     }
 
     const query = ` WITH inserted_row AS (

@@ -11,6 +11,7 @@ import { useAlert } from 'react-alert'
 import { ResetPassword } from '../../api/services/User'
 
 const PasswordReset = () => {
+    const alert = useAlert()
     const [ searchParams ] = useSearchParams();
     const token = searchParams.get('token')
     const userId = searchParams.get('userId')
@@ -32,6 +33,11 @@ const PasswordReset = () => {
         if(Object.keys(errors).length === 0) {
             const result = await ResetPassword(userId, data.password, token)
             console.log(result)
+            if(result.status === 200){
+                alert.success(result.data)
+            }else {
+                alert.error(result.data)
+            }
         }
     }
     
@@ -39,7 +45,7 @@ const PasswordReset = () => {
         const error ={}
 
         
-        const passwordPattern= /^[a-zA-Z0-9!@#\$%\^\&*_=+-]{8,12}$/g;
+        const passwordPattern= /^[a-zA-Z0-9!@#\$%\^\&*_=+-]{8,20}$/g;
 
         if(data.password === "" || data.checkPassword === ""){
             error.password = "* Password is Required"

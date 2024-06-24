@@ -24,6 +24,7 @@ export const UserContext = createContext()
 export const LoginContext = createContext()
 export const FriendsContext = createContext()
 export const NotificationsContext = createContext()
+export const UpdateProfileContext = createContext()
 export const isTokenExpired = (token) => {
   if (!token) return true;
   try {
@@ -54,6 +55,7 @@ const App = () => {
     }
   });
 
+  const [updateProfile, setUpdateProfile] = useState(false);
   const [friendProfile, setFriendsProfile] = useState([]);
   const [items, setItems] = useState([]);
   const [activeChats, setActiveChats] = useState([]);
@@ -68,21 +70,21 @@ const App = () => {
 
 
   useEffect(() => {
-  const handleStorageChange = (e) => {
-    if (e.key === "data") { 
-      console.log(JSON.parse(localStorage.getItem('data')));
-      setItems(JSON.parse(localStorage.getItem('data')));
-    }
-  };
+    const handleStorageChange = (e) => {
+      if (e.key === "data") { 
+        console.log(JSON.parse(localStorage.getItem('data')));
+        setItems(JSON.parse(localStorage.getItem('data')));
+      }
+    };
+  
+    // Subscribe to future changes
+    window.addEventListener('storage', handleStorageChange);
 
-  // Subscribe to future changes
-  window.addEventListener('storage', handleStorageChange);
-
-  // Cleanup function
-  return () => {
-    window.removeEventListener('storage', handleStorageChange);
-  };
-}); 
+    // Cleanup function
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }); 
 
   useEffect(() => {
     console.log(isLoggedIn)
@@ -207,36 +209,38 @@ const App = () => {
   },[notifications])
   return (    
     <UserContext.Provider value={items}>
-      <LoginContext.Provider value={{isLoggedIn, setLoggedIn}}>
-        <NotificationsContext.Provider value={notifications}>
-          <FriendsContext.Provider value={{friendsList, setFriendsList, friendsSuggestion, setFriendRequests, friendRequests}}>
-            <div className='App'>
-              <Routes>
-                <Route path='/home' element={<PrivateRoute><Home setFriendsProfile={setFriendsProfile} friendRequests={friendRequests}/></PrivateRoute>} />
+      <UpdateProfileContext.Provider value={{updateProfile, setUpdateProfile}}>
+        <LoginContext.Provider value={{isLoggedIn, setLoggedIn}}>
+          <NotificationsContext.Provider value={notifications}>
+            <FriendsContext.Provider value={{friendsList, setFriendsList, friendsSuggestion, setFriendRequests, friendRequests}}>
+              <div className='App'>
+                <Routes>
+                  <Route path='/home' element={<PrivateRoute><Home setFriendsProfile={setFriendsProfile} friendRequests={friendRequests}/></PrivateRoute>} />
 
-                <Route path='/profile' element={<PrivateRoute><Profile friendsList={friendsList} setFriendsList={setFriendsList} friendRequests={friendRequests}/></PrivateRoute>} />
+                  <Route path='/profile' element={<PrivateRoute><Profile friendsList={friendsList} setFriendsList={setFriendsList} friendRequests={friendRequests}/></PrivateRoute>} />
 
-                <Route path='/users/:userId' element={<PrivateRoute><FriendsId friendProfile={friendProfile} friendRequests={friendRequests}/></PrivateRoute>} />
+                  <Route path='/users/:userId' element={<PrivateRoute><FriendsId friendProfile={friendProfile} friendRequests={friendRequests}/></PrivateRoute>} />
 
-                <Route path='/friendRequests' element={<PrivateRoute><FriendRequests setFriendsProfile={setFriendsProfile}  friendRequests={friendRequests} setFriendRequests={setFriendRequests}/></PrivateRoute>} />
+                  <Route path='/friendRequests' element={<PrivateRoute><FriendRequests setFriendsProfile={setFriendsProfile}  friendRequests={friendRequests} setFriendRequests={setFriendRequests}/></PrivateRoute>} />
 
-                <Route path='/notification' element={<PrivateRoute><Notification notifications={notifications}/></PrivateRoute>} />
+                  <Route path='/notification' element={<PrivateRoute><Notification notifications={notifications}/></PrivateRoute>} />
 
-                <Route path='/chat' element={<PrivateRoute><Chat/></PrivateRoute>} />
+                  <Route path='/chat' element={<PrivateRoute><Chat/></PrivateRoute>} />
 
-                <Route path='/' element={isLoggedIn ? <Navigate to="/home" /> : <Login />} />
+                  <Route path='/' element={isLoggedIn ? <Navigate to="/home" /> : <Login />} />
 
-                <Route path='/signup' element={isLoggedIn ? <Navigate to="/home" /> : <SignUp />} />
+                  <Route path='/signup' element={isLoggedIn ? <Navigate to="/home" /> : <SignUp />} />
 
-                <Route path='/passwordReset' element={<PasswordReset />} />
-                {/* <Route path='/SendOtp'   element={isLoggedIn ? <Navigate to="/home"/> : <OTPInput/> } /> */}
+                  <Route path='/passwordReset' element={<PasswordReset />} />
+                  {/* <Route path='/SendOtp'   element={isLoggedIn ? <Navigate to="/home"/> : <OTPInput/> } /> */}
 
-                <Route path='/videocall' element={<PrivateRoute><VideoCall/></PrivateRoute>} />
-              </Routes>
-            </div>
-          </FriendsContext.Provider >
-        </NotificationsContext.Provider>
-      </LoginContext.Provider>
+                  <Route path='/videocall' element={<PrivateRoute><VideoCall/></PrivateRoute>} />
+                </Routes>
+              </div>
+            </FriendsContext.Provider >
+          </NotificationsContext.Provider>
+        </LoginContext.Provider>
+      </UpdateProfileContext.Provider>
     </UserContext.Provider >
 
   )

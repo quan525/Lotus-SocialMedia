@@ -17,8 +17,7 @@ import ModelProfile from '../ModelProfile/ModelProfile.js';
 import { Link } from 'react-router-dom';
 import FileInput from '../../../ImageInput/FileInput.js'
 import ImageCropper from '../../../ImageInput/ImageCropper.js';
-import { UserContext } from '../../../../App';
-import { LoginContext } from '../../../../App';
+import { UserContext, LoginContext, } from '../../../../App';
 import "../../../ImageInput/ImageCropper.css"
 import { useAlert } from 'react-alert';
 export const customStyles = {
@@ -176,10 +175,9 @@ const onCropDone = (imgCroppedArea) => {
   }
   const [openEdit,setOpenEdit] =useState(false)
   const [countryName,setCountryName]= useState("")
-  const [emailName,setEmailName]= useState("")
-  
+  const [email,setEmail]= useState("")
   const userData = useContext(UserContext)
-  
+
 const handleLogOut = () => {
   console.log("Logging out...");
   localStorage.removeItem("data")
@@ -192,7 +190,7 @@ const handleLogOut = () => {
   useEffect(()=> {
     setCoverImg(userData.cover_url)
     setProfileImg(userData.image)
-    setEmailName(emailName)
+    setEmail(userData.email)
   },[userData])
   
   return (
@@ -274,8 +272,8 @@ const handleLogOut = () => {
             <h1>{ name ? userData.profile_name : "Guest"}</h1>
             <p>{}</p>
 
-            <Link to="/" className='logout'>
-              <BiLogOut onClick={()=> handleLogOut()}/>Logout
+            <Link to="/" className='logout'  onClick={()=> handleLogOut()}>
+              <BiLogOut/>Logout
             </Link>
 
             <button onClick={()=>setOpenEdit(true)}><LiaEdit />Edit Profile</button>
@@ -286,8 +284,8 @@ const handleLogOut = () => {
               setGender={setGender}
               countryName={countryName}
               setCountryName={setCountryName}
-              emailName={emailName}
-              setEmailName={setEmailName}
+              email={email}
+              setEmail={setEmail}
               openEdit={openEdit}
               setOpenEdit={setOpenEdit}
             />
@@ -305,7 +303,7 @@ const handleLogOut = () => {
 
               <div className="info-details-list">
                 <EmailOutlinedIcon />
-                <span>{emailName}</span>
+                <span>{email}</span>
               </div>
 
               <div className="info-details-list">

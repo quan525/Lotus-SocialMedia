@@ -2,44 +2,49 @@ import { Modal, useMantineTheme } from '@mantine/core';
 import "../ModelProfile/ModelProfile.css"
 
 import { UserContext } from '../../../../App';
-import { useContext, useState, useEffect } from 'react';
+import { useContext, useState, useEffect} from 'react';
 
 import { useAlert } from 'react-alert';
 import { updateProfile } from '../../../../api/services/User';
-
+import { UpdateProfileContext } from '../../../../App';
 function ModelProfile({openEdit,setOpenEdit,handleModel,
                       name,setName,gender,
                       setGender,countryName,setCountryName,
-                      emailName,setEmailname
+                      email, setEmail
                       }) 
                       {
+  const profileContext = useContext(UpdateProfileContext)
   const alert = useAlert();
   const theme = useMantineTheme();
   const userData = useContext(UserContext);
   const [profileName, setProfileName] = useState('')
   const [editGender, setEditGender] = useState('')
+  const [editEmail, setEditEmail] = useState('')
   useEffect(()=> {
     if(userData){
       setProfileName(userData.profile_name)
       setEditGender(userData.gender == null ? null : userData.gender)
+      setEditEmail(userData.email)
     }
   },[userData])
 
   const handleUpdateProfile = async (e) => {
   e.preventDefault();
   console.log(JSON.parse(localStorage.getItem('data')));
-  await updateProfile(userData.token, { profileName : profileName , gender: editGender, email : emailName })
+  await updateProfile(userData.token, { profileName : profileName , gender: editGender, email: setEmail })
     .then(res => {
       console.log(res)
       if(res.status === 200){
         const localStorageData = JSON.parse(localStorage.getItem('data'));
         localStorageData.profile_name = profileName;
         localStorageData.gender = editGender;
+        localStorageData.email = editEmail;
         console.log(localStorageData);
-        setGender(editGender)         
+        setGender(editGender)      
         alert.success(res.data)
         localStorage.setItem('data', JSON.stringify(localStorageData));
         setName(profileName);
+        profileContext.setUpdateProfile(true);
       }else {
         alert.error(res.data)
       }
@@ -79,6 +84,7 @@ function ModelProfile({openEdit,setOpenEdit,handleModel,
                     /> */}
             <select name="cars" id="cars" onChange={(e)=> setEditGender(e.target.value)}>
               <option value="" disabled selected>Select your gender</option>
+              
               <option value="Male">Male</option>
               <option value="Female">Female</option>
               <option value="">Prefer not to say</option>
@@ -94,9 +100,9 @@ function ModelProfile({openEdit,setOpenEdit,handleModel,
           </div>
 
           <div className="inputBox1">
-            <input type="text" name="emailname" id="name" placeholder='Edit Email'
-                   onChange={(e)=>setEmailname(e.target.value)}
-                   value={emailName}
+            <input type="text" name="Email" id="name" placeholder='Enter Email'
+                   onChange={(e)=>setEditEmail(e.target.value)}
+                   value={editEmail}
                    />
           </div>
 
