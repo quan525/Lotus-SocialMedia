@@ -11,22 +11,15 @@ import ImageIcon from '@mui/icons-material/Image';
 import EmojiPicker, { Emoji } from 'emoji-picker-react';
 
 import {PiSmileySad} from "react-icons/pi"
-import {IoVolumeMuteOutline} from "react-icons/io5"
 import {MdBlockFlipped} from "react-icons/md"
-import {AiOutlineDelete} from "react-icons/ai"
 import {MdReportGmailerrorred} from "react-icons/md"
 
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import {FiInstagram} from "react-icons/fi"
-import {BiLogoLinkedin} from "react-icons/bi"
-import {AiFillYoutube} from "react-icons/ai"
-import {FiGithub} from "react-icons/fi"
-
 import { useState } from 'react';
 import Comments from '../Comments/Comments';
 import SharedPost from '../Share/SharedPost'
 import ShareBoxModal from '../Share/ShareBoxModal';
-import moment from 'moment';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { UserContext } from '../../App';
@@ -69,17 +62,15 @@ const Post = ({post,posts,setPosts,setFriendsProfile,images}) => {
       setFilledLike( <FavoriteBorderOutlinedIcon /> )
       setUnFilledLike(false)
     }
-  }, [post.user_like_ids, user])
+  }, [post?.user_like_ids, user])
 
 
   const handlelikes = async (postId)=>{
     setLike(unlike ? like -1 : like +1)
     setUnlike(!unlike)
-
     setFilledLike(unFilledLike ?   <FavoriteBorderOutlinedIcon /> : <FavoriteRoundedIcon />)
     setUnFilledLike(!unFilledLike)
     const url = `${API_PATHS.api}/like/${postId}`
-    
     console.log(postId)
     const config = {
       headers: {
@@ -87,21 +78,21 @@ const Post = ({post,posts,setPosts,setFriendsProfile,images}) => {
       }
     }
     try {
-    if (unlike) {
-      // Unlike the post
-      await axios.delete(url, config).then((response) => console.log(response));
-      console.log("Post unliked successfully");
-      // Perform any additional actions if needed
-    } else {
-      // Like the post
-      await axios.post(url, {}, config).then((response) => console.log(response));
-      console.log("Post liked successfully");
-      // Perform any additional actions if needed
+      if (unlike) {
+        // Unlike the post
+        await axios.delete(url, config).then((response) => console.log(response));
+        console.log("Post unliked successfully");
+        // Perform any additional actions if needed
+      } else {
+        // Like the post
+        await axios.post(url, {}, config).then((response) => console.log(response));
+        console.log("Post liked successfully");
+        // Perform any additional actions if needed
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      // Handle error if needed
     }
-  } catch (error) {
-    console.error('Error:', error);
-    // Handle error if needed
-  }
   }
 
   useEffect(()=>{

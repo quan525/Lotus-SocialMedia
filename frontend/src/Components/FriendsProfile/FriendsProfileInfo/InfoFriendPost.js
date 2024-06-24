@@ -17,9 +17,10 @@ import SharedPost from '../../Share/SharedPost'
 import Comments from '../../Comments/Comments';
 import { UserContext } from '../../../App';
 import { LikePost, UnLikePost } from '../../../api/services/Likes';
+import { commentOnPost, fetchPostComments } from '../../api/services/Comments';
 
 const InfoFriendPost = ({val}) => {
-
+  const [totalComment,setTotalComment] = useState(val.comments_count)
   const [comments,setComments] =useState([])
     
   useEffect((val)=> {
@@ -31,6 +32,18 @@ const InfoFriendPost = ({val}) => {
 
   const [filledLike,setFilledLike] =useState(<FavoriteBorderOutlinedIcon />)
   const [unFilledLike,setUnFilledLike] =useState(false)
+
+    useEffect(()=>{
+    if(val.user_like_ids.includes(user.user_id)){
+      setUnlike(true)
+      setFilledLike( <FavoriteRoundedIcon /> )
+      setUnFilledLike(true)
+    }else{
+      setUnlike(false)
+      setFilledLike( <FavoriteBorderOutlinedIcon /> )
+      setUnFilledLike(false)
+    }
+  }, [val.user_like_ids, user])
 
   const handlelikes= async (postId)=>{
     setLike(unlike ? like -1 :like +1)
@@ -52,26 +65,53 @@ const InfoFriendPost = ({val}) => {
 
   const [showComment,setShowComment] = useState(false)
 
-  const [commentInput,setCommentInput] =useState("")
+ useEffect(() => {
+  if(showComment && user.token && val.post_id ){
+    const fetchData = async () => {
+      try {
+        const comment = await fetchPostComments(user.token, val.post_id);
+        if (comment) {
+          setComments(comment);
+        }
+      } catch (error) {
+        console.error('Error fetching post comments:', error);
+      }
+    };
 
-  const handleCommentInput=(e)=>{
+    fetchData();
+  }}, [showComment, user.token, val.post_id])
+  const [commentInput,setCommentInput] =useState("")
+  const [commentImages, setCommentImages] = useState({});
+
+  const handleCommentInput = async (e)=>{
      e.preventDefault()
 
-    const id=comments.length ? comments[comments.length -1].id +1 : 1
-    const username="Vijay"
-    const comment =commentInput
-    const time= moment.utc(new Date(), 'yyyy/MM/dd kk:mm:ss').local().startOf('seconds').fromNow()
-
+    
+    const avatar_url = user.image
+    const profile_name = user.profile_name
+    const content = commentInput
+    const created_at = new Date(Date.now())
+    const image = commentImages[val.post_id]
     const commentObj ={
-      id:id,
-      likes:0,
-      username:username,
-      comment:comment,
-      time:time
+      avatar_url: avatar_url,
+      likes: 0,
+      username: profile_name,
+      content: content,
+      created_at: created_at
     }
-    const insert =[...comments,commentObj]
-    setComments(insert)
-    setCommentInput("")
+    const response = await commentOnPost(user.token, val.post_id, commentInput, image);
+    console.log(response)
+    if(response?.status === 201){
+      const insert =[commentObj, ...comments]
+      setTotalComment (totalComment + 1)
+      setComments(insert)
+      setCommentInput("")
+      setCommentImages(prevCommentImages => ({ // Reset the image for the current post
+        ...prevCommentImages,
+        [val.post_id]: null
+      }));
+    }
+    
   }
 
   const [socialIcons,setSocialIcons] = useState(false)

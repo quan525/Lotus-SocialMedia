@@ -62,7 +62,6 @@ const Home = ({setFriendsProfile, friendRequests}) => {
 
   const handleSubmit =(e)=>{
     e.preventDefault()
-    setBody("")
     const token = JSON.parse(localStorage.getItem("data")).token;
     // Define the request headers including the Authorization header with the token
     const config = {
@@ -85,6 +84,7 @@ const Home = ({setFriendsProfile, friendRequests}) => {
         .then((response) => {
             console.log("Response:", response.data);
             alert.success("Posted successfully");
+            setBody("")
             setImageFiles(null);
             setFiles(null);
             fetchPosts();
