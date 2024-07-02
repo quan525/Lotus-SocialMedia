@@ -1,5 +1,5 @@
 const express = require("express")
-const { CreatePost, DeletePost, GetUserPosts, GetPost, GetPosts, SharePost } = require("../controllers/PostController")
+const { CreatePost, DeletePost, GetUserPosts, GetPost, GetPosts, SharePost, UpdatePost } = require("../controllers/PostController")
 const { authenticateToken } = require("../middleware/authorization")
 const parser = require("../config/multer")
 const { route } = require("./AuthRouter")
@@ -12,6 +12,8 @@ router.get("/posts/:postId", authenticateToken, GetPost); // Get a specific post
 
 // router.get("/user/posts", authenticateToken, );
 router.post("/:postId/share", authenticateToken, SharePost)
+
+router.put("/:postId/update", authenticateToken, parser.array("media", 6), UpdatePost)
 
 // Get posts for the homepage
 router.get("/my-posts", authenticateToken, GetUserPosts);

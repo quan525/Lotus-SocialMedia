@@ -78,7 +78,16 @@ const GetNotifications = async (req, res) => {
     await consumer.stopConsuming(consumerTag);
     clearTimeout(timeoutId);
   });
-
+  res.on('close', async () => {
+    console.log("req close consumer tag")
+    await consumer.stopConsuming(consumerTag);
+    clearTimeout(timeoutId);
+  });
+  req.on("end", async () => {
+    console.log("Htpp request ended")
+    await consumer.stopConsuming(consumerTag);
+    clearTimeout(timeoutId);
+  });
   poll();
 }
 

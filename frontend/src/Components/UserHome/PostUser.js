@@ -98,7 +98,18 @@ const PostUser = ({posts,post,setPosts,profileImg,modelDetails,images}) => {
     fetchData();
   }}, [showComment, userData.token, post.post_id])
 
-const handleDelete=(id)=>{
+  const [showPostEdit, setShowPostEdit] = useState(false)
+  const handleEditPost = (postId) => {
+    setShowPostEdit(true)
+    setShowDelete(false)
+  }
+
+  const closePostEdit = () => {
+    setShowDelete(false)
+    setShowPostEdit(false)
+  }
+
+  const handleDelete=(id)=>{
     const url = `${API_PATHS.api}/post/${id}` 
     const token = JSON.parse(localStorage.getItem("data")).token
     const config = {
@@ -118,7 +129,7 @@ const handleDelete=(id)=>{
         alert.show(response?.data)
       }
     })
-  const deleteFilter = posts.filter(val=> val.id !== id)
+    const deleteFilter = posts.filter(val=> val.id !== id)
     setPosts(deleteFilter)
     setShowDelete(false)
   }
@@ -167,7 +178,7 @@ const handleDelete=(id)=>{
          <button onClick={()=>handleDelete(post.post_id)}><AiOutlineDelete />Delete</button>
          </div>
          )}
-          <MoreVertRoundedIcon className='post-vertical-icon' onClick={()=>setShowDelete(!showDelete)}/>
+          <MoreVertRoundedIcon className='post-vertical-icon' onClick={()=>setShowDelete(true)}/>
          </div>
        </div>
        {

@@ -18,3 +18,20 @@ export const sharePost = async(token, postId, content) => {
     }
 }
 
+export const updatePost = async(token, postId, content, images) => {
+    try {
+        const formData = new FormData();
+        formData.append('content', content);
+        images.forEach(element => {
+            formData.append('images', element);
+        });
+        const response = await axios.post(`${API_PATHS.api}/post/${postId}/update`, formData, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+        return response
+    }catch (err) {
+        return err
+    }
+}

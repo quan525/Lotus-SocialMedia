@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import InputPost from '../Post/InputPost'
 import Homepage from "../Home/Homepage"
 import "../MiddleSide/Middle.css"
-import axios from 'axios';
 
 
 const Middle = ({handleSubmit,
