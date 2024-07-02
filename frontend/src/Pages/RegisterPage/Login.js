@@ -42,7 +42,7 @@ const Login = () => {
                 navigate('/home')
             })
             .catch(error => {
-                alert.show(error.response.data)
+                alert.show("Login failed. Please try again.")
                 console.log('Login failed', error);
                 // handle failed login here
             });
