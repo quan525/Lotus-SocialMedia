@@ -108,6 +108,7 @@ const Login = async (req, res) => {
         return;
     }
   }catch (error) {
+    console.log(error)
     res.status(500).send("Server error",error);
     return;
   }
