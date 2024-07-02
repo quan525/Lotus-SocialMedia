@@ -43,7 +43,7 @@ app.use(express.urlencoded({ extended: false })); // Parse application/x-www-for
 //   origin: "http://localhost:3001",
 // };
 var corsOptions = {
-  origin: 'https://lotus-socialmedia.pages.dev/' || "http://localhost:3001",
+  origin: process.env.origin || "http://localhost:3001",
   optionsSuccessStatus: 200 
 }
 
