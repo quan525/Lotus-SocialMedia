@@ -27,6 +27,7 @@ const ProfileMiddle = ({
   const [body,setBody] =useState("")
   const [importFile,setImportFile] =useState("")
   const userData = useContext(UserContext)
+  const [fetchProfilePosts, setFetchProfilePosts] = useState(false)
   const fetchSelfPosts = async () => {
     if (!userData || !userData.token) {
       console.error("User data or user token not available");
@@ -50,13 +51,15 @@ const ProfileMiddle = ({
         console.error("Error response data: ", error.response.data);
       }
     }
+    setFetchProfilePosts(false)
   }
 
+
   useEffect(() => {
-    if (userData) {
+    if (userData || fetchProfilePosts === true) {
       fetchSelfPosts();
     }
-  }, [userData]);
+  }, [userData, fetchProfilePosts]);
 
   const handleSubmit = async (e)=>{
     e.preventDefault()
@@ -125,6 +128,7 @@ const ProfileMiddle = ({
               setUserPostData={setUserPostData}
               userPostData={userPostData}
               images={images}
+              setFetchProfilePosts={setFetchProfilePosts}
             />
         }
     </div>

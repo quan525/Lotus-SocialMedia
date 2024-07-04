@@ -42,7 +42,13 @@ const Login = () => {
                 navigate('/home')
             })
             .catch(error => {
-                alert.show("Login failed. Please try again.")
+                if(error.response.status === 401){
+                    alert.error("Invalid username or password")
+                }else if(error.response.status === 500){
+                    alert.error("Server error")
+                }else{
+                    alert.show("Login failed. Please try again.")
+                }
                 console.log('Login failed', error);
                 // handle failed login here
             });

@@ -7,8 +7,11 @@ import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined';
 import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
 import SendRoundedIcon from '@mui/icons-material/SendRounded';
 import SentimentSatisfiedRoundedIcon from '@mui/icons-material/SentimentSatisfiedRounded';
+import EditNoteOutlinedIcon from '@mui/icons-material/EditNoteOutlined';
 
 import {AiOutlineDelete} from "react-icons/ai"
+import EditPostModal from '../ProfilePostComponents/EditPostModal';
+
 import {AiFillYoutube} from "react-icons/ai"
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import axios from 'axios';
@@ -24,7 +27,7 @@ import { handleDateDiff } from '../../utils/utils'
 import { commentOnPost, fetchPostComments } from '../../api/services/Comments';
 
 import { useAlert } from 'react-alert'
-const PostUser = ({posts,post,setPosts,profileImg,modelDetails,images}) => {
+const PostUser = ({posts,post,setPosts,profileImg,modelDetails,images, setFetchProfilePosts}) => {
   const userData = useContext(UserContext)
   const [comments,setComments] =useState([])
   const [totalComment,setTotalComment] = useState(post?.comments_count || 0)
@@ -175,9 +178,11 @@ const PostUser = ({posts,post,setPosts,profileImg,modelDetails,images}) => {
          <div className='delete'>
          {showDelete && (
          <div className="options">
-         <button onClick={()=>handleDelete(post.post_id)}><AiOutlineDelete />Delete</button>
+          <button  onClick={()=>handleEditPost(post.post_id)}><EditNoteOutlinedIcon/>Edit Post</button> 
+          <button onClick={()=>handleDelete(post.post_id)}><AiOutlineDelete />Delete</button>
          </div>
          )}
+          <EditPostModal isOpen={showPostEdit} onRequestClose={closePostEdit} post={post} setFetchProfilePosts={setFetchProfilePosts}/>
           <MoreVertRoundedIcon className='post-vertical-icon' onClick={()=>setShowDelete(true)}/>
          </div>
        </div>

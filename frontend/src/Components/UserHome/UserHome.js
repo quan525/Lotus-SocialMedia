@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import FeedUser from './FeedUser'
 
 
-const UserHome = ({setUserPostData,userPostData,profileImg,modelDetails,images}) => {
+const UserHome = ({setUserPostData,userPostData,profileImg,modelDetails,images, setFetchProfilePosts}) => {
   return (
     <div>
         {userPostData.length ? <FeedUser 
@@ -11,6 +11,7 @@ const UserHome = ({setUserPostData,userPostData,profileImg,modelDetails,images})
                                posts={userPostData}
                                setPosts={setUserPostData}
                                images={images}
+                               setFetchPosts={setFetchProfilePosts}
                                /> 
         :
         (<p style={{textAlign:"center",marginBottom:"40px"}}>

@@ -1,7 +1,7 @@
 import React from 'react'
 import PostUser from './PostUser'
 
-const FeedUser = ({posts,setPosts,profileImg,modelDetails,images}) => {
+const FeedUser = ({posts,setPosts,profileImg,modelDetails,images, setFetchProfilePosts}) => {
   
   return (
     <div className='feedposts'>
@@ -14,6 +14,7 @@ const FeedUser = ({posts,setPosts,profileImg,modelDetails,images}) => {
               post ={post}
               setPosts={setPosts}
               key={post.post_id} 
+              setFetchProfilePosts={setFetchProfilePosts}
             />
         ))}
     </div>

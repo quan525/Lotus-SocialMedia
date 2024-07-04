@@ -20,23 +20,28 @@ const style = {
   },
 };
 
-const EditPostModal = ({isOpen, onAfterOpen, onRequestClose, contentLabel, post}) => {
+const EditPostModal = ({isOpen, onAfterOpen, onRequestClose, post, setFetchProfilePosts}) => {
   const user = useContext(UserContext)
   const alert = useAlert()
   const [editPostContent, setEditPostContent ] = useState(post?.content)
   const [editPostImages, setEditPostImages] = useState(post?.images_url)
 
+  useEffect(() => {
+    Modal.setAppElement('body');
+  },[])
   const handleUpdatePost = async () => {
-    console.log("Update Post")
+    console.log(editPostImages)
     const result = updatePost(user.token, post.post_id, editPostContent, editPostImages)
-    setEditPostImages([])
-    setEditPostContent('')
-    onRequestClose()
     if(result.status === 200){
+      setFetchProfilePosts(true)
       alert.success("Post Updated")
     }else{
-      alert.error(`Status Code: ${result.status}, Error: ${result.statusText}`)
+      setEditPostContent(post.content)
+      setEditPostImages(post.images_url)
+      alert.error(`Status Code: ${result.status}, Error: ${result.data}`)
     }
+    onRequestClose()
+    return;
   }
   useEffect(() => {
     if(editPostImages){
