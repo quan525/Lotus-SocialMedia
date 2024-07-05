@@ -25,7 +25,7 @@ export const updatePost = async(token, postId, content, images) => {
         images.forEach(element => {
             formData.append('images', element);
         });
-        const response = await axios.post(`${API_PATHS.api}/post/${postId}/update`, formData, {
+        const response = await axios.put(`${API_PATHS.api}/post/${postId}/update`, formData, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
