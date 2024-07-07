@@ -3,7 +3,7 @@ const { Login, Register, ForgotPassword, ResetPassword } = require("../controlle
 const router = express.Router();
 const parser = require("../config/multer");
 
-router.post("/register", parser.single("file"), Register);
+router.post("/register", parser.single('file'), Register);
 
 router.post("/login", Login);
 

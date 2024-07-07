@@ -38,6 +38,7 @@ const AddMembersModal = ({ open, handleClose, setFetchRooms, roomMembers, roomId
     const [search, setSearch] = useState("");
     const [searchResult, setSearchResult] = useState([]);
     const [selectedUsers, setSelectedUsers] = useState([]);
+  
     const handleSearch = async (query) => {
         setSearch(query);
         if (!query) {

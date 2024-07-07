@@ -6,7 +6,6 @@ import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 
 import Modal from 'react-modal';
 import { UpdateAvatar } from '../../../../api/services/User.js';
-import { useNavigate } from "react-router-dom";
 import {LiaEdit} from "react-icons/lia"
 import '../../../Modals/PostBoxModal.css'
 import {IoCameraOutline} from "react-icons/io5"
@@ -17,7 +16,7 @@ import ModelProfile from '../ModelProfile/ModelProfile.js';
 import { Link } from 'react-router-dom';
 import FileInput from '../../../ImageInput/FileInput.js'
 import ImageCropper from '../../../ImageInput/ImageCropper.js';
-import { UserContext, LoginContext, } from '../../../../App';
+import { UserContext, LoginContext, UpdateProfileContext} from '../../../../App';
 import "../../../ImageInput/ImageCropper.css"
 import { useAlert } from 'react-alert';
 export const customStyles = {
@@ -47,7 +46,7 @@ const Info = ({userPostData,
               friendsList,
               setShowFriendsList}) => {
   const alert = useAlert()
-  const navigate = useNavigate()
+  const profileContext =  useContext(UpdateProfileContext)
   const {isLoggedIn, setLoggedIn} = useContext(LoginContext)
   const [coverImg,setCoverImg] =useState()
   const [openProfileImageEdit,setOpenProfileImageEdit] =useState(false)
@@ -166,8 +165,12 @@ const onCropDone = (imgCroppedArea) => {
 
   const handleUpdateAvatar = async (blob) => {
     const result = await UpdateAvatar(userData?.token, blob );
-    if(result.status === 200){
-      alert.success("Avatar updated succesfully")
+    if(result.status === 200){      
+        const localStorageData = JSON.parse(localStorage.getItem('data'));
+        localStorageData.image = result.data.imageUrl;
+        localStorage.setItem('data', JSON.stringify(localStorageData));
+        profileContext.setUpdateProfile(true)
+        alert.success("Avatar updated succesfully")
     }else {
       console.log(result)
       alert.error("Avatar update failed")

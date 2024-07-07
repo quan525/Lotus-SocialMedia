@@ -31,7 +31,7 @@ function ModelProfile({openEdit,setOpenEdit,handleModel,
   const handleUpdateProfile = async (e) => {
   e.preventDefault();
   console.log(JSON.parse(localStorage.getItem('data')));
-  await updateProfile(userData.token, { profileName : profileName , gender: editGender, email: editEmail })
+  await updateProfile(userData.token, { profileName : profileName , gender: editGender, email: setEmail })
     .then(res => {
       console.log(res)
       if(res.status === 200){

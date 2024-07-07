@@ -24,13 +24,12 @@ const Nav = ({search,setSearch,setShowMenu,profileImg,friendRequests}) => {
   const userData = useContext(UserContext)
   const [searchResults, setSearchResult] = useState([])
   const user = useContext(UserContext)
-useEffect(() => {
-  console.log(notifications)
-  console.log("noti: ", notifications)
-},[notifications])
-useEffect(()=> {
-  console.log(friendRequests)
-},[friendRequests])
+  useEffect(() => {
+    console.log("noti: ", notifications)
+  },[notifications])
+  useEffect(()=> {
+    console.log(friendRequests)
+  },[friendRequests])
    const handleSearch = async (query) => {
     if(query.length > 0){
 
@@ -106,12 +105,12 @@ useEffect(()=> {
 
 
        <div className="n-profile" >
-          <Link to="/profile"> 
+          <Link to="/profile" > 
             <img src={userData ? (userData.image) : Profile} className='n-img' style={{marginBottom:"-7px"}}/>
           </Link>
       </div>
     </nav>
-    <SearchResultsList className="search" searchResults={searchResults}/>
+    <SearchResultsList className="search" searchResults={searchResults} setSearchResult={setSearchResult}/>
     </div>
   )
 }

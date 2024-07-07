@@ -462,7 +462,7 @@ const Chat = ({socket}) => {
                                 <ListItemText primary={room?.name 
                                                 || (room.admin === null && room.users.length === 2 
                                                     ? chatRoomUsers?.find((user) => user?.profile_name !== userData.profile_name)?.profile_name 
-                                                    : (room.admin != null && room.users.length > 0 
+                                                    : (room.admin != null && room.users.length <= 3
                                                     ? chatRoomUsers.map((user,idx) =>idx < 3 ? user.profile_name : null).join(',')
                                                     : (room.admin != null) && chatRoomUsers?.length > 3 
                                                     ? chatRoomUsers?.map((user,idx) =>idx < 3 ? user.profile_name : null).join(',') + "..."
@@ -580,7 +580,7 @@ const Chat = ({socket}) => {
                                         <Typography align="left" wrap="nowrap" >{room?.name 
                                                 || (room.admin === null && room.users.length === 2 
                                                     ? chatRoomUsers?.find((user) => user?.profile_name !== userData.profile_name)?.profile_name 
-                                                    : (room.admin != null && room.users.length > 0 
+                                                    : (room.admin != null && room.users.length <= 3 
                                                     ? chatRoomUsers.map((user,idx) =>idx < 3 ? user.profile_name : null).join(',')
                                                     : (room.admin != null) && chatRoomUsers?.length > 3 
                                                     ? chatRoomUsers?.map((user,idx) =>idx < 3 ? user.profile_name : null).join(',') + "..."

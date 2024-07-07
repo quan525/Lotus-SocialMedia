@@ -101,14 +101,14 @@ const handleFriendAction = async (action, token, otherUserId) => {
 
           <div className="info-details">
             <div className="info-col-1">
-              <div className="info-details-list"> 
+              {/* <div className="info-details-list"> 
                 <LocationOnOutlinedIcon />
                 <span></span>
-              </div>
+              </div> */}
 
               <div className="info-details-list">
                 <EmailOutlinedIcon />
-                <span>{val?.email}</span>
+                <span>{val?.email}</ span>
               </div>
 
               <div className="info-details-list">

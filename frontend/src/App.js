@@ -68,7 +68,12 @@ const App = () => {
     setActiveChats(activeChats.filter(id => id !== userId));
   };
 
-
+  useEffect(() => {
+    if(updateProfile === true){
+      setItems(JSON.parse(localStorage.getItem('data')));
+      setUpdateProfile(false)
+    }
+  },[updateProfile])
   useEffect(() => {
     const handleStorageChange = (e) => {
       if (e.key === "data") { 
