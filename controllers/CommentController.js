@@ -56,7 +56,6 @@ const AddComment = async (req, res) => {
         date : new Date().toUTCString()
       };
       await producer.publishMessage(receiverId, message)
-      await pushNotiToSystem('COMMENT_POST', postId, userId, receiverId); 
       res.status(201).json({ message: 'Comment added successfully' });;
     }
     // Send success response

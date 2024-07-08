@@ -1,7 +1,5 @@
 const pool = require('../config/postgresdb');
 const rabbitMq = require('../services/messageQueue/rabbitMq');
-const { SendMessage } = require('./MessageController');
-const { pushNotiToSystem } = require('../services/notification.service');
 const producer = require('../services/Producer')
 
 const LikePost = async (req, res) => {
@@ -44,7 +42,6 @@ const LikePost = async (req, res) => {
         date : new Date().toUTCString()
       };
       await producer.publishMessage(likeResponse.rows[0].referenced_user_id, message)
-      await pushNotiToSystem('LIKE_POST', post_id, userId, receiverId);
     } else {
       res.status(404).json({ error: "Failed to like post" });
     }

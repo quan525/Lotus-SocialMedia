@@ -1,7 +1,6 @@
 const Notification = require("../models/NotificationSchema.js")
 
 const pushNotiToSystem = async (noti_type, item_id, sender_id, receiver_id) => {
-    console.log("213")
     const check = await Notification.findOne({noti_type : noti_type, item_id : item_id, sender_id : sender_id, receiver_id : receiver_id}).exec();
     if(!check){
         const notis = await Notification.create({
