@@ -44,7 +44,6 @@ const GetNotificationOnLogin = async (req, res) => {
     res.status(500).send("Error receiving message");
   }
 }
-           await pushNotiToSystem('LIKE_POST', post_id, userId, receiverId);
 
 const GetNotifications = async (req, res) => {
   console.log('getting notifications...')
