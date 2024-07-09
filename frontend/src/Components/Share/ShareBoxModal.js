@@ -20,7 +20,6 @@ const ShareBoxModal = ({ isOpen, onClose, postId,  }) => {
   const user = useContext(UserContext)
   const [content, setContent] = useState('');
   const handleSharePost = async () => {
-    console.log(user.token)
     const result = await sharePost(user.token, postId, content)
     
     if(result.status === 200){

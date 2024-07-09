@@ -5,9 +5,6 @@ const SharedPost = ({post={post}}) => {
     const [sharedPost, setSharedPost] = useState()
     const [imagesUrl, setImagesUrl] = useState()
     useEffect(() => {
-        console.log(post.shared_post_details)
-        console.log(typeof(post.shared_post_details))
-        console.log(JSON.parse(post.shared_post_details).avatar_url)
         setSharedPost(JSON.parse(post.shared_post_details))
     },[post])
 

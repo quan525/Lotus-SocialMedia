@@ -60,8 +60,6 @@ const GetNotifications = async (req, res) => {
 
       if (messages.length > 0) {
         const newMessages = await Promise.all(messages.map(async (message) => {
-                     await pushNotiToSystem('LIKE_POST', post_id, userId, receiverId);
-
           const result = await pool.query('SELECT avatar_url, profile_name FROM users WHERE user_id = $1', [message.sender_id]);
           message.avatar_url = result.rows[0].avatar_url;
           message.sender_name = result.rows[0].profile_name;
