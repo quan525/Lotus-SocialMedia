@@ -48,6 +48,9 @@ const AddComment = async (req, res) => {
     if(result.rowCount === 0) {
       return res.status(404).json({ message: 'No comment found to add' });
     }else {
+      if(userId === receiverId){
+        return;
+      }
       const message = {
         noti_type: 'COMMENT_POST',
         item_id : postId,

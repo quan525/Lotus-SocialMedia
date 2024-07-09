@@ -1,9 +1,8 @@
 import Info from './ProfileComponents/InfoProfile/Info'
 import UserHome from '../UserHome/UserHome'
 import FriendsList from '../FriendsList/FriendsList'
-import { useContext, useEffect, useState } from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
 import "../Profile/ProfileMiddle.css"
-
 import ProfileInputPost from './ProfileComponents/ProfileInputPost'
 
 import axios from 'axios'
@@ -33,7 +32,6 @@ const ProfileMiddle = ({
       console.error("User data or user token not available");
       return;
     }
-    console.log(userData.token)
     const config = {
       headers: {
         Authorization: `Bearer ${userData.token}`

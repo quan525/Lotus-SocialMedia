@@ -128,7 +128,7 @@ const Post = ({post,posts,setPosts,setFriendsProfile,images}) => {
   }
 
   const handleDelete=(id)=>{
-    const url = `http://localhost:3000/api/post/${id}` 
+    const url = `${API_PATHS.api}/post/${id}` 
     const token = JSON.parse(localStorage.getItem("data")).token
     const config = {
         headers: {
@@ -149,13 +149,9 @@ const Post = ({post,posts,setPosts,setFriendsProfile,images}) => {
   const [commentInput,setCommentInput] = useState("")
   const [commentImages, setCommentImages] = useState({});
   const onEmojiClick = (emojiObject) => {
-    console.log(emojiObject);
     setCommentInput((prevInput) => prevInput + emojiObject.emoji);
   };
 
-  useEffect(()=> {
-    console.log(commentInput)
-  },[commentInput])
 
   const onCommentImageChange = (postId) => (event) => {
     const file = event.target.files[0];
@@ -274,13 +270,13 @@ const Post = ({post,posts,setPosts,setFriendsProfile,images}) => {
               </div>
           ))}
       </div>
-      ) : (
+      ) : post.images_url.length >= 3 ? (
           <div className="multi-img more-three-images">
               {post.images_url.map((img, index) => (
                   <img src={img} alt="" />
               ))}
           </div>
-      )}
+      ) : null}
       <div className="post-footer">
         <div className="like-icons">
           <p className='heart' 

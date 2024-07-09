@@ -6,7 +6,7 @@ import { customStyles } from '../Profile/ProfileComponents/InfoProfile/Info';
 
 import { sharePost } from '../../api/services/Post';
 import { UserContext } from '../../App';
-
+import { useAlert } from 'react-alert';
 const newStyles = {
   ...customStyles,
   content: {
@@ -16,12 +16,18 @@ const newStyles = {
 };
 
 const ShareBoxModal = ({ isOpen, onClose, postId,  }) => {
+  const alert = useAlert()
   const user = useContext(UserContext)
   const [content, setContent] = useState('');
   const handleSharePost = async () => {
     console.log(user.token)
     const result = await sharePost(user.token, postId, content)
-    .then(res => console.log(res))
+    
+    if(result.status === 200){
+      alert.success("Post Shared")
+    }else{
+      alert.error(`Status Code: ${result.status}, Error: ${result.data?.length < 30 ? result.data : "Error sharing post"}`)
+    }
     onClose()
   }
   if (!isOpen) {

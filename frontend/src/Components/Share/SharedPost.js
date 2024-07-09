@@ -27,7 +27,7 @@ const SharedPost = ({post={post}}) => {
         }
     }, [sharedPost?.images_url])
     if(!sharedPost) return null
-  return (
+    return (
          <div className='post'>
             <div className='post-user' style={{cursor:"pointer"}}>
                 <img src={sharedPost?.avatar_url} className='p-img' alt="" />
@@ -61,7 +61,7 @@ const SharedPost = ({post={post}}) => {
                     </div>
                 ))}
             </div>
-        ) : imagesUrl && imagesUrl?.length > 2 ? (
+        ) : imagesUrl && imagesUrl?.length >= 3 ? (
             <div className="multi-img">
                 {imagesUrl.map((img, index) => (
                     <div key={index} className="multi-image">

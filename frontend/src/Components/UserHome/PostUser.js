@@ -51,13 +51,12 @@ const PostUser = ({posts,post,setPosts,profileImg,modelDetails,images, setFetchP
     }
   }, [post.user_like_ids, userData])
 
-  const handlelikes = async (postId)=>{
+  const handlelikes = async ()=>{
     setLike(unlike ? like -1 : like +1)
     setUnlike(!unlike)
     setFilledLike(unFilledLike ?   <FavoriteBorderOutlinedIcon /> : <FavoriteRoundedIcon />)
     setUnFilledLike(!unFilledLike)
-    const url = `${API_PATHS.api}/like/${postId}`
-    console.log(postId)
+    const url = `${API_PATHS.api}/like/${post.post_id}`
     const config = {
       headers: {
         "Authorization": `Bearer ${userData.token}`
@@ -208,13 +207,13 @@ const PostUser = ({posts,post,setPosts,profileImg,modelDetails,images, setFetchP
               </div>
           ))}
       </div>
-      ) : (
+      ) : post.images_url.length >= 3 ? (
           <div className="multi-img more-three-images">
               {post.images_url.map((img, index) => (
                   <img src={img} alt="" />
               ))}
           </div>
-      )}
+      ) : null}
     {
       post.shared_post && <SharedPost post={post} />
     }

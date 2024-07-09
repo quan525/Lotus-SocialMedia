@@ -31,7 +31,7 @@ function ModelProfile({openEdit,setOpenEdit,handleModel,
   const handleUpdateProfile = async (e) => {
   e.preventDefault();
   console.log(JSON.parse(localStorage.getItem('data')));
-  await updateProfile(userData.token, { profileName : profileName , gender: editGender, email: setEmail })
+  await updateProfile(userData.token, { profileName : profileName , gender: editGender, email: editEmail })
     .then(res => {
       console.log(res)
       if(res.status === 200){
@@ -46,7 +46,7 @@ function ModelProfile({openEdit,setOpenEdit,handleModel,
         setName(profileName);
         profileContext.setUpdateProfile(true);
       }else {
-        alert.error(res.data)
+        alert.error(res?.data)
       }
       
       setOpenEdit(false);
@@ -92,12 +92,12 @@ function ModelProfile({openEdit,setOpenEdit,handleModel,
           </div>
         </div>
 
-          <div className="inputBox1">
+          {/* <div className="inputBox1">
             <input type="text" name="countryname" id="name" placeholder='Enter Country'
                     onChange={(e)=>setCountryName(e.target.value)}
                     value={countryName}
                     />
-          </div>
+          </div> */}
 
           <div className="inputBox1">
             <input type="text" name="Email" id="name" placeholder='Enter Email'

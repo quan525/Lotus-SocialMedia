@@ -34,6 +34,9 @@ const LikePost = async (req, res) => {
       const receiverId= likeResponse.rows[0].referenced_user_id;
       const post_id = likeResponse.rows[0].post_id;
       res.status(200).json({ status: "Liked" });
+      if(userId === receiverId){
+        return;
+      }
       const message = {
         noti_type: 'LIKE_POST',
         item_id : post_id,

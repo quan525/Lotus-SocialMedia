@@ -31,14 +31,14 @@ const EditPostModal = ({isOpen, onAfterOpen, onRequestClose, post, setFetchProfi
   },[])
   const handleUpdatePost = async () => {
     console.log(editPostImages)
-    const result = updatePost(user.token, post.post_id, editPostContent, editPostImages)
+    const result = await updatePost(user.token, post.post_id, editPostContent, editPostImages)
     if(result.status === 200){
       setFetchProfilePosts(true)
       alert.success("Post Updated")
     }else{
       setEditPostContent(post.content)
       setEditPostImages(post.images_url)
-      alert.error(`Status Code: ${result.status}, Error: ${result.data}`)
+      alert.error(`Status Code: ${result.status}, Error: ${result.data.message}`)
     }
     onRequestClose()
     return;
@@ -50,10 +50,7 @@ const EditPostModal = ({isOpen, onAfterOpen, onRequestClose, post, setFetchProfi
       });
     }
   },[editPostImages])
-  
-  useEffect(() => {
-    console.log(editPostContent)
-  },[editPostContent])
+
   return (
         <Modal
           isOpen={isOpen}

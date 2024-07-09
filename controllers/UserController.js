@@ -230,12 +230,16 @@ const UpdateProfile = async (req, res) => {
     const email = req.body.email;
     const checkUser = await pool.query("SELECT * FROM users WHERE user_id = $1", [userId]);
     let result;
-    if (checkUser.rows.length > 0) {
-      result = await pool.query("UPDATE users SET profile_name = $1, gender = $2, email = $3 WHERE user_id = $4", [profileName, gender, email, userId]);
+    if (checkUser.rows.length > 0 && !email) {
+      result = await pool.query("UPDATE users SET profile_name = $1, gender = $2 WHERE user_id = $3", [profileName, gender, userId]);
+    }else if(checkUser.rows.length > 0 && email){
+      result = await pool.query("Update users SET profile_name = $1, gender = $2, email = $3 WHERE user_id = $4", [profileName, gender, email, userId])
     }
-    if(result) {
+    if(result.rowCount > 0) {
       console.log(result)
       res.status(200).send("Succesfully updated");
+    }else {
+      res.status(400).send("Failed to update profile")
     }
   }catch (err) {
     console.log(err)
