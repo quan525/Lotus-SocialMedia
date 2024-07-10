@@ -31,9 +31,9 @@ export const leaveChatRoom = async (token, userId, roomId) => {
 
 }
 
-export const deleteChatMessage = async (token, roomId) => {
+export const deleteChatMessages = async (token, roomId) => {
     try {
-        const response = await axios.put(`${API_PATHS.api}/message/${roomId}/delete-messages`, {
+        const response = await axios.put(`${API_PATHS.api}/message/${roomId}/delete-messages`, {}, {
             headers: {
                 Authorization: `Bearer ${token}`
             }

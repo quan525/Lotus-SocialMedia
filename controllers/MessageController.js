@@ -33,20 +33,19 @@ const DeleteChatMessage = asyncHandler(async (req, res) => {
     try {
         const userId = req.userId;
         const roomId = req.params.roomId;
-        const query = 'UPDATE user_room SET joined_at = CURRENT_TIMESTAMP WHERE user_id = $1 and room_id = $2 ';
+        const query = 'UPDATE user_room SET joined_at = CURRENT_TIMESTAMP WHERE user_id = $1 and room_id = $2';
         const values = [userId, roomId];
         const result = await pool.query(query, values);
-        if(result.rowCount === 1){
+        if (result.rowCount === 1) {
             res.status(200).json({ success: true, message: 'Message deleted' });
-        }else {
+        } else {
             res.status(404).json({ success: false, message: 'Unable to delete message' });
         }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ success: false, message: 'Error deleting room' });
     }
-    catch(error) {
-        console.log(err)
-        res.status(500).json({ success: false, message: 'Error deleting room' })
-    }
-})
+});
 
 const SendMessage = async (req, res) => {
     const userId = req.userId;

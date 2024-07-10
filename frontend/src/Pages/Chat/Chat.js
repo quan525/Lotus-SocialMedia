@@ -39,7 +39,7 @@ import EmojiPicker from 'emoji-picker-react';
 import './Chat.css';
 
 import { UserContext } from '../../App';
-import { leaveChatRoom, fetchChatRooms, loadChatMessage, sendMessage, removeParticipant, deleteChatMessage} from '../../api/services/Messages';
+import { leaveChatRoom, fetchChatRooms, loadChatMessage, sendMessage, removeParticipant, deleteChatMessages} from '../../api/services/Messages';
 import { IconButton } from '@material-ui/core';
 
 const useStyles = makeStyles({
@@ -324,7 +324,7 @@ const Chat = ({socket}) => {
 
     const handleDeleteChat = async (roomId) => {
         try {
-            const res = await deleteChatMessage(userData.token, roomId);
+            const res = await deleteChatMessages(userData.token, roomId);
             if(res.status === 200) {
                 setCurrentRoomId(null)
                 setChatRoomUsers([])

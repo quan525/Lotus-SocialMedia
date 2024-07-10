@@ -30,7 +30,9 @@ const GetNotificationOnLogin = async (req, res) => {
     if (messages.length > 0) {
       console.log(messages)
       const MessagesArray = await Promise.all(messages.map(async (message) => {
-        await pushNotiToSystem(message.noti_type, message.item_id, message.sender_id, message.receiver_id);
+        if(message.noti_type !== 'FRIEND_REQUEST'){
+          await pushNotiToSystem(message.noti_type, message.item_id, message.sender_id, message.receiver_id);
+        }
         const result = await pool.query('SELECT avatar_url, profile_name FROM users WHERE user_id = $1', [message.sender_id]);
         return { ...message._doc, sender_name: result.rows[0].profile_name, avatar_url: result.rows[0].avatar_url };
       }));
