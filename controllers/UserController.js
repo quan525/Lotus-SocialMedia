@@ -125,7 +125,7 @@ const ResetPassword = async (req, res) => {
       const userId = user.user_id;
       const resetItem = await ResetItem.findOneAndDelete({user_id: userId, token: token});
       if(!resetItem) {
-        res.status(400).send('Token not found')
+        res.status(400).send('Invalid Token')
       }else{
         const salt = await bcrypt.genSalt(saltRounds);
         const encryptPassword = await bcrypt.hash(resetPassword, salt);

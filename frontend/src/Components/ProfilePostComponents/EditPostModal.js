@@ -24,7 +24,7 @@ const EditPostModal = ({isOpen, onAfterOpen, onRequestClose, post, setFetchProfi
   const user = useContext(UserContext)
   const alert = useAlert()
   const [editPostContent, setEditPostContent ] = useState(post?.content)
-  const [editPostImages, setEditPostImages] = useState(post?.images_url)
+  const [editPostImages, setEditPostImages] = useState(post?.images_url || [])
 
   useEffect(() => {
     Modal.setAppElement('body');
@@ -82,15 +82,22 @@ const EditPostModal = ({isOpen, onAfterOpen, onRequestClose, post, setFetchProfi
                 </div>
             )}
             <div>
-              <h2>Select to Delete</h2>
               {
-                editPostImages.map((img, index) => {
-                  return (
-                    <div className='deleteButtons'>
-                      <button className='deleteImageButton btn-outline btn' onClick={()=> setEditPostImages(editPostImages.filter((_, i) => i !== index))}>Image {index}</button> 
-                    </div>
-                    )
-                })
+                editPostImages?.length > 0 &&
+                <>
+                  <h2>Select image to delete</h2>
+                  {
+                    editPostImages.map((img, index) => {
+                      return (
+                        <div className='deleteButtons' key={index}>
+                          <button className='deleteImageButton btn-outline btn' onClick={() => setEditPostImages(editPostImages.filter((_, i) => i !== index))}>
+                            Image {index}
+                          </button>
+                        </div>
+                      )
+                    })
+                  }
+                </>
               }
             </div>
             <div className='optionButton'> 

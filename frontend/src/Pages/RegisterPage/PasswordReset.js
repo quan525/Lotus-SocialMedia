@@ -36,7 +36,7 @@ const PasswordReset = () => {
             if(result.status === 200){
                 alert.success(result.data)
             }else {
-                alert.error(result.data)
+                alert.error(result.data || result.response.data)
             }
         }
     }

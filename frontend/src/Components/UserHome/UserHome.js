@@ -11,7 +11,7 @@ const UserHome = ({setUserPostData,userPostData,profileImg,modelDetails,images, 
                                posts={userPostData}
                                setPosts={setUserPostData}
                                images={images}
-                               setFetchPosts={setFetchProfilePosts}
+                               setFetchProfilePosts={setFetchProfilePosts}
                                /> 
         :
         (<p style={{textAlign:"center",marginBottom:"40px"}}>
