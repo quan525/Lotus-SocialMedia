@@ -48,17 +48,17 @@ const GetNotificationOnLogin = async (req, res) => {
 }
 
 const GetNotifications = async (req, res) => {
-  console.log('getting notifications...')
+  console.log('getting notifications...');
   const userId = req.userId;
   let messages = [];
   let timeoutId;
   let consumerTag;
+
   const poll = async () => {
     try {
-      await consumer.consume(userId).then((result) => {
-        messages = messages.concat(result.messages);
-        consumerTag = result.consumerTag;
-      });
+      const result = await consumer.consume(userId);
+      messages = messages.concat(result.messages);
+      consumerTag = result.consumerTag;
 
       if (messages.length > 0) {
         const newMessages = await Promise.all(messages.map(async (message) => {
@@ -67,13 +67,12 @@ const GetNotifications = async (req, res) => {
           message.sender_name = result.rows[0].profile_name;
           return message;
         }));
-        console.log("Messages received")
-        console.log(messages)
+        console.log("Messages received");
+        console.log(messages);
         clearTimeout(timeoutId);
         res.status(200).send(newMessages);
-      } else {        
-        timeoutId = setTimeout(poll, 5000)
-         // wait 5 seconds before polling again
+      } else {
+        timeoutId = setTimeout(poll, 5000); // wait 5 seconds before polling again
       }
     } catch (err) {
       console.error(err);
@@ -83,22 +82,16 @@ const GetNotifications = async (req, res) => {
   };
 
   // Stop polling when the client disconnects
-  res.on('close', async () => {
-    console.log("res close consumer tag")
+  const stopPolling = async () => {
+    console.log("Stopping consumer tag");
     await consumer.stopConsuming(consumerTag);
     clearTimeout(timeoutId);
-  });
-  res.on('close', async () => {
-    console.log("req close consumer tag")
-    await consumer.stopConsuming(consumerTag);
-    clearTimeout(timeoutId);
-  });
-  req.on("end", async () => {
-    console.log("Htpp request ended")
-    await consumer.stopConsuming(consumerTag);
-    clearTimeout(timeoutId);
-  });
+  };
+
+  res.on('close', stopPolling);
+  req.on('end', stopPolling);
+
   poll();
-}
+};
 
 module.exports = { GetNotifications, GetNotificationOnLogin }
