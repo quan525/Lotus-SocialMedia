@@ -66,10 +66,13 @@ const FriendsProfileMiddle = ({userId, friendProfile}) => {
     <div >
       {friendProfile && <InfoFriends val={friendProfile} friendsList={friendsList} setShowFriendsList={setShowFriendsList} friendPosts={friendPosts}/>}
 
-      {friendPosts && friendPosts.map((val)=>(
+      {friendPosts && friendPosts.length > 0 ? 
+        friendPosts.map((val)=>(
         <InfoFriendPost val={val} key={val.post_id}/>
-      ))}
-      
+        )) : <p style={{textAlign:"center",marginTop:"40px"}}>
+            There are no posts to display.
+        </p>
+      }
     </div>
   )
 }
