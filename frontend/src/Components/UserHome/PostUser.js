@@ -192,7 +192,7 @@ const PostUser = ({posts,post,setPosts,profileImg,modelDetails,images, setFetchP
         // post.content.length <= 300 ? post.content : ""
         // : `${post.content ? post.content.slice(0,300) : ''}...`
     }</p>
-    {post.images_url.length == 1 ? post.images_url.map((img, index) => (
+    {post.images_url.length === 1 ? post.images_url.map((img, index) => (
       <img 
         key={index} 
         src={img} 

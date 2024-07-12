@@ -59,7 +59,7 @@ const EditPostModal = ({isOpen, onAfterOpen, onRequestClose, post, setFetchProfi
         >
             <h2>Edit Post</h2>
             <textarea placeholder="post's content" value={editPostContent} onChange={(e)=> setEditPostContent(e.target.value)}/>
-            {editPostImages?.length == 1 ? editPostImages.map((img, index) => (
+            {editPostImages?.length === 1 ? editPostImages.map((img, index) => (
             <img 
               key={index} 
               src={img} 
