@@ -86,10 +86,12 @@ const Login = () => {
 
     const handleForgotPassword = async (e) => {
         e.preventDefault()
-            if(data.username === ""){                
+            if(data.username === ""){ 
+            setError({username: "* Enter username to reset password"});               
             alert.show("* Enter username to reset password");
             return;
         }
+        setError({}); 
         const rootUrl = window.location.origin.toString()
         console.log("Forgot password");
         try {
@@ -106,6 +108,7 @@ const Login = () => {
              );
         } catch (error) {
             console.error(error);
+            alert.show(alert.response.data);
         }
     }
 
