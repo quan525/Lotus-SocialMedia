@@ -54,35 +54,49 @@ const CreatePost = async (req, res) => {
 };
 
 const UpdatePost = async (req, res) => {
-  try { 
-    console.log("Updating post")
-    const { postId } = req.params; 
-    const { userId } = req; 
+  try {
+    console.log("Updating post");
+    const { postId } = req.params;
+    const { userId } = req;
     let { content } = req.body;
+    const postImageURLS = req.body?.postImageURLS;
     const pictureFiles = Array.isArray(req.files) ? req.files : [];
+
     // Check if the post exists and belongs to the user
     const postCheck = await pool.query("SELECT * FROM posts WHERE post_id = $1 AND user_id = $2", [postId, userId]);
     if (!postCheck.rows[0]) {
       return res.status(404).json({ message: "Post not found or you do not have permission to edit this post" });
     }
 
+    let imageURLS = [];
+    if (postImageURLS) {
+      try {
+        imageURLS = JSON.parse(postImageURLS);
+      } catch (err) {
+        return res.status(400).json({ error: 'Invalid JSON format for postImageURLS' });
+      }
+    }
+
     let imageResponses = [];
     if (pictureFiles.length > 0) {
       // If pictureFiles exist, upload new images to cloudinary
-      let multiplePicturePromise = pictureFiles.map((picture) =>
+      const multiplePicturePromise = pictureFiles.map((picture) =>
         cloudinary.uploader.upload(picture.path).catch((error) => {
           console.error(`Failed to upload ${picture.path}: ${error}`);
         })
       );
       imageResponses = await Promise.all(multiplePicturePromise);
+
       // Extract media URLs from imageResponses
-      let mediaUrls = imageResponses.map((response) => response.secure_url);
-      console.log(mediaUrls)
+      const mediaUrls = imageResponses.map((response) => response.secure_url);
+      console.log(mediaUrls);
+
       // Update post with new content and images
-      await pool.query("UPDATE posts SET content = $1, images_url = $2 WHERE post_id = $3", [content, mediaUrls, postId]);
-    } else if (content && pictureFiles.length === 0) {
+      const allImageURLS = imageURLS.concat(mediaUrls);
+      await pool.query("UPDATE posts SET content = $1, images_url = $2 WHERE post_id = $3", [content, allImageURLS, postId]);
+    } else if (content) {
       // Update post with new content only
-      await pool.query("UPDATE posts SET content = $1, images_url = $2 WHERE post_id = $3", [content, [], postId]);
+      await pool.query("UPDATE posts SET content = $1, images_url = $2 WHERE post_id = $3", [content, imageURLS, postId]);
     } else {
       return res.status(400).json({ message: "Nothing to update" });
     }
@@ -94,7 +108,6 @@ const UpdatePost = async (req, res) => {
     res.status(500).json({ message: `An error occurred: ${error.message}` });
   }
 };
-
 
 const SharePost = async (req, res) => {
   try {

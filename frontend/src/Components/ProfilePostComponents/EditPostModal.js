@@ -24,32 +24,32 @@ const EditPostModal = ({isOpen, onAfterOpen, onRequestClose, post, setFetchProfi
   const user = useContext(UserContext)
   const alert = useAlert()
   const [editPostContent, setEditPostContent ] = useState(post?.content)
-  const [editPostImages, setEditPostImages] = useState(post?.images_url || [])
+  const [editPostImageURLs, setEditPostImageURLs] = useState(post?.images_url || [])
 
   useEffect(() => {
     Modal.setAppElement('body');
   },[])
   const handleUpdatePost = async () => {
-    console.log(editPostImages)
-    const result = await updatePost(user.token, post.post_id, editPostContent, editPostImages)
+    console.log(editPostImageURLs)
+    const result = await updatePost(user.token, post.post_id, editPostContent, editPostImageURLs)
     if(result.status === 200){
       setFetchProfilePosts(true)
       alert.success("Post Updated")
     }else{
       setEditPostContent(post.content)
-      setEditPostImages(post.images_url)
+      setEditPostImageURLs(post.images_url)
       alert.error(`Status Code: ${result.status}, Error: ${result.data.message}`)
     }
     onRequestClose()
     return;
   }
   useEffect(() => {
-    if(editPostImages){
-      editPostImages.forEach(element => {
+    if(editPostImageURLs){
+      editPostImageURLs.forEach(element => {
         console.log(element)
       });
     }
-  },[editPostImages])
+  },[editPostImageURLs])
 
   return (
         <Modal
@@ -59,16 +59,16 @@ const EditPostModal = ({isOpen, onAfterOpen, onRequestClose, post, setFetchProfi
         >
             <h2>Edit Post</h2>
             <textarea placeholder="post's content" value={editPostContent} onChange={(e)=> setEditPostContent(e.target.value)}/>
-            {editPostImages?.length === 1 ? editPostImages.map((img, index) => (
+            {editPostImageURLs?.length === 1 ? editPostImageURLs.map((img, index) => (
             <img 
               key={index} 
               src={img} 
               alt="" 
               className="post-img" 
             /> 
-            )) : editPostImages.length === 2 ? (
+            )) : editPostImageURLs.length === 2 ? (
             <div className="multi-img two-images">
-                {editPostImages.map((img, index) => (
+                {editPostImageURLs.map((img, index) => (
                     <div key={index} className="multi-image">
                         <img src={img} alt="" />
                     </div>
@@ -76,21 +76,21 @@ const EditPostModal = ({isOpen, onAfterOpen, onRequestClose, post, setFetchProfi
             </div>
             ) : (
                 <div className="multi-img more-three-images">
-                    {editPostImages.map((img, index) => (
+                    {editPostImageURLs.map((img, index) => (
                         <img src={img} alt="" />
                     ))}
                 </div>
             )}
             <div>
               {
-                editPostImages?.length > 0 &&
+                editPostImageURLs?.length > 0 &&
                 <>
                   <h2>Select image to delete</h2>
                   {
-                    editPostImages.map((img, index) => {
+                    editPostImageURLs.map((img, index) => {
                       return (
                         <div className='deleteButtons' key={index}>
-                          <button className='deleteImageButton btn-outline btn' onClick={() => setEditPostImages(editPostImages.filter((_, i) => i !== index))}>
+                          <button className='deleteImageButton btn-outline btn' onClick={() => setEditPostImageURLs(editPostImageURLs.filter((_, i) => i !== index))}>
                             Image {index}
                           </button>
                         </div>

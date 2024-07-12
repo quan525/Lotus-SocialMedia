@@ -18,14 +18,17 @@ export const sharePost = async(token, postId, content) => {
     }
 }
 
-export const updatePost = async(token, postId, content, images) => {
+export const updatePost = async(token, postId, content, imageURLS) => {
     try {
         const formData = new FormData();
         formData.append('content', content);
-        if( images?.length > 0 ) {
-            images.forEach(element => {
-                formData.append('images', element);
-            });
+        // if( imageURLS?.length > 0 ) {
+        //     imageURLS.forEach(element => {
+        //         formData.append('postImageURLS', element);
+        //     });
+        // }
+        if(imageURLS?.length > 0){
+            formData.append('postImageURLS', JSON.stringify(imageURLS));
         }
         const response = await axios.put(`${API_PATHS.api}/post/${postId}/update`, formData, {
             headers: {

@@ -129,7 +129,7 @@ const InfoFriendPost = ({val}) => {
                   </div>
               ))}
           </div>
-      ) : (
+      ) : val.images_url.length > 3 ? (
           <div className="multi-img">
               {val.images_url.map((img, index) => (
                   <div key={index} className="multi-image">
@@ -137,7 +137,7 @@ const InfoFriendPost = ({val}) => {
                   </div>
               ))}
           </div>
-      )}     
+      ) : null}     
 
     <div className="post-foot">
      <div className="post-footer">
