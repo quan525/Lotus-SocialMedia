@@ -12,9 +12,10 @@ const Request = ({ request, handleFriendsId, friendRequests, setFriendRequests }
     const [accept, setAccept] = useState(false)
     const [refuse, setRefuse] = useState(false)
     const handleAcceptRequest = async () => {
-        setAccept(true)
-        setRefuse(false)
-        await acceptRequest(user.token, request.user_id)
+      setAccept(true)
+      setRefuse(false)
+      await acceptRequest(user.token, request.user_id)
+      setFriendRequests(friendRequests.filter(request => request.user_id != request.user_id))
     }
     const handleRefuseRequest = async (userId)=> {
       setRefuse(true)
