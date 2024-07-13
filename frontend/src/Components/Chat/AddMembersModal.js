@@ -18,6 +18,7 @@ import { UserContext } from '../../App';
 import { SearchUsers } from '../../api/services/User';
 
 import { addMembers } from '../../api/services/Messages';
+import { useAlert } from 'react-alert';
 
 const style = {
   position: 'absolute',
@@ -35,6 +36,7 @@ const style = {
 
 const AddMembersModal = ({ open, handleClose, setFetchRooms, roomMembers, roomId, chatRoomUsers, setChatRoomUsers }) => {  
     const user = useContext(UserContext);
+    const alert = useAlert();
     const [search, setSearch] = useState("");
     const [searchResult, setSearchResult] = useState([]);
     const [selectedUsers, setSelectedUsers] = useState([]);
@@ -87,7 +89,7 @@ const AddMembersModal = ({ open, handleClose, setFetchRooms, roomMembers, roomId
         setChatRoomUsers(chatRoomUsers => [...chatRoomUsers, ...selectedUsers])
         setFetchRooms(true)
       }else {
-        alert.error("Error adding members", result.data)
+        alert.error("Error adding members" + result?.data)
       }
       console.log(result)
       // if(selectedUsers.length > 0) {
