@@ -11,7 +11,8 @@ const Register = async (req, res, next) => {
   let uploadedImagePublicId;
   try {
     const emailPattern= /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/;
-    const { username, email, password, file } = req.body;
+    const avatar = req.file;
+    const { username, email, password} = req.body;
     if(!username || !password || !email || username.length < 6 || password.length < 8) {
       return res.status(400).json({ message: "Invalid or missing fields" });
     }else if (!emailPattern.test(email)) {
@@ -24,8 +25,8 @@ const Register = async (req, res, next) => {
     }
 
     let avatarUrl;
-    if (file) {
-      const result = await cloudinary.uploader.upload(file.path);
+    if (avatar) {
+      const result = await cloudinary.uploader.upload(avatar.path);
       avatarUrl = result.secure_url;
       uploadedImagePublicId = result.public_id;
     }
@@ -33,11 +34,11 @@ const Register = async (req, res, next) => {
     const salt = await bcrypt.genSalt(saltRounds);
     const encryptPassword = await bcrypt.hash(password, salt);
 
-    const query = file ? 
+    const query = avatar ? 
       'INSERT INTO users (username, email, password, avatar_url, profile_name) VALUES ($1, $2, $3, $4, $5) RETURNING profile_name,avatar_url,created_at,cover_url' :
       'INSERT INTO users (username, email, password, profile_name) VALUES ($1, $2, $3, $4) RETURNING *';
 
-    const params = file ? [username, email, encryptPassword, avatarUrl, username] : [username, email, encryptPassword, username];
+    const params = avatar ? [username, email, encryptPassword, avatarUrl, username] : [username, email, encryptPassword, username];
     const user = (await pool.query(query, params)).rows[0];
 
     if (!user) {
@@ -196,7 +197,7 @@ const UpdateAvatar = async (req, res) => {
       const result = await pool.query('UPDATE users SET avatar_url = $1 WHERE user_id = $2', [secure_url, userId]);
       
       if (result.rowCount > 0) {
-        res.status(200).send("Avatar successfully updated");
+        res.status(200).json({ avatar_url: secure_url });
       } else {
         res.status(400).send("No user found or avatar update failed");
       }

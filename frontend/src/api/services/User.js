@@ -37,12 +37,12 @@ export const UpdateAvatar = async (token, image) => {
         }
     }
     const formData = new FormData();
-    formData.append("file", image)
+    formData.append('file', image)
     console.log(image)
     const result = await axios.post(`${API_PATHS.api}/users/avatar_update`, formData, config)
-    console.log(result)
-    return result;
+    return result
 }
+
 
 export const updateProfile = async (token, data) => {
     console.log(token)

@@ -167,7 +167,7 @@ const onCropDone = (imgCroppedArea) => {
     const result = await UpdateAvatar(userData?.token, blob );
     if(result.status === 200){      
         const localStorageData = JSON.parse(localStorage.getItem('data'));
-        localStorageData.image = result.data.imageUrl;
+        localStorageData.image = result.data.avatar_url;
         localStorage.setItem('data', JSON.stringify(localStorageData));
         profileContext.setUpdateProfile(true)
         alert.success("Avatar updated succesfully")

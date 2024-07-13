@@ -7,18 +7,11 @@ const SharedPost = ({post={post}}) => {
     useEffect(() => {
         setSharedPost(JSON.parse(post.shared_post_details))
     },[post])
-
-    useEffect( () => {
-        console.log(imagesUrl)
-
-    },[imagesUrl])
-
     useEffect(() => {
         if(sharedPost?.images_url){
             const jsonString = sharedPost?.images_url.replace(/^{/g, '["').replace(/}$/g, '"]').replace(/,/g, '","');
             const images = JSON.parse(jsonString);
-            console.log(images)
-            if(images != ''){
+            if(images != '' || null || undefined){ 
                 setImagesUrl(images);
             } 
         }
