@@ -273,7 +273,6 @@ const PostUser = ({posts,post,setPosts,profileImg,modelDetails,images, setFetchP
                 <PostAddIcon className='social-links'/>
               </div>             
             </a>
-            
             <a href="http://youtube.com/" target="blank"  className="social-margin">
               <div className="social-icon youtube">
               <AiFillYoutube className='social-links'/>

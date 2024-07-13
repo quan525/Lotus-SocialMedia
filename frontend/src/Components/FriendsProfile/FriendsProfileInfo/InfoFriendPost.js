@@ -8,9 +8,7 @@ import MessageRoundedIcon from '@mui/icons-material/MessageRounded';
 import { useState } from 'react';
 
 import PostAddIcon from '@mui/icons-material/PostAdd';
-import {FiInstagram} from "react-icons/fi"
-import {BiLogoLinkedin} from "react-icons/bi"
-import {FiGithub} from "react-icons/fi"
+import {AiFillYoutube} from "react-icons/ai"
 
 import SharedPost from '../../Share/SharedPost'
 import Comments from '../../Comments/Comments';
@@ -28,6 +26,9 @@ const InfoFriendPost = ({val}) => {
 
   const [filledLike,setFilledLike] =useState(<FavoriteBorderOutlinedIcon />)
   const [unFilledLike,setUnFilledLike] =useState(false)
+
+  const [openShareModal, setOpenShareModal] = useState(false)
+  const closeShareModal = () => setOpenShareModal(false);
 
   const handlelikes= async (postId)=>{
     setLike(unlike ? like -1 :like +1)
@@ -159,34 +160,20 @@ const InfoFriendPost = ({val}) => {
           className='share'  
         />
         {socialIcons && (
-          
           <div className="social-buttons">        
-    
-            <a className="social-margin"> 
+            <a className="social-margin">
               <div className="social-icon facebook">
-                <PostAddIcon className='social-links'/>
-              </div>
+                <PostAddIcon className='social-links' onClick={() => {setOpenShareModal(!openShareModal); 
+                  setSocialIcons(!socialIcons)}
+                }/>
+              </div>             
             </a>
-            
-            <a href="https://pinterest.com/" target="blank"  className="social-margin">
-              <div className="social-icon instagram">
-                <FiInstagram className='social-links'/>
-              </div>
-            </a>
-            
-            <a href="http://linkedin.com/" className="social-margin" target="blank">
-              <div className="social-icon linkedin">
-                <BiLogoLinkedin className='social-links'/>
+            <a href="http://youtube.com/" target="blank"  className="social-margin">
+              <div className="social-icon youtube">
+              <AiFillYoutube className='social-links'/>
               </div> 
             </a>
-         
-            <a href="https://github.com/"  target="blank"  className="social-margin">
-              <div className="social-icon github">
-                <FiGithub className='social-links'/>
-              </div>
-            </a>
-            
-       </div>
+          </div>
       )}
       </div>
       

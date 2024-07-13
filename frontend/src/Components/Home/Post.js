@@ -15,11 +15,12 @@ import {MdBlockFlipped} from "react-icons/md"
 import {MdReportGmailerrorred} from "react-icons/md"
 
 import PostAddIcon from '@mui/icons-material/PostAdd';
-import {FiInstagram} from "react-icons/fi"
+import {AiFillYoutube} from "react-icons/ai"
 import { useState } from 'react';
 import Comments from '../Comments/Comments';
 import SharedPost from '../Share/SharedPost'
 import ShareBoxModal from '../Share/ShareBoxModal';
+
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { UserContext } from '../../App';
@@ -299,21 +300,19 @@ const Post = ({post,posts,setPosts,setFriendsProfile,images}) => {
         {/* You can put the content of the modal here */}
           </ShareBoxModal>
           {socialIcons && (
-          
-              <div className="social-buttons">        
-                <a className="social-margin">
-                  <div className="social-icon facebook">
-                    <PostAddIcon className='social-links' onClick={() => {setOpenShareModal(!openShareModal); 
-                      setSocialIcons(!socialIcons)}
-                    }/>
-                  </div>             
-                </a>
-                <a href="https://www.instagram.com/" target="blank"  className="social-margin">
-                  <div className="social-icon instagram">
-                    <FiInstagram className='social-links'/>
-                  </div>
-                </a>
-               
+            <div className="social-buttons">        
+              <a className="social-margin">
+                <div className="social-icon facebook">
+                  <PostAddIcon className='social-links' onClick={() => {setOpenShareModal(!openShareModal); 
+                    setSocialIcons(!socialIcons)}
+                  }/>
+                </div>             
+              </a>
+              <a href="http://youtube.com/" target="blank"  className="social-margin">
+                <div className="social-icon youtube">
+                <AiFillYoutube className='social-links'/>
+                </div> 
+              </a>
            </div>
           )}
         </div>
