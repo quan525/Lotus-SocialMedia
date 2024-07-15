@@ -8,23 +8,27 @@ export const handleDateDiff = (date) => {
     providedDate.setHours(0, 0, 0, 0);
 
     const diffTime = Math.abs(currentDate - providedDate);
-    const diffMinutes = Math.floor(diffTime / (1000 * 60));
-    const diffHours = Math.floor(diffTime / (1000 * 60 * 60));
+    const diffDays = Math.floor(diffTime / (1000 * 3600 * 24));
 
-    if (diffMinutes < 1) {
-        return "Just now";
-    } else if (diffHours < 1) {
-        return diffMinutes + (diffMinutes === 1 ? " minute ago" : " minutes ago");
-    } else if (diffHours < 24) {
-        return diffHours + (diffHours === 1 ? " hour ago" : " hours ago");
-    } else {
-        const diffDays = Math.floor(diffTime / (1000 * 3600 * 24));
-        if (diffDays === 1) {
-            return "Yesterday";
-        } else if (diffDays < 7) {
-            return diffDays + " days ago";
+    if (diffDays < 1) {
+    const diffHours = Math.floor(diffTime / (1000 * 60 * 60));
+    if (diffHours < 1) {
+        const diffMinutes = Math.floor(diffTime / (1000 * 60));
+        if (diffMinutes < 1) {
+            return "Just now";
         } else {
-            return providedDate.toLocaleString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+            return diffMinutes + (diffMinutes === 1 ? " minute ago" : " minutes ago");
         }
+    } else {
+        return diffHours + (diffHours === 1 ? " hour ago" : " hours ago");
+    }
+    } else {
+    // Adjusted logic here
+    if (diffDays < 2) {
+        return "Yesterday";
+    } else {
+        // This will now correctly show "2 days ago" after 24 hours have passed
+        return diffDays + " days ago";
+    }
     }
 }
